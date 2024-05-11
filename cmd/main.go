@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -27,6 +28,9 @@ func CheckError(err error) {
 }
 
 func main() {
+		err := godotenv.Load(".env")
+
+
 	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 	db, err := sql.Open("postgres", psqlconn)
 	CheckError(err)
