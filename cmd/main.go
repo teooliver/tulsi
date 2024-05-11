@@ -35,14 +35,14 @@ func main() {
 
 	// insert
 	// hardcoded
-	insertStmt := `insert into "Students"("Name", "Roll") values('John', 1)`
+	insertStmt := `insert into "task"("title") values('hello_world')`
 	_, e := db.Exec(insertStmt)
 	CheckError(e)
 
 	// dynamic
-	insertDynStmt := `insert into "Students"("Name", "Roll") values($1, $2)`
-	_, e = db.Exec(insertDynStmt, "Jane", 2)
-	CheckError(e)
+	// insertDynStmt := `insert into "Students"("Name", "Roll") values($1, $2)`
+	// _, e = db.Exec(insertDynStmt, "Jane", 2)
+	// CheckError(e)
 
 	// CHI
 	r := chi.NewRouter()
