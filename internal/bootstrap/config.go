@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/teooliver/kanban/internal/config"
 
@@ -13,8 +14,9 @@ import (
 func Config(ctx context.Context, filenames ...string) (*config.Config, error) {
 	err := godotenv.Load(filenames...)
 	if err != nil {
+		// should ignore error since vars can be set in k8s
+		log.Fatal("Error loading .env file")
 		// log.Error(ctx, "failed to load env files", err)
-		// ignore error since vars can be set in k8s
 	}
 
 	var cfg config.Config

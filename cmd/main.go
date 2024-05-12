@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"database/sql"
 
@@ -14,11 +16,11 @@ import (
 
 // TODO move to .env
 const (
-	host     = "localhost"
-	port     = 5432
-	user     = "db_user"
-	password = "12345"
-	dbname   = "kanban-go"
+	host = "localhost"
+	port = 5432
+	user = "db_user"
+	// password = "12345"
+	dbname = "kanban-go"
 )
 
 func CheckError(err error) {
@@ -28,10 +30,13 @@ func CheckError(err error) {
 }
 
 func main() {
-		err := godotenv.Load(".env")
+	err := godotenv.Load(".env.dev")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	postgresPassword := os.Getenv("POSTGRES_PASSWORD")
 
-
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, postgresPassword, dbname)
 	db, err := sql.Open("postgres", psqlconn)
 	CheckError(err)
 
@@ -39,7 +44,7 @@ func main() {
 
 	// insert
 	// hardcoded
-	insertStmt := `insert into "task"("title") values('hello_world')`
+	insertStmt := `insert into "task"("title") values('hello_world2')`
 	_, e := db.Exec(insertStmt)
 	CheckError(e)
 
