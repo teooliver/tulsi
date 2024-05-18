@@ -5,6 +5,5 @@ type Config struct {
 }
 
 type PostgresConfig struct {
-	DSN      string `envconfig:"DSN" required:"true"`
-	Password string `envconfig:"PASSWORD" required:"true"`
+	DSN string `envconfig:"DSN"`
 }
