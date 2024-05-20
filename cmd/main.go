@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"database/sql"
@@ -10,27 +11,18 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/teooliver/kanban/internal/bootstrap"
 	"github.com/teooliver/kanban/internal/controller/task"
-	"github.com/teooliver/kanban/internal/models"
 )
 
-// TODO move to .env
+func main() {
+	config, err := bootstrap.Config(".env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
-func CheckError(err error) {
+	db, err := sql.Open("postgres", config.Postgres.DSN)
 	if err != nil {
 		panic(err)
 	}
-}
-
-func main() {
-	// err := godotenv.Load(".env")
-	config, _ := bootstrap.Config(".env")
-	// if err != nil {
-	// 	log.Fatal("Error loading .env file")
-	// }
-	// postgresPassword := os.Getenv("POSTGRES_PASSWORD")
-
-	db, err := sql.Open("postgres", config.Postgres.DSN)
-	CheckError(err)
 
 	defer db.Close()
 
@@ -39,7 +31,7 @@ func main() {
 	// insertStmt := `insert into "task"("title") values('hello_world2')`
 	// _, e := db.Exec(insertStmt)
 	// CheckError(e)
-	models.ListTasks(db)
+	// models.ListTasks(db)
 
 	// dynamic
 	// insertDynStmt := `insert into "Students"("Name", "Roll") values($1, $2)`
