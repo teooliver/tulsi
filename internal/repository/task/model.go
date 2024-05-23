@@ -1,8 +1,7 @@
-package models
+package task
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -32,29 +31,6 @@ type TaskForUpdate struct {
 	StatusID    *string `json:"status_id"`
 	Color       *string `json:"color"`
 	UserID      *string `json:"user_id"`
-}
-
-func ListTasks(db *sql.DB) {
-	sql, _, _ := goqu.From("task").ToSql()
-
-	rows, err := db.Query(sql)
-	if err != nil {
-		log.Fatal("Error listing tasks")
-	}
-
-	defer rows.Close()
-
-	for rows.Next() {
-		task, _ := mapRowToTask(rows)
-		// if err != nil {
-		// 	fmt.Println(err)
-		// }
-		// CheckError(err)
-
-		fmt.Println(task)
-	}
-
-	// return tasks
 }
 
 // impl chi.Render interface to render objects as JSON to the API consumer

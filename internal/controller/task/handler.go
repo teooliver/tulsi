@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/teooliver/kanban/internal/models"
+	task "github.com/teooliver/kanban/internal/repository/task"
 )
 
 func CreateTask(w http.ResponseWriter, r *http.Request) {
@@ -17,8 +17,8 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(fmt.Sprintf("Task %s", "task")))
 }
 
-func ListTasks(w http.ResponseWriter, r *http.Request){
-	models.ListTasks(db)
+func ListTasks(w http.ResponseWriter, r *http.Request) {
+	task.ListTasks(db)
 
 	w.Write([]byte(fmt.Sprintf("Task %s", "task")))
 }

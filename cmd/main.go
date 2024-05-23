@@ -4,8 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	"database/sql"
-
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	_ "github.com/lib/pq"
@@ -16,15 +14,9 @@ import (
 func main() {
 	config, err := bootstrap.Config(".env")
 	if err != nil {
+		// TODO: Better error handling
 		log.Fatal("Error loading .env file")
 	}
-
-	db, err := sql.Open("postgres", config.Postgres.DSN)
-	if err != nil {
-		panic(err)
-	}
-
-	defer db.Close()
 
 	// insert
 	// hardcoded
