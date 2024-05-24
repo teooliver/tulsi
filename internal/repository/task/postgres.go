@@ -1,9 +1,9 @@
 package task
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
-	"log"
 
 	"github.com/doug-martin/goqu"
 )
@@ -16,25 +16,25 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 	return &PostgresRepository{db: db}
 }
 
-func (r *PostgresRepository) ListTasks() {
+func (r *PostgresRepository) ListTasks(ctx context.Context) ([]Task, error) {
 	sql, _, _ := goqu.From("task").ToSql()
 
 	rows, err := r.db.Query(sql)
 	if err != nil {
-		log.Fatal("Error listing tasks")
+		return nil, err
 	}
 
 	defer rows.Close()
 
+	var result []Task
 	for rows.Next() {
-		task, _ := mapRowToTask(rows)
-		// if err != nil {
-		// 	fmt.Println(err)
-		// }
-		// CheckError(err)
-
-		fmt.Println(task)
+		task, err := mapRowToTask(rows)
+		if err != nil {
+			// TODO: Handle error
+			fmt.Println(err)
+		}
+		result = append(result, task)
 	}
 
-	// return tasks
+	return result, nil
 }

@@ -11,7 +11,9 @@ require (
 )
 
 require (
+	github.com/ajg/form v1.5.1 // indirect
 	github.com/c2fo/testify v0.0.0-20150827203832-fba96363964a // indirect
+	github.com/go-chi/render v1.0.3 // indirect
 	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0 // indirect
 	gopkg.in/doug-martin/goqu.v5 v5.0.0 // indirect
 )

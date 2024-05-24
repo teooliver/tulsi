@@ -1,6 +1,7 @@
 package deps
 
 import (
+	"context"
 	"database/sql"
 	"log"
 
@@ -11,7 +12,7 @@ type Infra struct {
 	Postgres *sql.DB
 }
 
-func InitInfra(cfg *config.Config) (*Infra, error) {
+func InitInfra(ctx context.Context, cfg *config.Config) (*Infra, error) {
 	// TODO: handle err
 	pgClient, _ := initPostgres(&cfg.Postgres)
 
@@ -20,7 +21,7 @@ func InitInfra(cfg *config.Config) (*Infra, error) {
 	}, nil
 }
 
-func initPostgres(cfg *config.PostgresConfig) (*sql.DB, error) {
+func initPostgres(ctx context.Context, cfg *config.PostgresConfig) (*sql.DB, error) {
 	db, err := sql.Open("postgres", cfg.DSN)
 	if err != nil {
 		panic(err)

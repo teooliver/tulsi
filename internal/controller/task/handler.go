@@ -1,24 +1,48 @@
 package task
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
-	task "github.com/teooliver/kanban/internal/repository/task"
+	"github.com/teooliver/kanban/internal/repository/task"
 )
 
-func CreateTask(w http.ResponseWriter, r *http.Request) {
-	// here we read from the request context and fetch out `"user"` key set in
-	// the MyMiddleware example above.
-	// task := r.Context().Value("user").(string)
-	// r.Body.Read(p []byte)
-
-	// respond to the client
-	w.Write([]byte(fmt.Sprintf("Task %s", "task")))
+type taskService interface {
+	CreateTask(ctx context.Context, req task.TaskForCreate) (*task.Task, error)
+	ListTasks(ctx context.Context) ([]task.Task, error)
 }
 
-func ListTasks(w http.ResponseWriter, r *http.Request) {
-	task.ListTasks(db)
+type Handler struct {
+	svc taskService
+}
 
-	w.Write([]byte(fmt.Sprintf("Task %s", "task")))
+func New(svc taskService) Handler {
+	return Handler{
+		svc: svc,
+	}
+}
+
+type ListTaskResponse struct {
+	Tasks []task.Task `json:"tasks"`
+}
+
+func (h Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	tasks, err := h.svc.ListTasks(ctx)
+	if err != nil {
+		w.Write([]byte(fmt.Sprintf("Something went wrong")))
+	}
+	taskResponse := ListTaskResponse{
+		Tasks: tasks,
+	}
+
+	jsonTasks, err := json.Marshal(taskResponse)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	w.Write([]byte(jsonTasks))
 }
