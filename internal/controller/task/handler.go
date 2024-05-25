@@ -10,8 +10,7 @@ import (
 )
 
 type taskService interface {
-	CreateTask(ctx context.Context, req task.TaskForCreate) (*task.Task, error)
-	ListTasks(ctx context.Context) ([]task.Task, error)
+	ListAllTasks(ctx context.Context) ([]task.Task, error)
 }
 
 type Handler struct {
@@ -30,7 +29,7 @@ type ListTaskResponse struct {
 
 func (h Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	tasks, err := h.svc.ListTasks(ctx)
+	tasks, err := h.svc.ListAllTasks(ctx)
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("Something went wrong")))
 	}

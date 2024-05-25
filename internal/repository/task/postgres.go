@@ -16,7 +16,7 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 	return &PostgresRepository{db: db}
 }
 
-func (r *PostgresRepository) ListTasks(ctx context.Context) ([]Task, error) {
+func (r *PostgresRepository) ListAllTasks(ctx context.Context) ([]Task, error) {
 	sql, _, _ := goqu.From("task").ToSql()
 
 	rows, err := r.db.Query(sql)
