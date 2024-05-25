@@ -14,12 +14,12 @@ type taskService interface {
 }
 
 type Handler struct {
-	svc taskService
+	service taskService
 }
 
-func New(svc taskService) Handler {
+func New(service taskService) Handler {
 	return Handler{
-		svc: svc,
+		service: service,
 	}
 }
 
@@ -29,7 +29,7 @@ type ListTaskResponse struct {
 
 func (h Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	tasks, err := h.svc.ListAllTasks(ctx)
+	tasks, err := h.service.ListAllTasks(ctx)
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("Something went wrong")))
 	}

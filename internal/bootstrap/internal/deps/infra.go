@@ -14,7 +14,7 @@ type Infra struct {
 
 func InitInfra(ctx context.Context, cfg *config.Config) (*Infra, error) {
 	// TODO: handle err
-	pgClient, _ := initPostgres(&cfg.Postgres)
+	pgClient, _ := initPostgres(context.TODO(), &cfg.Postgres)
 
 	return &Infra{
 		Postgres: pgClient,

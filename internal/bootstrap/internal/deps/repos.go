@@ -9,7 +9,7 @@ type Repos struct {
 	TaskRepo *task.PostgresRepository
 }
 
-func initRepos(cfg *config.Config, infra *Infra) *Repos {
+func InitRepos(cfg *config.Config, infra *Infra) *Repos {
 	taskRepo := task.NewPostgres(infra.Postgres)
 
 	return &Repos{
