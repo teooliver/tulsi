@@ -55,6 +55,7 @@ func mapRowToTask(rows *sql.Rows) (Task, error) {
 	err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.StatusID, &t.UserID)
 
 	if err != nil {
+		// TODO: handle error
 		// if err.Is(err, sql.ErrNoRows) {
 		// 	return Task{}, serrors.ErrNotFound
 		// }

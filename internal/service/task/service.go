@@ -25,11 +25,11 @@ func New(
 func (s *Service) ListAllTasks(ctx context.Context) ([]task.Task, error) {
 	// grab data from repo
 	//
-	test_task := task.Task{
-		Title: "hello there title",
+
+	tasks, err := s.taskRepo.ListAllTasks(context.TODO())
+	if err != nil {
+		return nil, err
 	}
-	tasks := make([]task.Task, 0)
-	tasks = append(tasks, test_task)
 
 	return tasks, nil
 }

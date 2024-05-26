@@ -35,7 +35,5 @@ func initPostgres(ctx context.Context, cfg *config.PostgresConfig) (*sql.DB, err
 	}
 	log.Println("Database connection established")
 
-	defer db.Close()
-
 	return db, nil
 }
