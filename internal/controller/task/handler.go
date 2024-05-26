@@ -11,6 +11,7 @@ import (
 
 type taskService interface {
 	ListAllTasks(ctx context.Context) ([]task.Task, error)
+	CreateTask(ctx context.Context, task task.TaskForCreate) error
 }
 
 type Handler struct {
@@ -44,4 +45,16 @@ func (h Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Write([]byte(jsonTasks))
+}
+
+func (h Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
+	// ctx := r.Context()
+
+	var taskToCreate task.TaskForCreate
+	err := json.NewDecoder(r.Body).Decode(&taskToCreate)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	fmt.Printf("Task for CREATE %+v\n", taskToCreate)
 }

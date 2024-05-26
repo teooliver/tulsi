@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/doug-martin/goqu"
+	"github.com/doug-martin/goqu/v9"
 )
 
 type PostgresRepository struct {
@@ -17,7 +17,7 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 }
 
 func (r *PostgresRepository) ListAllTasks(ctx context.Context) ([]Task, error) {
-	sql, _, err := goqu.From("task").ToSql()
+	sql, _, err := goqu.From("task").ToSQL()
 	if err != nil {
 		fmt.Print("TO SQL ERROR")
 	}
@@ -43,25 +43,20 @@ func (r *PostgresRepository) ListAllTasks(ctx context.Context) ([]Task, error) {
 	return result, nil
 }
 
-func (r *PostgresRepository) CreateTask(ctx context.Context, task Task) (id string, err error) {
-	// "INSERT INTO task (
-	//            title,
-	//            description,
-	//            status_id,
-	//            color,
-	//            user_id
-	//            )
-	//            values ($1, $2,$3, $4, $5) RETURNING id",
-	//
-	//
-	// ds := goqu.Insert("task").
-	// 	Cols("first_name", "last_name").
-	// 	Vals(
-	// 		goqu.Vals{"Greg", "Farley"},
-	// 		goqu.Vals{"Jimmy", "Stewart"},
-	// 		goqu.Vals{"Jeff", "Jeffers"},
-	// 	)
-	// insertSQL, args, _ := ds.ToSQL()
+func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate) (err error) {
+	insertSQL, args, _ := goqu.Insert("task").Rows(TaskForCreate{
+		Title:       task.Title,
+		Description: task.Description,
+		StatusID:    task.StatusID,
+		Color:       task.Color,
+		UserID:      task.UserID,
+	}).Returning("id").ToSQL()
 
-	// sql, _, err := goqu.From("task").ToSql()
+	_, err = r.db.ExecContext(ctx, insertSQL, args)
+	// TODO: handle error
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	return nil
 }
