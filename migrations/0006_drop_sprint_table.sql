@@ -1,1 +1,2 @@
+-- +goose up
 -- DROP TABLE sprint;

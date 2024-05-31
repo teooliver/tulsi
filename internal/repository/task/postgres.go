@@ -43,20 +43,22 @@ func (r *PostgresRepository) ListAllTasks(ctx context.Context) ([]Task, error) {
 	return result, nil
 }
 
+// TODO: should return at least id of the created task
 func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate) (err error) {
 	insertSQL, args, _ := goqu.Insert("task").Rows(TaskForCreate{
 		Title:       task.Title,
 		Description: task.Description,
-		StatusID:    task.StatusID,
 		Color:       task.Color,
 		UserID:      task.UserID,
 	}).Returning("id").ToSQL()
 
-	_, err = r.db.ExecContext(ctx, insertSQL, args)
+	result, err := r.db.ExecContext(ctx, insertSQL, args...)
 	// TODO: handle error
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
+
+	println("CREATE RESULT", result)
 	return nil
 }

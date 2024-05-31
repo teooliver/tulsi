@@ -24,9 +24,6 @@ func New(
 }
 
 func (s *Service) ListAllTasks(ctx context.Context) ([]task.Task, error) {
-	// grab data from repo
-	//
-
 	tasks, err := s.taskRepo.ListAllTasks(context.TODO())
 	if err != nil {
 		return nil, err

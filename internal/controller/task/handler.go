@@ -57,4 +57,7 @@ func (h Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Printf("Task for CREATE %+v\n", taskToCreate)
+
+	err = h.service.CreateTask(context.TODO(), taskToCreate)
+
 }
