@@ -4,9 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log/slog"
 
 	"github.com/doug-martin/goqu/v9"
-	"golang.org/x/exp/slog"
 )
 
 type PostgresRepository struct {
