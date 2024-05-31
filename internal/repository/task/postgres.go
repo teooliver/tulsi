@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/doug-martin/goqu/v9"
+	"golang.org/x/exp/slog"
 )
 
 type PostgresRepository struct {
@@ -59,6 +60,6 @@ func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate)
 		return err
 	}
 
-	println("CREATE RESULT", result)
+	slog.Info("CREATE RESULT", result)
 	return nil
 }

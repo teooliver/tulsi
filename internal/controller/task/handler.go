@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"net/http"
 
 	"github.com/teooliver/kanban/internal/repository/task"
@@ -48,7 +49,7 @@ func (h Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
-	// ctx := r.Context()
+	ctx := r.Context()
 
 	var taskToCreate task.TaskForCreate
 	err := json.NewDecoder(r.Body).Decode(&taskToCreate)
@@ -56,8 +57,8 @@ func (h Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	fmt.Printf("Task for CREATE %+v\n", taskToCreate)
+	slog.Info("Task for CREATE %+v\n", taskToCreate, taskToCreate)
 
-	err = h.service.CreateTask(context.TODO(), taskToCreate)
+	err = h.service.CreateTask(ctx, taskToCreate)
 
 }

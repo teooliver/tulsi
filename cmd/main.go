@@ -4,6 +4,8 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -12,6 +14,8 @@ import (
 )
 
 func main() {
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill)
+	defer cancel()
 
 	config, err := bootstrap.Config(".env")
 	if err != nil {
@@ -19,20 +23,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	deps, err := bootstrap.Deps(context.TODO(), config)
-
-	// insert
-	// hardcoded
-	// insertStmt := `insert into "task"("title") values('hello_world2')`
-	// _, e := db.Exec(insertStmt)
-	// CheckError(e)
-	// models.ListTasks(db)
-
-	// dynamic
-	// insertDynStmt := `insert into "Students"("Name", "Roll") values($1, $2)`
-	// _, e = db.Exec(insertDynStmt, "Jane", 2)
-	// CheckError(e)
-	//
+	deps, err := bootstrap.Deps(ctx, config)
 
 	// CHI
 	r := chi.NewRouter()
