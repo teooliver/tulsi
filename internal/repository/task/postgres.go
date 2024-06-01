@@ -63,3 +63,18 @@ func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate)
 	slog.Info("CREATE RESULT", result)
 	return nil
 }
+
+// TODO: use `uuid` type for taskID instead of `string`
+func (r *PostgresRepository) DeleteTask(ctx context.Context, taskID string) (err error) {
+	insertSQL, args, _ := goqu.Delete("task").Where(goqu.Ex{"id": taskID}).Returning("id").ToSQL()
+
+	result, err := r.db.ExecContext(ctx, insertSQL, args...)
+	// TODO: handle error
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	slog.Info("DELETED TASKS ID", result)
+	return nil
+}

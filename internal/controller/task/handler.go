@@ -7,12 +7,14 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/teooliver/kanban/internal/repository/task"
 )
 
 type taskService interface {
 	ListAllTasks(ctx context.Context) ([]task.Task, error)
 	CreateTask(ctx context.Context, task task.TaskForCreate) error
+	DeleteTask(ctx context.Context, taskID string) error
 }
 
 type Handler struct {
@@ -60,5 +62,25 @@ func (h Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	slog.Info("Task for CREATE %+v\n", taskToCreate, taskToCreate)
 
 	err = h.service.CreateTask(ctx, taskToCreate)
+
+}
+
+func (h Handler) DeleteTask(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	taskID := chi.URLParam(r, "id")
+
+	// if err != nil {
+	// 	http.Error(w, err.Error(), http.StatusBadRequest)
+	// 	return
+	// }
+	slog.Info("TaskID %+v\n", taskID, taskID)
+
+	err := h.service.DeleteTask(ctx, taskID)
+
+	if err != nil {
+		// Should return Error Not Found and 404
+		print(err)
+	}
 
 }

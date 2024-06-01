@@ -37,6 +37,7 @@ func main() {
 		// r.With(paginate).Get("/{month}-{day}-{year}", listArticlesByDate) // GET /articles/01-16-2017
 		r.Get("/", deps.Handlers.TaskHandler.ListTasks)
 		r.Post("/", deps.Handlers.TaskHandler.CreateTask)
+		r.Delete("/{id}", deps.Handlers.TaskHandler.DeleteTask)
 
 	})
 

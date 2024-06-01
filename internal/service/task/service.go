@@ -13,6 +13,7 @@ type Service struct {
 type taskRepo interface {
 	ListAllTasks(ctx context.Context) ([]task.Task, error)
 	CreateTask(ctx context.Context, task task.TaskForCreate) error
+	DeleteTask(ctx context.Context, taskID string) error
 }
 
 func New(
@@ -24,7 +25,7 @@ func New(
 }
 
 func (s *Service) ListAllTasks(ctx context.Context) ([]task.Task, error) {
-	tasks, err := s.taskRepo.ListAllTasks(context.TODO())
+	tasks, err := s.taskRepo.ListAllTasks(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +34,16 @@ func (s *Service) ListAllTasks(ctx context.Context) ([]task.Task, error) {
 }
 
 func (s *Service) CreateTask(ctx context.Context, task task.TaskForCreate) error {
-	err := s.taskRepo.CreateTask(context.TODO(), task)
+	err := s.taskRepo.CreateTask(ctx, task)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *Service) DeleteTask(ctx context.Context, taskID string) error {
+	err := s.taskRepo.DeleteTask(ctx, taskID)
 	if err != nil {
 		return err
 	}
