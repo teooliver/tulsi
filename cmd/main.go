@@ -32,7 +32,7 @@ func main() {
 		w.Write([]byte("welcome"))
 	})
 
-	r.Route("/task", func(r chi.Router) {
+	r.Route("/tasks", func(r chi.Router) {
 		// r.With(paginate).Get("/", listArticles)                           // GET /articles
 		// r.With(paginate).Get("/{month}-{day}-{year}", listArticlesByDate) // GET /articles/01-16-2017
 		r.Get("/", deps.Handlers.TaskHandler.ListTasks)
