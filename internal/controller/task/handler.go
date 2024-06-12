@@ -15,6 +15,7 @@ type taskService interface {
 	ListAllTasks(ctx context.Context) ([]task.Task, error)
 	CreateTask(ctx context.Context, task task.TaskForCreate) error
 	DeleteTask(ctx context.Context, taskID string) error
+	InsertMultipleTasks(ctx context.Context) error
 }
 
 type Handler struct {
@@ -77,6 +78,20 @@ func (h Handler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 	slog.Info("TaskID %+v\n", taskID, taskID)
 
 	err := h.service.DeleteTask(ctx, taskID)
+
+	if err != nil {
+		// Should return Error Not Found and 404
+		print(err)
+	}
+
+}
+
+func (h Handler) SeedTasks(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	slog.Info("HELLO")
+
+	err := h.service.InsertMultipleTasks(ctx)
 
 	if err != nil {
 		// Should return Error Not Found and 404

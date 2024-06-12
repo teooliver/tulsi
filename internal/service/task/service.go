@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/teooliver/kanban/internal/repository/task"
+	"github.com/teooliver/kanban/pkg/seedDb"
 )
 
 type Service struct {
@@ -14,6 +15,7 @@ type taskRepo interface {
 	ListAllTasks(ctx context.Context) ([]task.Task, error)
 	CreateTask(ctx context.Context, task task.TaskForCreate) error
 	DeleteTask(ctx context.Context, taskID string) error
+	InsertMultipleTasks(ctx context.Context, tasks []task.TaskForCreate) error
 }
 
 func New(
@@ -44,6 +46,17 @@ func (s *Service) CreateTask(ctx context.Context, task task.TaskForCreate) error
 
 func (s *Service) DeleteTask(ctx context.Context, taskID string) error {
 	err := s.taskRepo.DeleteTask(ctx, taskID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+
+func (s *Service) InsertMultipleTasks(ctx context.Context) error {
+	newTasks := seedDb.CreateMultipleTasks(20)
+	err := s.taskRepo.InsertMultipleTasks(ctx, newTasks)
 	if err != nil {
 		return err
 	}

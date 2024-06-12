@@ -15,19 +15,19 @@ type Task struct {
 }
 
 type TaskForCreate struct {
-	Title       string  `json:"title"`
-	Description *string `json:"description"`
-	StatusID    *string `json:"status_id"`
-	Color       *string `json:"color"`
-	UserID      *string `json:"user_id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	StatusID    string `json:"status_id"`
+	Color       string `json:"color"`
+	UserID      string `json:"user_id"`
 }
 
 type TaskForUpdate struct {
-	Title       *string `json:"title"`
-	Description *string `json:"description"`
-	StatusID    *string `json:"status_id"`
-	Color       *string `json:"color"`
-	UserID      *string `json:"user_id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	StatusID    string `json:"status_id"`
+	Color       string `json:"color"`
+	UserID      string `json:"user_id"`
 }
 
 // impl chi.Render interface to render objects as JSON to the API consumer

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -16,6 +17,7 @@ import (
 func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill)
 	defer cancel()
+	defer fmt.Println("Bye")
 
 	config, err := bootstrap.Config(".env")
 	if err != nil {
@@ -38,8 +40,10 @@ func main() {
 		r.Get("/", deps.Handlers.TaskHandler.ListTasks)
 		r.Post("/", deps.Handlers.TaskHandler.CreateTask)
 		r.Delete("/{id}", deps.Handlers.TaskHandler.DeleteTask)
+		r.Post("/seed", deps.Handlers.TaskHandler.SeedTasks)
 
 	})
 
 	http.ListenAndServe(":3000", r)
+	println("Listenning at :3000")
 }

@@ -78,3 +78,19 @@ func (r *PostgresRepository) DeleteTask(ctx context.Context, taskID string) (err
 	slog.Info("DELETED TASKS ID", result)
 	return nil
 }
+
+func (r *PostgresRepository) InsertMultipleTasks(ctx context.Context, tasks []TaskForCreate) (err error) {
+	insertSQL, args, _ := goqu.Insert("task").Rows(tasks).ToSQL()
+
+	slog.Info(insertSQL)
+
+	result, err := r.db.ExecContext(ctx, insertSQL, args...)
+	// TODO: handle error
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	slog.Info("INSERT MULTIPLE TASKS RESULT", result)
+	return nil
+}
