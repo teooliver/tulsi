@@ -35,11 +35,11 @@ func main() {
 	})
 
 	r.Route("/tasks", func(r chi.Router) {
-		// r.With(paginate).Get("/", listArticles)                           // GET /articles
-		// r.With(paginate).Get("/{month}-{day}-{year}", listArticlesByDate) // GET /articles/01-16-2017
+		// TODO: Add Pagination
 		r.Get("/", deps.Handlers.TaskHandler.ListTasks)
 		r.Post("/", deps.Handlers.TaskHandler.CreateTask)
 		r.Delete("/{id}", deps.Handlers.TaskHandler.DeleteTask)
+		r.Put("/{id}", deps.Handlers.TaskHandler.UpdateTask)
 		r.Post("/seed", deps.Handlers.TaskHandler.SeedTasks)
 
 	})

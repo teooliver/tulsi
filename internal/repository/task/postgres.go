@@ -50,7 +50,7 @@ func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate)
 		Title:       task.Title,
 		Description: task.Description,
 		Color:       task.Color,
-		UserID:      task.UserID,
+		// UserID:      task.UserID,
 	}).Returning("id").ToSQL()
 
 	result, err := r.db.ExecContext(ctx, insertSQL, args...)
@@ -79,18 +79,35 @@ func (r *PostgresRepository) DeleteTask(ctx context.Context, taskID string) (err
 	return nil
 }
 
-func (r *PostgresRepository) InsertMultipleTasks(ctx context.Context, tasks []TaskForCreate) (err error) {
-	insertSQL, args, _ := goqu.Insert("task").Rows(tasks).ToSQL()
+func (r *PostgresRepository) UpdateTask(ctx context.Context, taskID string, task TaskForUpdate) (err error) {
+	// "UPDATE task SET title = $1, description = $2 WHERE id = $3"
+	updateSQL, args, _ := goqu.Update("task").Set(task).Where(goqu.Ex{"id": taskID}).Returning("id").ToSQL()
 
-	slog.Info(insertSQL)
+	slog.Info("UPDATE SQL", updateSQL)
 
-	result, err := r.db.ExecContext(ctx, insertSQL, args...)
+	result, err := r.db.ExecContext(ctx, updateSQL, args...)
 	// TODO: handle error
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
 
-	slog.Info("INSERT MULTIPLE TASKS RESULT", result)
+	slog.Info("UPDATED ID", result)
+	return nil
+}
+
+func (r *PostgresRepository) InsertMultipleTasks(ctx context.Context, tasks []TaskForCreate) (err error) {
+	insertSQL, args, _ := goqu.Insert("task").Rows(tasks).ToSQL()
+
+	slog.Info(insertSQL)
+
+	r.db.ExecContext(ctx, insertSQL, args...)
+	// TODO: handle error
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return err
+	// }
+
+	// slog.Info("INSERT MULTIPLE TASKS RESULT", result)
 	return nil
 }

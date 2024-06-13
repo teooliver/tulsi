@@ -1,6 +1,9 @@
 package seedDb
 
 import (
+	"log/slog"
+	"strings"
+
 	"github.com/jaswdr/faker/v2"
 	"github.com/teooliver/kanban/internal/repository/task"
 )
@@ -9,11 +12,12 @@ func createRandomTask() task.TaskForCreate {
 	fake := faker.New()
 
 	task := task.TaskForCreate{
-		Title:       fake.Lorem().Sentence(5),
-		Description: fake.Lorem().Paragraph(1),
-		StatusID:    fake.Lorem().Faker.UUID().V4(),
+		Title:       strings.Join(fake.Lorem().Words(3), " "),
+		Description: strings.Join(fake.Lorem().Words(5), " "),
 		Color:       fake.Lorem().Faker.Color().ColorName(),
-		UserID:      fake.Lorem().Faker.UUID().V4(),
+		// Not needed for now:
+		// StatusID:    fake.Lorem().Faker.UUID().V4(),
+		// UserID:      fake.Lorem().Faker.UUID().V4(),
 	}
 
 	return task
@@ -21,9 +25,12 @@ func createRandomTask() task.TaskForCreate {
 
 func CreateMultipleTasks(nbTasks int) []task.TaskForCreate {
 	tasks := make([]task.TaskForCreate, nbTasks)
+	task := createRandomTask()
+
+	slog.Info("INSERT MULTIPLE TASKS RESULT", tasks)
 
 	for i := 0; i < nbTasks; i++ {
-		tasks = append(tasks, createRandomTask())
+		tasks = append(tasks, task)
 	}
 
 	return tasks

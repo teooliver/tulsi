@@ -15,6 +15,7 @@ type taskService interface {
 	ListAllTasks(ctx context.Context) ([]task.Task, error)
 	CreateTask(ctx context.Context, task task.TaskForCreate) error
 	DeleteTask(ctx context.Context, taskID string) error
+	UpdateTask(ctx context.Context, taskID string, updatedTask task.TaskForUpdate) error
 	InsertMultipleTasks(ctx context.Context) error
 }
 
@@ -78,6 +79,29 @@ func (h Handler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 	slog.Info("TaskID %+v\n", taskID, taskID)
 
 	err := h.service.DeleteTask(ctx, taskID)
+
+	if err != nil {
+		// Should return Error Not Found and 404
+		print(err)
+	}
+
+}
+
+func (h Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	taskID := chi.URLParam(r, "id")
+	var taskToUpdate task.TaskForUpdate
+	err := json.NewDecoder(r.Body).Decode(&taskToUpdate)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	slog.Info("TaskID %+v\n", taskID, taskID)
+	slog.Info("TaskForUpdate %+s\n", taskToUpdate)
+
+	err = h.service.UpdateTask(ctx, taskID, taskToUpdate)
 
 	if err != nil {
 		// Should return Error Not Found and 404

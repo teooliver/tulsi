@@ -16,6 +16,7 @@ type taskRepo interface {
 	CreateTask(ctx context.Context, task task.TaskForCreate) error
 	DeleteTask(ctx context.Context, taskID string) error
 	InsertMultipleTasks(ctx context.Context, tasks []task.TaskForCreate) error
+	UpdateTask(ctx context.Context, taskID string, task task.TaskForUpdate) (err error)
 }
 
 func New(
@@ -52,7 +53,14 @@ func (s *Service) DeleteTask(ctx context.Context, taskID string) error {
 
 	return nil
 }
+func (s *Service) UpdateTask(ctx context.Context, taskID string, updatedTask task.TaskForUpdate) error {
+	err := s.taskRepo.UpdateTask(ctx, taskID, updatedTask)
+	if err != nil {
+		return err
+	}
 
+	return nil
+}
 
 func (s *Service) InsertMultipleTasks(ctx context.Context) error {
 	newTasks := seedDb.CreateMultipleTasks(20)
