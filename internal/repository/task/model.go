@@ -4,9 +4,9 @@ import "github.com/jackc/pgx/v5"
 
 type Task struct {
 	ID          string  `json:"id"`
-	Title       string  `json:"title"`
-	Description string  `json:"description"`
-	Color       string  `json:"color"`
+	Title       *string `json:"title"`
+	Description *string `json:"description"`
+	Color       *string `json:"color"`
 	StatusID    *string `json:"status_id"`
 	UserID      *string `json:"user_id"`
 	Status      *string `json:"status"`
