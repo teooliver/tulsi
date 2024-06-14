@@ -29,6 +29,7 @@ func New(service taskService) Handler {
 	}
 }
 
+// TODO: Add pagination
 type ListTaskResponse struct {
 	Tasks []task.Task `json:"tasks"`
 }
@@ -37,16 +38,15 @@ func (h Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	tasks, err := h.service.ListAllTasks(ctx)
 	if err != nil {
-		w.Write([]byte(fmt.Sprintf("Something went wrong")))
+		w.Write([]byte(fmt.Sprintf("Something went wrong: %v\n", err)))
 	}
 	taskResponse := ListTaskResponse{
 		Tasks: tasks,
 	}
 
-	jsonTasks, err := json.Marshal(taskResponse)
+	jsonTasks, err := json.Marshal(taskResponse.Tasks)
 	if err != nil {
-		fmt.Println(err)
-		return
+		w.Write([]byte(fmt.Sprintf("Something went wrong: %v\n", err)))
 	}
 
 	w.Write([]byte(jsonTasks))
@@ -61,7 +61,7 @@ func (h Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	slog.Info("Task for CREATE %+v\n", taskToCreate, taskToCreate)
+	slog.Info("Task for CREATE %+v\n", "taskToCreate", taskToCreate)
 
 	err = h.service.CreateTask(ctx, taskToCreate)
 
@@ -71,18 +71,11 @@ func (h Handler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	taskID := chi.URLParam(r, "id")
-
-	// if err != nil {
-	// 	http.Error(w, err.Error(), http.StatusBadRequest)
-	// 	return
-	// }
-	slog.Info("TaskID %+v\n", taskID, taskID)
-
 	err := h.service.DeleteTask(ctx, taskID)
 
 	if err != nil {
 		// Should return Error Not Found and 404
-		print(err)
+		slog.Info("TaskID %+v\n", taskID, taskID)
 	}
 
 }
@@ -97,9 +90,6 @@ func (h Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
-	slog.Info("TaskID %+v\n", taskID, taskID)
-	slog.Info("TaskForUpdate %+s\n", taskToUpdate)
 
 	err = h.service.UpdateTask(ctx, taskID, taskToUpdate)
 

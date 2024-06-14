@@ -20,7 +20,7 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 func (r *PostgresRepository) ListAllTasks(ctx context.Context) ([]Task, error) {
 	sql, _, err := goqu.From("task").ToSQL()
 	if err != nil {
-		fmt.Print("TO SQL ERROR")
+		return nil, err
 	}
 
 	rows, err := r.db.Query(sql)
@@ -36,8 +36,10 @@ func (r *PostgresRepository) ListAllTasks(ctx context.Context) ([]Task, error) {
 		task, err := mapRowToTask(rows)
 		if err != nil {
 			// TODO: Handle error
-			fmt.Println(err)
+			return nil, err
 		}
+		slog.Info("LIST SQL RESULT ===> %+v\n", "result", task)
+
 		result = append(result, task)
 	}
 
@@ -56,7 +58,6 @@ func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate)
 	result, err := r.db.ExecContext(ctx, insertSQL, args...)
 	// TODO: handle error
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
 
@@ -80,10 +81,7 @@ func (r *PostgresRepository) DeleteTask(ctx context.Context, taskID string) (err
 }
 
 func (r *PostgresRepository) UpdateTask(ctx context.Context, taskID string, task TaskForUpdate) (err error) {
-	// "UPDATE task SET title = $1, description = $2 WHERE id = $3"
 	updateSQL, args, _ := goqu.Update("task").Set(task).Where(goqu.Ex{"id": taskID}).Returning("id").ToSQL()
-
-	slog.Info("UPDATE SQL", updateSQL)
 
 	result, err := r.db.ExecContext(ctx, updateSQL, args...)
 	// TODO: handle error
@@ -99,8 +97,6 @@ func (r *PostgresRepository) UpdateTask(ctx context.Context, taskID string, task
 func (r *PostgresRepository) InsertMultipleTasks(ctx context.Context, tasks []TaskForCreate) (err error) {
 	insertSQL, args, _ := goqu.Insert("task").Rows(tasks).ToSQL()
 
-	slog.Info(insertSQL)
-
 	r.db.ExecContext(ctx, insertSQL, args...)
 	// TODO: handle error
 	// if err != nil {
@@ -108,6 +104,5 @@ func (r *PostgresRepository) InsertMultipleTasks(ctx context.Context, tasks []Ta
 	// 	return err
 	// }
 
-	// slog.Info("INSERT MULTIPLE TASKS RESULT", result)
 	return nil
 }
