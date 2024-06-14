@@ -18,7 +18,7 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 }
 
 func (r *PostgresRepository) ListAllTasks(ctx context.Context) ([]Task, error) {
-	sql, _, err := goqu.From("task").ToSQL()
+	sql, _, err := goqu.From("task").Select(allColumns...).ToSQL()
 	if err != nil {
 		return nil, err
 	}

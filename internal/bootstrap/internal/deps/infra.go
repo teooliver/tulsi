@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"log"
 
+	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/teooliver/kanban/internal/config"
 )
 
@@ -22,7 +23,7 @@ func InitInfra(ctx context.Context, cfg *config.Config) (*Infra, error) {
 }
 
 func initPostgres(ctx context.Context, cfg *config.PostgresConfig) (*sql.DB, error) {
-	db, err := sql.Open("postgres", cfg.DSN)
+	db, err := sql.Open("pgx", cfg.DSN)
 	if err != nil {
 		panic(err)
 	}

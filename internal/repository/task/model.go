@@ -32,9 +32,19 @@ type TaskForUpdate struct {
 	// Status      *string `json:"status"`
 }
 
+var allColumns = []any{
+	"id",
+	"title",
+	"description",
+	"color",
+	"status_id",
+	"user_id",
+	"status",
+}
+
 func mapRowToTask(rows *sql.Rows) (Task, error) {
 	var t Task
-	err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.Color, &t.Status, &t.StatusID, &t.UserID)
+	err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.Color, &t.StatusID, &t.UserID, &t.Status)
 
 	if err != nil {
 		return Task{}, err
