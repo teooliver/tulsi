@@ -22,7 +22,7 @@ var allColumns = []any{
 	"name",
 }
 
-func mapRowToTask(rows *sql.Rows) (Status, error) {
+func mapRowToStatus(rows *sql.Rows) (Status, error) {
 	var s Status
 	err := rows.Scan(&s.ID, &s.Name)
 

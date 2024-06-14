@@ -38,8 +38,15 @@ func main() {
 		r.Delete("/{id}", deps.Handlers.TaskHandler.DeleteTask)
 		r.Put("/{id}", deps.Handlers.TaskHandler.UpdateTask)
 		r.Post("/seed", deps.Handlers.TaskHandler.SeedTasks)
-
 	})
+
+	// r.Route("/tasks", func(r chi.Router) {
+	// TODO: Add Pagination
+	// r.Get("/", deps.Handlers.StatusHandler.ListStatus)
+	// r.Post("/", deps.Handlers.TaskHandler.CreateTask)
+	// r.Delete("/{id}", deps.Handlers.TaskHandler.DeleteTask)
+	// r.Put("/{id}", deps.Handlers.TaskHandler.UpdateTask)
+	// })
 
 	http.ListenAndServe(":3000", r)
 	println("Listenning at :3000")
