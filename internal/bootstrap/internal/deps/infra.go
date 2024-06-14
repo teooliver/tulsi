@@ -2,14 +2,15 @@ package deps
 
 import (
 	"context"
-	"database/sql"
+
 	"log"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/teooliver/kanban/internal/config"
 )
 
 type Infra struct {
-	Postgres *sql.DB
+	Postgres *pgx.Conn
 }
 
 func InitInfra(ctx context.Context, cfg *config.Config) (*Infra, error) {
@@ -21,19 +22,21 @@ func InitInfra(ctx context.Context, cfg *config.Config) (*Infra, error) {
 	}, nil
 }
 
-func initPostgres(ctx context.Context, cfg *config.PostgresConfig) (*sql.DB, error) {
-	db, err := sql.Open("postgres", cfg.DSN)
+func initPostgres(ctx context.Context, cfg *config.PostgresConfig) (*pgx.Conn, error) {
+	// db, err := sql.Open("postgres", cfg.DSN)
+
+	conn, err := pgx.Connect(context.Background(), cfg.DSN)
 	if err != nil {
 		panic(err)
 	}
 
-	err = db.Ping()
+	err = conn.Ping(ctx)
 	if err != nil {
 		// TODO: Better error handling
 		log.Fatal("Error connecting to db")
-		return db, err
+		return conn, err
 	}
 	log.Println("Database connection established")
 
-	return db, nil
+	return conn, nil
 }

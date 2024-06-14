@@ -2,18 +2,18 @@ package task
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"log/slog"
 
 	"github.com/doug-martin/goqu/v9"
+	"github.com/jackc/pgx/v5"
 )
 
 type PostgresRepository struct {
-	db *sql.DB
+	db *pgx.Conn
 }
 
-func NewPostgres(db *sql.DB) *PostgresRepository {
+func NewPostgres(db *pgx.Conn) *PostgresRepository {
 	return &PostgresRepository{db: db}
 }
 
@@ -23,7 +23,7 @@ func (r *PostgresRepository) ListAllTasks(ctx context.Context) ([]Task, error) {
 		return nil, err
 	}
 
-	rows, err := r.db.Query(sql)
+	rows, err := r.db.Query(ctx, sql)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
@@ -55,7 +55,7 @@ func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate)
 		// UserID:      task.UserID,
 	}).Returning("id").ToSQL()
 
-	result, err := r.db.ExecContext(ctx, insertSQL, args...)
+	result, err := r.db.Exec(ctx, insertSQL, args...)
 	// TODO: handle error
 	if err != nil {
 		return err
@@ -69,7 +69,7 @@ func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate)
 func (r *PostgresRepository) DeleteTask(ctx context.Context, taskID string) (err error) {
 	insertSQL, args, _ := goqu.Delete("task").Where(goqu.Ex{"id": taskID}).Returning("id").ToSQL()
 
-	result, err := r.db.ExecContext(ctx, insertSQL, args...)
+	result, err := r.db.Exec(ctx, insertSQL, args...)
 	// TODO: handle error
 	if err != nil {
 		fmt.Println(err)
@@ -83,7 +83,7 @@ func (r *PostgresRepository) DeleteTask(ctx context.Context, taskID string) (err
 func (r *PostgresRepository) UpdateTask(ctx context.Context, taskID string, task TaskForUpdate) (err error) {
 	updateSQL, args, _ := goqu.Update("task").Set(task).Where(goqu.Ex{"id": taskID}).Returning("id").ToSQL()
 
-	result, err := r.db.ExecContext(ctx, updateSQL, args...)
+	result, err := r.db.Exec(ctx, updateSQL, args...)
 	// TODO: handle error
 	if err != nil {
 		fmt.Println(err)
@@ -97,7 +97,7 @@ func (r *PostgresRepository) UpdateTask(ctx context.Context, taskID string, task
 func (r *PostgresRepository) InsertMultipleTasks(ctx context.Context, tasks []TaskForCreate) (err error) {
 	insertSQL, args, _ := goqu.Insert("task").Rows(tasks).ToSQL()
 
-	r.db.ExecContext(ctx, insertSQL, args...)
+	r.db.Exec(ctx, insertSQL, args...)
 	// TODO: handle error
 	// if err != nil {
 	// 	fmt.Println(err)

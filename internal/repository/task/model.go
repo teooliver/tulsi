@@ -1,8 +1,6 @@
 package task
 
-import (
-	"database/sql"
-)
+import "github.com/jackc/pgx/v5"
 
 type Task struct {
 	ID          string  `json:"id"`
@@ -32,8 +30,9 @@ type TaskForUpdate struct {
 	// Status      *string `json:"status"`
 }
 
-func mapRowToTask(rows *sql.Rows) (Task, error) {
+func mapRowToTask(rows pgx.Rows) (Task, error) {
 	var t Task
+
 	err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.Color, &t.Status, &t.StatusID, &t.UserID)
 
 	if err != nil {
