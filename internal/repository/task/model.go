@@ -29,11 +29,6 @@ type TaskForUpdate struct {
 	// UserID      string `json:"user_id"`
 }
 
-// impl chi.Render interface to render objects as JSON to the API consumer
-// func (t *Task) Render(w http.ResponseWriter, r *http.Request) error {
-// 	return nil
-// }
-
 func mapRowToTask(rows *sql.Rows) (Task, error) {
 	var t Task
 	// err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.StatusID, &t.UserID)
