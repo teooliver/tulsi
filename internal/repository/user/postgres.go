@@ -1,4 +1,4 @@
-package status
+package user
 
 import (
 	"context"
@@ -17,20 +17,20 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 	return &PostgresRepository{db: db}
 }
 
-func (r *PostgresRepository) ListAllStatus(ctx context.Context) ([]Status, error) {
-	sql, _, err := goqu.From("status").Select(allColumns...).ToSQL()
+func (r *PostgresRepository) ListAllStatus(ctx context.Context) ([]User, error) {
+	sql, _, err := goqu.From("app_user").Select(allColumns...).ToSQL()
 	if err != nil {
-		return nil, fmt.Errorf("error generating list all status query: %w", err)
+		return nil, fmt.Errorf("error generating list all user query: %w", err)
 	}
 
 	rows, err := r.db.Query(sql)
 	if err != nil {
-		return nil, fmt.Errorf("error executing list all status query: %w", err)
+		return nil, fmt.Errorf("error executing list all user query: %w", err)
 	}
 
 	defer rows.Close()
 
-	var result []Status
+	var result []User
 	for rows.Next() {
 		task, err := mapRowToStatus(rows)
 		if err != nil {
@@ -44,25 +44,27 @@ func (r *PostgresRepository) ListAllStatus(ctx context.Context) ([]Status, error
 	return result, nil
 }
 
-func (r *PostgresRepository) CreateStatus(ctx context.Context, status StatusForCreate) (err error) {
-	insertSQL, args, err := goqu.Insert("status").Rows(StatusForCreate{
-		Name: status.Name,
+func (r *PostgresRepository) CreateStatus(ctx context.Context, user UserForCreate) (err error) {
+	insertSQL, args, err := goqu.Insert("app_user").Rows(UserForCreate{
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
 	}).Returning("id").ToSQL()
 	if err != nil {
-		return fmt.Errorf("error generating create status query: %w", err)
+		return fmt.Errorf("error generating create user query: %w", err)
 	}
 
 	result, err := r.db.ExecContext(ctx, insertSQL, args...)
 	if err != nil {
-		return fmt.Errorf("error executing create status query: %w", err)
+		return fmt.Errorf("error executing create user query: %w", err)
 	}
 
 	slog.Info("CREATE RESULT", result)
 	return nil
 }
 
-func (r *PostgresRepository) DeleteStatus(ctx context.Context, statusID string) (err error) {
-	insertSQL, args, err := goqu.Delete("status").Where(goqu.Ex{"id": statusID}).Returning("id").ToSQL()
+func (r *PostgresRepository) DeleteStatus(ctx context.Context, userID string) (err error) {
+	insertSQL, args, err := goqu.Delete("app_user").Where(goqu.Ex{"id": userID}).Returning("id").ToSQL()
 	if err != nil {
 		return fmt.Errorf("error generating delete status query: %w", err)
 	}
@@ -76,8 +78,8 @@ func (r *PostgresRepository) DeleteStatus(ctx context.Context, statusID string) 
 	return nil
 }
 
-func (r *PostgresRepository) UpdateStatus(ctx context.Context, statusID string, status StatusForUpdate) (err error) {
-	updateSQL, args, err := goqu.Update("status").Set(status).Where(goqu.Ex{"id": statusID}).Returning("id").ToSQL()
+func (r *PostgresRepository) UpdateStatus(ctx context.Context, userID string, user UserForUpdate) (err error) {
+	updateSQL, args, err := goqu.Update("app_user").Set(user).Where(goqu.Ex{"id": userID}).Returning("id").ToSQL()
 	if err != nil {
 		return fmt.Errorf("error generating update status query: %w", err)
 	}
