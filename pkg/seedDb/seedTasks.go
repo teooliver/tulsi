@@ -1,7 +1,6 @@
 package seedDb
 
 import (
-	"log/slog"
 	"strings"
 
 	"github.com/jaswdr/faker/v2"
@@ -26,8 +25,6 @@ func createRandomTask() task.TaskForCreate {
 func CreateMultipleTasks(nbTasks int) []task.TaskForCreate {
 	tasks := make([]task.TaskForCreate, nbTasks)
 	task := createRandomTask()
-
-	slog.Info("INSERT MULTIPLE TASKS RESULT", tasks)
 
 	for i := 0; i < nbTasks; i++ {
 		tasks = append(tasks, task)
