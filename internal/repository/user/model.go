@@ -31,7 +31,7 @@ var allColumns = []any{
 	"last_name",
 }
 
-func mapRowToStatus(rows *sql.Rows) (User, error) {
+func mapRowToUser(rows *sql.Rows) (User, error) {
 	var u User
 	err := rows.Scan(&u.ID, &u.Email, &u.FirstName, &u.LastName)
 

@@ -32,7 +32,7 @@ func (r *PostgresRepository) ListAllStatus(ctx context.Context) ([]User, error) 
 
 	var result []User
 	for rows.Next() {
-		task, err := mapRowToStatus(rows)
+		task, err := mapRowToUser(rows)
 		if err != nil {
 			return nil, err
 		}
