@@ -20,13 +20,12 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 func (r *PostgresRepository) ListAllTasks(ctx context.Context) ([]Task, error) {
 	sql, _, err := goqu.From("task").Select(allColumns...).ToSQL()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error generating list all task query: %w", err)
 	}
 
 	rows, err := r.db.Query(sql)
 	if err != nil {
-		fmt.Println(err)
-		return nil, err
+		return nil, fmt.Errorf("error execuing list all task query: %w", err)
 	}
 
 	defer rows.Close()
@@ -35,10 +34,8 @@ func (r *PostgresRepository) ListAllTasks(ctx context.Context) ([]Task, error) {
 	for rows.Next() {
 		task, err := mapRowToTask(rows)
 		if err != nil {
-			// TODO: Handle error
 			return nil, err
 		}
-		slog.Info("LIST SQL RESULT ===> %+v\n", "result", task)
 
 		result = append(result, task)
 	}
@@ -48,17 +45,18 @@ func (r *PostgresRepository) ListAllTasks(ctx context.Context) ([]Task, error) {
 
 // TODO: should return at least id of the created task
 func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate) (err error) {
-	insertSQL, args, _ := goqu.Insert("task").Rows(TaskForCreate{
+	insertSQL, args, err := goqu.Insert("task").Rows(TaskForCreate{
 		Title:       task.Title,
 		Description: task.Description,
 		Color:       task.Color,
 		// UserID:      task.UserID,
 	}).Returning("id").ToSQL()
-
-	result, err := r.db.ExecContext(ctx, insertSQL, args...)
-	// TODO: handle error
 	if err != nil {
-		return err
+		return fmt.Errorf("error generating create task query: %w", err)
+	}
+	result, err := r.db.ExecContext(ctx, insertSQL, args...)
+	if err != nil {
+		return fmt.Errorf("error executing create task query: %w", err)
 	}
 
 	slog.Info("CREATE RESULT", result)
@@ -67,13 +65,14 @@ func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate)
 
 // TODO: use `uuid` type for taskID instead of `string`
 func (r *PostgresRepository) DeleteTask(ctx context.Context, taskID string) (err error) {
-	insertSQL, args, _ := goqu.Delete("task").Where(goqu.Ex{"id": taskID}).Returning("id").ToSQL()
+	insertSQL, args, err := goqu.Delete("task").Where(goqu.Ex{"id": taskID}).Returning("id").ToSQL()
+	if err != nil {
+		return fmt.Errorf("error generating delete task query: %w", err)
+	}
 
 	result, err := r.db.ExecContext(ctx, insertSQL, args...)
-	// TODO: handle error
 	if err != nil {
-		fmt.Println(err)
-		return err
+		return fmt.Errorf("error executing delete task query: %w", err)
 	}
 
 	slog.Info("DELETED TASKS ID", result)
@@ -81,13 +80,14 @@ func (r *PostgresRepository) DeleteTask(ctx context.Context, taskID string) (err
 }
 
 func (r *PostgresRepository) UpdateTask(ctx context.Context, taskID string, task TaskForUpdate) (err error) {
-	updateSQL, args, _ := goqu.Update("task").Set(task).Where(goqu.Ex{"id": taskID}).Returning("id").ToSQL()
+	updateSQL, args, err := goqu.Update("task").Set(task).Where(goqu.Ex{"id": taskID}).Returning("id").ToSQL()
+	if err != nil {
+		return fmt.Errorf("error generating update task query: %w", err)
+	}
 
 	result, err := r.db.ExecContext(ctx, updateSQL, args...)
-	// TODO: handle error
 	if err != nil {
-		fmt.Println(err)
-		return err
+		return fmt.Errorf("error executing update task query: %w", err)
 	}
 
 	slog.Info("UPDATED ID", result)
@@ -95,14 +95,15 @@ func (r *PostgresRepository) UpdateTask(ctx context.Context, taskID string, task
 }
 
 func (r *PostgresRepository) InsertMultipleTasks(ctx context.Context, tasks []TaskForCreate) (err error) {
-	insertSQL, args, _ := goqu.Insert("task").Rows(tasks).ToSQL()
+	insertSQL, args, err := goqu.Insert("task").Rows(tasks).ToSQL()
+	if err != nil {
+		return fmt.Errorf("error generating insert multiple tasks query: %w", err)
+	}
 
-	r.db.ExecContext(ctx, insertSQL, args...)
-	// TODO: handle error
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return err
-	// }
+	_, err = r.db.ExecContext(ctx, insertSQL, args...)
+	if err != nil {
+		return fmt.Errorf("error executing insert multiple tasks query: %w", err)
+	}
 
 	return nil
 }

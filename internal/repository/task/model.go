@@ -2,6 +2,7 @@ package task
 
 import (
 	"database/sql"
+	"fmt"
 )
 
 type Task struct {
@@ -47,12 +48,8 @@ func mapRowToTask(rows *sql.Rows) (Task, error) {
 	err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.Color, &t.StatusID, &t.UserID, &t.Status)
 
 	if err != nil {
-		return Task{}, err
-		// TODO: handle error
-		// if err.Is(err, sql.ErrNoRows) {
-		// 	return Task{}, serrors.ErrNotFound
-		// }
-		// return Task{}, errors.Wrap(err, "failed to scan metadata")
+		return Task{}, fmt.Errorf("Error error scanning Task row: %w", err)
+
 	}
 	return t, nil
 }

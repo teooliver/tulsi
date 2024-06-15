@@ -20,13 +20,12 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 func (r *PostgresRepository) ListAllStatus(ctx context.Context) ([]Status, error) {
 	sql, _, err := goqu.From("status").Select(allColumns...).ToSQL()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error generating list all status query: %w", err)
 	}
 
 	rows, err := r.db.Query(sql)
 	if err != nil {
-		fmt.Println(err)
-		return nil, err
+		return nil, fmt.Errorf("error executing list all status query: %w", err)
 	}
 
 	defer rows.Close()
@@ -35,7 +34,6 @@ func (r *PostgresRepository) ListAllStatus(ctx context.Context) ([]Status, error
 	for rows.Next() {
 		task, err := mapRowToStatus(rows)
 		if err != nil {
-			// TODO: Handle error
 			return nil, err
 		}
 		slog.Info("LIST SQL RESULT ===> %+v\n", "result", task)
@@ -47,14 +45,16 @@ func (r *PostgresRepository) ListAllStatus(ctx context.Context) ([]Status, error
 }
 
 func (r *PostgresRepository) CreateStatus(ctx context.Context, status StatusForCreate) (err error) {
-	insertSQL, args, _ := goqu.Insert("task").Rows(StatusForCreate{
+	insertSQL, args, err := goqu.Insert("task").Rows(StatusForCreate{
 		Name: status.Name,
 	}).Returning("id").ToSQL()
+	if err != nil {
+		return fmt.Errorf("error generating create status query: %w", err)
+	}
 
 	result, err := r.db.ExecContext(ctx, insertSQL, args...)
-	// TODO: handle error
 	if err != nil {
-		return err
+		return fmt.Errorf("error executing create status query: %w", err)
 	}
 
 	slog.Info("CREATE RESULT", result)
@@ -62,13 +62,14 @@ func (r *PostgresRepository) CreateStatus(ctx context.Context, status StatusForC
 }
 
 func (r *PostgresRepository) DeleteStatus(ctx context.Context, statusID string) (err error) {
-	insertSQL, args, _ := goqu.Delete("task").Where(goqu.Ex{"id": statusID}).Returning("id").ToSQL()
+	insertSQL, args, err := goqu.Delete("task").Where(goqu.Ex{"id": statusID}).Returning("id").ToSQL()
+	if err != nil {
+		return fmt.Errorf("error generating delete status query: %w", err)
+	}
 
 	result, err := r.db.ExecContext(ctx, insertSQL, args...)
-	// TODO: handle error
 	if err != nil {
-		fmt.Println(err)
-		return err
+		return fmt.Errorf("error executing delete status query: %w", err)
 	}
 
 	slog.Info("DELETED TASKS ID", result)
@@ -76,13 +77,14 @@ func (r *PostgresRepository) DeleteStatus(ctx context.Context, statusID string) 
 }
 
 func (r *PostgresRepository) UpdateStatus(ctx context.Context, statusID string, status StatusForUpdate) (err error) {
-	updateSQL, args, _ := goqu.Update("task").Set(status).Where(goqu.Ex{"id": statusID}).Returning("id").ToSQL()
+	updateSQL, args, err := goqu.Update("task").Set(status).Where(goqu.Ex{"id": statusID}).Returning("id").ToSQL()
+	if err != nil {
+		return fmt.Errorf("error generating update status query: %w", err)
+	}
 
 	result, err := r.db.ExecContext(ctx, updateSQL, args...)
-	// TODO: handle error
 	if err != nil {
-		fmt.Println(err)
-		return err
+		return fmt.Errorf("error executing update status query: %w", err)
 	}
 
 	slog.Info("UPDATED ID", result)

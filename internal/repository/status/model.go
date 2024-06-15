@@ -2,6 +2,7 @@ package status
 
 import (
 	"database/sql"
+	"fmt"
 )
 
 type Status struct {
@@ -27,7 +28,7 @@ func mapRowToStatus(rows *sql.Rows) (Status, error) {
 	err := rows.Scan(&s.ID, &s.Name)
 
 	if err != nil {
-		return Status{}, err
+		return Status{}, fmt.Errorf("Error error scanning Status row: %w", err)
 	}
 	return s, nil
 }

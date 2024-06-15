@@ -3,6 +3,7 @@ package deps
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
@@ -16,7 +17,6 @@ type Infra struct {
 func InitInfra(ctx context.Context, cfg *config.Config) (*Infra, error) {
 	pgClient, err := initPostgres(ctx, &cfg.Postgres)
 	if err != nil {
-		// TODO: handle err
 		panic(err)
 	}
 
@@ -33,10 +33,10 @@ func initPostgres(ctx context.Context, cfg *config.PostgresConfig) (*sql.DB, err
 
 	err = db.Ping()
 	if err != nil {
-		// TODO: Better error handling
 		log.Fatal("Error connecting to db")
-		return db, err
+		return db, fmt.Errorf("error connecting to db: %w", err)
 	}
+
 	log.Println("Database connection established")
 
 	return db, nil

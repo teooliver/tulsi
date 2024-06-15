@@ -18,11 +18,15 @@ func main() {
 
 	config, err := bootstrap.Config(".env")
 	if err != nil {
-		// TODO: Better error handling
-		log.Fatal("Error loading .env file")
+		log.Fatal("Error loading .env file %w", err)
+		panic("error loading .env file")
 	}
 
 	deps, err := bootstrap.Deps(ctx, config)
+	if err != nil {
+		log.Fatal("Error bootstraping application: %w", err)
+		panic("error bootstraping application")
+	}
 
 	// CHI
 	r := chi.NewRouter()
@@ -49,5 +53,5 @@ func main() {
 	// })
 
 	http.ListenAndServe(":3000", r)
-	println("Listenning at :3000")
+	log.Println("Listenning at :3000")
 }

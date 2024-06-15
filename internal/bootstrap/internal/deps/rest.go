@@ -10,7 +10,6 @@ type RestHandlers struct {
 }
 
 func InitRestHandlers(cfg *config.Config, services *Services) *RestHandlers {
-
 	taskHandler := task.New(services.TaskService)
 
 	return &RestHandlers{
