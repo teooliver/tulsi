@@ -44,13 +44,21 @@ func main() {
 		r.Post("/seed", deps.Handlers.TaskHandler.SeedTasks)
 	})
 
-	// r.Route("/tasks", func(r chi.Router) {
-	// TODO: Add Pagination
-	// r.Get("/", deps.Handlers.StatusHandler.ListStatus)
-	// r.Post("/", deps.Handlers.TaskHandler.CreateTask)
-	// r.Delete("/{id}", deps.Handlers.TaskHandler.DeleteTask)
-	// r.Put("/{id}", deps.Handlers.TaskHandler.UpdateTask)
-	// })
+	r.Route("/status", func(r chi.Router) {
+		// TODO: Add Pagination
+		r.Get("/", deps.Handlers.StatusHandler.ListAllStatus)
+		r.Post("/", deps.Handlers.StatusHandler.CreateStatus)
+		r.Delete("/{id}", deps.Handlers.StatusHandler.DeleteStatus)
+		r.Put("/{id}", deps.Handlers.StatusHandler.UpdateStatus)
+	})
+
+	r.Route("/user", func(r chi.Router) {
+		// TODO: Add Pagination
+		r.Get("/", deps.Handlers.UserHandler.ListUsers)
+		r.Post("/", deps.Handlers.UserHandler.CreateUser)
+		r.Delete("/{id}", deps.Handlers.UserHandler.DeleteUser)
+		r.Put("/{id}", deps.Handlers.UserHandler.UpdateUser)
+	})
 
 	http.ListenAndServe(":3000", r)
 	log.Println("Listenning at :3000")

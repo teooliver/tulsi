@@ -14,7 +14,6 @@ type statusRepo interface {
 	ListAllStatus(ctx context.Context) ([]status.Status, error)
 	CreateStatus(ctx context.Context, status status.StatusForCreate) error
 	DeleteStatus(ctx context.Context, statusId string) error
-	InsertMultipleStatus(ctx context.Context, status []status.StatusForCreate) error
 	UpdateStatus(ctx context.Context, statusID string, status status.StatusForUpdate) (err error)
 }
 

@@ -33,7 +33,7 @@ type ListStatusResponse struct {
 	StatusList []status.Status `json:"status_list"`
 }
 
-func (h Handler) ListStatuss(w http.ResponseWriter, r *http.Request) {
+func (h Handler) ListAllStatus(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	statusList, err := h.service.ListAllStatus(ctx)
 	if err != nil {

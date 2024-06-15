@@ -14,7 +14,6 @@ type userRepo interface {
 	ListAllUsers(ctx context.Context) ([]user.User, error)
 	CreateUser(ctx context.Context, user user.UserForCreate) error
 	DeleteUser(ctx context.Context, userID string) error
-	InsertMultipleUsers(ctx context.Context, users []user.UserForCreate) error
 	UpdateUser(ctx context.Context, userID string, user user.UserForUpdate) (err error)
 }
 
