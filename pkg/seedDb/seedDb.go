@@ -19,10 +19,15 @@ func seedData() DbData {
 	users := createMultipleFakeUsers(10)
 
 	tasks := make([]task.Task, len(users)*tasksPerUser)
+
 	for _, u := range users {
 		userTasks := createMultipleTasks(tasksPerUser, statusList[0].ID, u.ID)
 		tasks = append(tasks, userTasks...)
 	}
+
+	// Create Tasks without users or status
+	blankTasks := createMultipleTasks(20, "", "")
+	tasks = append(tasks, blankTasks...)
 
 	return DbData{
 		StatusList: statusList,
