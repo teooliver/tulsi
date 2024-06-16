@@ -3,28 +3,29 @@ package seedDb
 import (
 	"strings"
 
+	"github.com/google/uuid"
 	"github.com/jaswdr/faker/v2"
 	"github.com/teooliver/kanban/internal/repository/task"
 )
 
-func createRandomTask() task.TaskForCreate {
+func createFakeTask(statusID string, userId string) task.Task {
 	fake := faker.New()
 
-	task := task.TaskForCreate{
+	task := task.Task{
+		ID:          uuid.New().String(),
 		Title:       strings.Join(fake.Lorem().Words(3), " "),
 		Description: strings.Join(fake.Lorem().Words(5), " "),
 		Color:       fake.Lorem().Faker.Color().ColorName(),
-		// Not needed for now:
-		// StatusID:    fake.Lorem().Faker.UUID().V4(),
-		// UserID:      fake.Lorem().Faker.UUID().V4(),
+		StatusID:    &statusID,
+		UserID:      &userId,
 	}
 
 	return task
 }
 
-func CreateMultipleTasks(nbTasks int) []task.TaskForCreate {
-	tasks := make([]task.TaskForCreate, nbTasks)
-	task := createRandomTask()
+func createMultipleTasks(nbTasks int, statusID string, userId string) []task.Task {
+	tasks := make([]task.Task, nbTasks)
+	task := createFakeTask(statusID, userId)
 
 	for i := 0; i < nbTasks; i++ {
 		tasks = append(tasks, task)

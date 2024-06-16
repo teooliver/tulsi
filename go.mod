@@ -5,6 +5,7 @@ go 1.22.3
 require (
 	github.com/doug-martin/goqu/v9 v9.19.0
 	github.com/go-chi/chi/v5 v5.0.12
+	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.6.0
 	github.com/jaswdr/faker/v2 v2.3.0
 	github.com/joho/godotenv v1.5.1
