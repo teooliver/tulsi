@@ -1,6 +1,7 @@
 package seedDb
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/google/uuid"
@@ -32,4 +33,16 @@ func createMultipleTasks(nbTasks int, statusID string, userId string) []task.Tas
 	}
 
 	return tasks
+}
+
+func taskIntoCSVString(tasks []task.Task) []string {
+	s := make([]string, len(tasks))
+
+	for _, t := range tasks {
+		// TODO: Research better ways of build the string from struct
+		result := fmt.Sprintf("%s ,%s, %s, %s, %s, %s", t.ID, t.Title, t.Color, t.Description, *t.StatusID, *t.UserID)
+		s = append(s, result)
+	}
+
+	return s
 }

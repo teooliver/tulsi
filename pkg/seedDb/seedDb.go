@@ -34,7 +34,6 @@ func seedData() DbData {
 		Users:      users,
 		Tasks:      tasks,
 	}
-
 }
 
 // TODO: Create CSV file with fake to seed database
