@@ -41,7 +41,6 @@ func main() {
 		r.Post("/", deps.Handlers.TaskHandler.CreateTask)
 		r.Delete("/{id}", deps.Handlers.TaskHandler.DeleteTask)
 		r.Put("/{id}", deps.Handlers.TaskHandler.UpdateTask)
-		r.Post("/seed", deps.Handlers.TaskHandler.SeedTasks)
 	})
 
 	r.Route("/status", func(r chi.Router) {

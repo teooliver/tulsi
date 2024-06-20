@@ -36,11 +36,12 @@ func createMultipleTasks(nbTasks int, statusID string, userId string) []task.Tas
 }
 
 func taskIntoCSVString(tasks []task.Task) []string {
-	s := make([]string, len(tasks))
+	// Why make with len(tasks) is adding empty strings in the beggining?
+	s := make([]string, 0)
 
 	for _, t := range tasks {
 		// TODO: Research better ways of build the string from struct
-		result := fmt.Sprintf("%s ,%s, %s, %s, %s, %s", t.ID, t.Title, t.Color, t.Description, *t.StatusID, *t.UserID)
+		result := fmt.Sprintf("%s, %s, %s, %s, %s, %s", t.ID, t.Title, t.Color, t.Description, *t.StatusID, *t.UserID)
 		s = append(s, result)
 	}
 

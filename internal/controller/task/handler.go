@@ -16,7 +16,6 @@ type taskService interface {
 	CreateTask(ctx context.Context, task task.TaskForCreate) error
 	DeleteTask(ctx context.Context, taskID string) error
 	UpdateTask(ctx context.Context, taskID string, updatedTask task.TaskForUpdate) error
-	InsertMultipleTasks(ctx context.Context) error
 }
 
 type Handler struct {
@@ -92,20 +91,6 @@ func (h Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = h.service.UpdateTask(ctx, taskID, taskToUpdate)
-
-	if err != nil {
-		// Should return Error Not Found and 404
-		print(err)
-	}
-
-}
-
-func (h Handler) SeedTasks(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-
-	slog.Info("HELLO")
-
-	err := h.service.InsertMultipleTasks(ctx)
 
 	if err != nil {
 		// Should return Error Not Found and 404
