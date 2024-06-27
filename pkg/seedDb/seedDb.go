@@ -22,7 +22,7 @@ func seedData() DbData {
 	statusList := createFakeStatusList()
 	users := createMultipleFakeUsers(10)
 
-	tasks := make([]task.Task, len(users)*tasksPerUser)
+	tasks := make([]task.Task, 0, len(users)*tasksPerUser)
 
 	for _, u := range users {
 		userTasks := createMultipleTasks(tasksPerUser, statusList[0].ID, u.ID)
@@ -30,8 +30,8 @@ func seedData() DbData {
 	}
 
 	// Create Tasks without users or status
-	blankTasks := createMultipleTasks(20, "", "")
-	tasks = append(tasks, blankTasks...)
+	// blankTasks := createMultipleTasks(20, "", "")
+	// tasks = append(tasks, blankTasks...)
 
 	return DbData{
 		StatusList: statusList,
@@ -47,8 +47,8 @@ func CreateDbCSV() {
 	statusCSVTable := statusIntoCSVString(dbData.StatusList)
 	tasksCSVTable := taskIntoCSVString(dbData.Tasks)
 
-	writeCSVtoFile("users.csv", statusCSVTable)
-	writeCSVtoFile("status.csv", usersCSVTable)
+	writeCSVtoFile("users.csv", usersCSVTable)
+	writeCSVtoFile("status.csv", statusCSVTable)
 	writeCSVtoFile("tasks.csv", tasksCSVTable)
 
 }

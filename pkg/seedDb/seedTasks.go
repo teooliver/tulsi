@@ -26,10 +26,10 @@ func createFakeTask(statusID string, userId string) task.Task {
 }
 
 func createMultipleTasks(nbTasks int, statusID string, userId string) []task.Task {
-	tasks := make([]task.Task, nbTasks)
-	task := createFakeTask(statusID, userId)
+	tasks := make([]task.Task, 0, nbTasks)
 
 	for i := 0; i < nbTasks; i++ {
+		task := createFakeTask(statusID, userId)
 		tasks = append(tasks, task)
 	}
 

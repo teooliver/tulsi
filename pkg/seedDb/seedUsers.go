@@ -22,10 +22,10 @@ func createFakeUser() user.User {
 }
 
 func createMultipleFakeUsers(nbUsers int) []user.User {
-	users := make([]user.User, nbUsers)
-	user := createFakeUser()
+	users := make([]user.User, 0, nbUsers)
 
 	for i := 0; i < nbUsers; i++ {
+		user := createFakeUser()
 		users = append(users, user)
 	}
 
