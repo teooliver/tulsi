@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jaswdr/faker/v2"
 	"github.com/teooliver/kanban/internal/repository/task"
+	"github.com/teooliver/kanban/pkg/error"
 )
 
 func createFakeTask(statusID string, userId string) task.Task {
@@ -36,12 +37,10 @@ func createMultipleTasks(nbTasks int, statusID string, userId string) []task.Tas
 }
 
 func taskIntoCSVString(tasks []task.Task) []string {
-	// Why make with len(tasks) is adding empty strings in the beggining?
-	s := make([]string, 0)
+	s := make([]string, 0, len(tasks))
 
 	for _, t := range tasks {
-		// TODO: Research better ways of build the string from struct
-		result := fmt.Sprintf("%s, %s, %s, %s, %s, %s", t.ID, t.Title, t.Color, t.Description, *t.StatusID, *t.UserID)
+		result := fmt.Sprintf("%s, %s, %s, %s, %s, %s", t.ID, t.Title, t.Color, t.Description, error.ZeroOnNil(t.StatusID), error.ZeroOnNil(t.UserID))
 		s = append(s, result)
 	}
 

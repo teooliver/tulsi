@@ -1,6 +1,8 @@
 package seedDb
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/jaswdr/faker/v2"
 	"github.com/teooliver/kanban/internal/repository/user"
@@ -28,4 +30,15 @@ func createMultipleFakeUsers(nbUsers int) []user.User {
 	}
 
 	return users
+}
+
+func userIntoCSVString(users []user.User) []string {
+	s := make([]string, 0, len(users))
+
+	for _, t := range users {
+		result := fmt.Sprintf("%s, %s, %s, %s", t.ID, t.Email, t.FirstName, t.LastName)
+		s = append(s, result)
+	}
+
+	return s
 }
