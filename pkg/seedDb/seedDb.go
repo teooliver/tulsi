@@ -41,7 +41,7 @@ func seedData() DbData {
 }
 
 func CreateDbCSV() {
-	// TODO: Should we recieve dbData as an arg to the function instead?
+	// TODO: Should we receive dbData as an arg to the function instead?
 	dbData := seedData()
 	usersCSVTable := userIntoCSVString(dbData.Users)
 	statusCSVTable := statusIntoCSVString(dbData.StatusList)
@@ -54,12 +54,14 @@ func CreateDbCSV() {
 }
 
 func writeCSVtoFile(fileName string, lines []string) {
+	// TODO: Check if path already exist
 	err := os.Mkdir("CSV_DB/", 0755)
 	if err != nil {
-		// If folder already exists do nothing
+		// TODO: If folder already exists do nothing
 		// log.Fatal(err)
 	}
 
+	// TODO: Allow overriding the files if they already exist
 	f, err := os.Create("CSV_DB/" + fileName)
 	if err != nil {
 		log.Fatal(err)
