@@ -5,14 +5,11 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/jaswdr/faker/v2"
 	"github.com/teooliver/kanban/internal/repository/task"
 	"github.com/teooliver/kanban/pkg/error"
 )
 
 func createFakeTask(statusID string, userId string) task.Task {
-	fake := faker.New()
-
 	task := task.Task{
 		ID:          uuid.New().String(),
 		Title:       strings.Join(fake.Lorem().Words(3), " "),

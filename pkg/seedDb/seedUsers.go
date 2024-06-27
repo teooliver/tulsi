@@ -4,13 +4,10 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/jaswdr/faker/v2"
 	"github.com/teooliver/kanban/internal/repository/user"
 )
 
 func createFakeUser() user.User {
-	fake := faker.New()
-
 	user := user.User{
 		ID:        uuid.New().String(),
 		Email:     fake.Person().Contact().Email,
