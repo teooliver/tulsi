@@ -37,7 +37,7 @@ func taskIntoCSVString(tasks []task.Task) []string {
 	s := make([]string, 0, len(tasks))
 
 	for _, t := range tasks {
-		result := fmt.Sprintf("%s, %s, %s, %s, %s, %s", t.ID, t.Title, t.Color, t.Description, error.ZeroOnNil(t.StatusID), error.ZeroOnNil(t.UserID))
+		result := fmt.Sprintf("%s,%s,%s,%s,%s,%s", t.ID, t.Title, t.Color, t.Description, error.ZeroOnNil(t.UserID), error.ZeroOnNil(t.StatusID))
 		s = append(s, result)
 	}
 

@@ -28,6 +28,8 @@ func InitInfra(ctx context.Context, cfg *config.Config) (*Infra, error) {
 func initPostgres(ctx context.Context, cfg *config.PostgresConfig) (*sql.DB, error) {
 	db, err := sql.Open("pgx", cfg.DSN)
 	if err != nil {
+		// TODO?
+		// db.Close()
 		panic(err)
 	}
 
@@ -41,3 +43,28 @@ func initPostgres(ctx context.Context, cfg *config.PostgresConfig) (*sql.DB, err
 
 	return db, nil
 }
+
+// func initPostgres(ctx context.Context, cfg *config.PostgresConfig) (*sql.DB, error) {
+// 	db, err := sql.Open("pgx", cfg.DSN)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	err = db.Ping()
+// 	if err != nil {
+// 		log.Fatal("Error connecting to db")
+// 		return db, fmt.Errorf("error connecting to db: %w", err)
+// 	}
+
+// 	for {
+// 		select {
+// 		case <-ctx.Done():
+// 			db.Close()
+// 			fmt.Println("Connection Closed")
+// 			return db, nil
+// 		default:
+// 			log.Println("Database connection established")
+// 			return db, nil
+// 		}
+// 	}
+// }

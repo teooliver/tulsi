@@ -36,7 +36,7 @@ func statusIntoCSVString(status []status.Status) []string {
 	s := make([]string, 0, len(status))
 
 	for _, t := range status {
-		result := fmt.Sprintf("%s, %s", t.ID, t.Name)
+		result := fmt.Sprintf("%s,%s", t.ID, t.Name)
 		s = append(s, result)
 	}
 

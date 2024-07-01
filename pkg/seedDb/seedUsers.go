@@ -33,7 +33,7 @@ func userIntoCSVString(users []user.User) []string {
 	s := make([]string, 0, len(users))
 
 	for _, t := range users {
-		result := fmt.Sprintf("%s, %s, %s, %s", t.ID, t.Email, t.FirstName, t.LastName)
+		result := fmt.Sprintf("%s,%s,%s,%s", t.ID, t.Email, t.FirstName, t.LastName)
 		s = append(s, result)
 	}
 

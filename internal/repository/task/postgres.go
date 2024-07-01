@@ -25,7 +25,7 @@ func (r *PostgresRepository) ListAllTasks(ctx context.Context) ([]Task, error) {
 
 	rows, err := r.db.Query(sql)
 	if err != nil {
-		return nil, fmt.Errorf("error execuing list all task query: %w", err)
+		return nil, fmt.Errorf("error executing list all task query: %w", err)
 	}
 
 	defer rows.Close()

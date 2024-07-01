@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -13,8 +14,10 @@ import (
 )
 
 func main() {
-	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill)
-	defer cancel()
+	ctx, initialCancel := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill)
+	defer initialCancel()
+	// defer log.Println("Gracefully shuting down")
+	// defer os.Exit(0)
 
 	config, err := bootstrap.Config(".env")
 	if err != nil {
@@ -28,9 +31,26 @@ func main() {
 		panic("error bootstraping application")
 	}
 
-	// CHI
+	// The HTTP Server
+	server := &http.Server{Addr: "0.0.0.0:3000", Handler: router(deps)}
+	err = server.ListenAndServe()
+	if err != nil && err != http.ErrServerClosed {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Listenning at :3000")
+	fmt.Println("Waiting for ctrl+c...")
+
+}
+
+func router(deps *bootstrap.AllDeps) http.Handler {
 	r := chi.NewRouter()
+	// A good base middleware stack
+	r.Use(middleware.RequestID)
+	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("welcome"))
 	})
@@ -51,7 +71,7 @@ func main() {
 		r.Put("/{id}", deps.Handlers.StatusHandler.UpdateStatus)
 	})
 
-	r.Route("/user", func(r chi.Router) {
+	r.Route("/users", func(r chi.Router) {
 		// TODO: Add Pagination
 		r.Get("/", deps.Handlers.UserHandler.ListUsers)
 		r.Post("/", deps.Handlers.UserHandler.CreateUser)
@@ -59,6 +79,5 @@ func main() {
 		r.Put("/{id}", deps.Handlers.UserHandler.UpdateUser)
 	})
 
-	http.ListenAndServe(":3000", r)
-	log.Println("Listenning at :3000")
+	return r
 }

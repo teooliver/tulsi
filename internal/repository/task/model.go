@@ -12,7 +12,6 @@ type Task struct {
 	Color       string  `json:"color"`
 	StatusID    *string `json:"status_id"`
 	UserID      *string `json:"user_id"`
-	Status      *string `json:"status"`
 }
 
 type TaskForCreate struct {
@@ -21,7 +20,6 @@ type TaskForCreate struct {
 	Color       string `json:"color"`
 	// StatusID    string `json:"status_id"`
 	// UserID      string `json:"user_id"`
-	// Status      *string `json:"status"`
 }
 
 type TaskForUpdate struct {
@@ -30,7 +28,6 @@ type TaskForUpdate struct {
 	Color       string `json:"color"`
 	// StatusID    string `json:"status_id"`
 	// UserID      string `json:"user_id"`
-	// Status      *string `json:"status"`
 }
 
 var allColumns = []any{
@@ -40,12 +37,11 @@ var allColumns = []any{
 	"color",
 	"status_id",
 	"user_id",
-	"status",
 }
 
 func mapRowToTask(rows *sql.Rows) (Task, error) {
 	var t Task
-	err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.Color, &t.StatusID, &t.UserID, &t.Status)
+	err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.Color, &t.StatusID, &t.UserID)
 
 	if err != nil {
 		return Task{}, fmt.Errorf("Error error scanning Task row: %w", err)
