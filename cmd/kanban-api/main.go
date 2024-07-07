@@ -10,9 +10,11 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/ggicci/httpin"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/teooliver/kanban/internal/bootstrap"
+	"github.com/teooliver/kanban/internal/controller/task"
 )
 
 func main() {
@@ -79,6 +81,7 @@ func main() {
 
 func router(deps *bootstrap.AllDeps) http.Handler {
 	r := chi.NewRouter()
+
 	// A good base middleware stack
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
@@ -91,7 +94,10 @@ func router(deps *bootstrap.AllDeps) http.Handler {
 
 	r.Route("/tasks", func(r chi.Router) {
 		// TODO: Add Pagination
-		r.Get("/", deps.Handlers.TaskHandler.ListTasks)
+
+		r.With(
+			httpin.NewInput(task.ListTasksInput{}),
+		).Get("/", deps.Handlers.TaskHandler.ListTasks)
 		r.Post("/", deps.Handlers.TaskHandler.CreateTask)
 		r.Delete("/{id}", deps.Handlers.TaskHandler.DeleteTask)
 		r.Put("/{id}", deps.Handlers.TaskHandler.UpdateTask)

@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/ggicci/httpin"
 	"github.com/go-chi/chi/v5"
 	"github.com/teooliver/kanban/internal/repository/task"
 )
@@ -28,6 +29,12 @@ func New(service taskService) Handler {
 	}
 }
 
+type ListTasksInput struct {
+	Token string `in:"header=Authorization"`
+	Size  int    `in:"query=size"`
+	Page  int    `in:"query=page"`
+}
+
 // TODO: Add pagination
 type ListTaskResponse struct {
 	Tasks []task.Task `json:"tasks"`
@@ -35,6 +42,9 @@ type ListTaskResponse struct {
 
 func (h Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	input := r.Context().Value(httpin.Input).(*ListTasksInput)
+	slog.Info("HTTPin Input: ", input)
+
 	tasks, err := h.service.ListAllTasks(ctx)
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("Something went wrong: %v\n", err)))
