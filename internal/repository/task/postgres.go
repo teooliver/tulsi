@@ -7,6 +7,7 @@ import (
 	"log/slog"
 
 	"github.com/doug-martin/goqu/v9"
+	"github.com/teooliver/kanban/pkg/postgresutils"
 )
 
 type PostgresRepository struct {
@@ -17,30 +18,35 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 	return &PostgresRepository{db: db}
 }
 
-func (r *PostgresRepository) ListAllTasks(ctx context.Context) ([]Task, error) {
+type ListParams struct {
+	Page postgresutils.PageRequest
+}
+
+func (r *PostgresRepository) ListAllTasks(ctx context.Context, params) ([]Task, error) {
 	sql, _, err := goqu.From("task").Select(allColumns...).ToSQL()
 	if err != nil {
 		return nil, fmt.Errorf("error generating list all task query: %w", err)
 	}
 
-	rows, err := r.db.Query(sql)
-	if err != nil {
-		return nil, fmt.Errorf("error executing list all task query: %w", err)
-	}
+	// rows, err := r.db.Query(sql)
+	// if err != nil {
+	// 	return nil, fmt.Errorf("error executing list all task query: %w", err)
+	// }
 
-	defer rows.Close()
+	// defer rows.Close()
 
-	var result []Task
-	for rows.Next() {
-		task, err := mapRowToTask(rows)
-		if err != nil {
-			return nil, err
-		}
+	// var result []Task
+	// for rows.Next() {
+	// 	task, err := mapRowToTask(rows)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
 
-		result = append(result, task)
-	}
+	// 	result = append(result, task)
+	// }
 
-	return result, nil
+	// return result, nil
+	return postgresutils.ListPaginated(ctx, r.db, sql, params.Page, mapRow postgresutils.RowMapper[T])
 }
 
 // TODO: should return at least id of the created task

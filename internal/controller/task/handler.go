@@ -30,16 +30,17 @@ func New(service taskService) Handler {
 }
 
 type ListTasksInput struct {
-	Token string `in:"header=Authorization"`
-	Size  int    `in:"query=size"`
-	Page  int    `in:"query=page"`
+	Token  string  `in:"header=Authorization;omitempty"`
+	Page   int     `in:"query=page;default=1"`
+	Size   int     `in:"query=size;default=20"`
+	Search *string `in:"query=search;omitempty"`
 }
 
-// TODO: Add pagination
 type ListTaskResponse struct {
 	Tasks []task.Task `json:"tasks"`
 }
 
+// TODO: Add pagination
 func (h Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	input := r.Context().Value(httpin.Input).(*ListTasksInput)
