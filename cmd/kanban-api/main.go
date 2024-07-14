@@ -14,7 +14,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/teooliver/kanban/internal/bootstrap"
-	"github.com/teooliver/kanban/internal/controller/task"
+	"github.com/teooliver/kanban/pkg/postgresutils"
 )
 
 func main() {
@@ -96,7 +96,7 @@ func router(deps *bootstrap.AllDeps) http.Handler {
 		// TODO: Add Pagination
 
 		r.With(
-			httpin.NewInput(task.ListTasksInput{}),
+			httpin.NewInput(postgresutils.PageRequest{}),
 		).Get("/", deps.Handlers.TaskHandler.ListTasks)
 		r.Post("/", deps.Handlers.TaskHandler.CreateTask)
 		r.Delete("/{id}", deps.Handlers.TaskHandler.DeleteTask)

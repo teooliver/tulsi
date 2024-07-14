@@ -10,10 +10,11 @@ import (
 	"github.com/ggicci/httpin"
 	"github.com/go-chi/chi/v5"
 	"github.com/teooliver/kanban/internal/repository/task"
+	"github.com/teooliver/kanban/pkg/postgresutils"
 )
 
 type taskService interface {
-	ListAllTasks(ctx context.Context) ([]task.Task, error)
+	ListAllTasks(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[task.Task], error)
 	CreateTask(ctx context.Context, task task.TaskForCreate) error
 	DeleteTask(ctx context.Context, taskID string) error
 	UpdateTask(ctx context.Context, taskID string, updatedTask task.TaskForUpdate) error
@@ -29,26 +30,25 @@ func New(service taskService) Handler {
 	}
 }
 
-type ListTasksInput struct {
-	Token  string  `in:"header=Authorization;omitempty"`
-	Page   int     `in:"query=page;default=1"`
-	Size   int     `in:"query=size;default=20"`
-	Search *string `in:"query=search;omitempty"`
-}
+// type ListTasksInput struct {
+// 	Token  string  `in:"header=Authorization;omitempty"`
+// 	Page   int     `in:"query=page;default=1"`
+// 	Size   int     `in:"query=size;default=20"`
+// 	Search *string `in:"query=search;omitempty"`
+// }
 
 type ListTaskResponse struct {
-	Tasks []task.Task `json:"tasks"`
+	Tasks postgresutils.Page[task.Task] `json:"tasks"`
 }
 
-// TODO: Add pagination
 func (h Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	input := r.Context().Value(httpin.Input).(*ListTasksInput)
+	input := r.Context().Value(httpin.Input).(*postgresutils.PageRequest)
 	slog.Info("HTTPin Input: ", input)
 
-	tasks, err := h.service.ListAllTasks(ctx)
+	tasks, err := h.service.ListAllTasks(ctx, input)
 	if err != nil {
-		w.Write([]byte(fmt.Sprintf("Something went wrong: %v\n", err)))
+		w.Write([]byte(fmt.Sprintf("TASK HANDLER => Something went wrong: %v\n", err)))
 	}
 	taskResponse := ListTaskResponse{
 		Tasks: tasks,
@@ -56,7 +56,7 @@ func (h Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 
 	jsonTasks, err := json.Marshal(taskResponse.Tasks)
 	if err != nil {
-		w.Write([]byte(fmt.Sprintf("Something went wrong: %v\n", err)))
+		w.Write([]byte(fmt.Sprintf("TASK HANDLER MARSHAL => Something went wrong: %v\n", err)))
 	}
 
 	w.Write([]byte(jsonTasks))

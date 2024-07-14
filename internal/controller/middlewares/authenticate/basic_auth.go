@@ -1,3 +1,5 @@
+package authenticate
+
 import (
 	"crypto/subtle"
 	"fmt"

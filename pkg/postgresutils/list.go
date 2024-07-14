@@ -97,17 +97,19 @@ type Scanner interface {
 	Scan(dest ...interface{}) error
 }
 
-type RowMapper[T any] func(row Scanner) (T, error)
+type RowMapper[T any] func(rows *sql.Rows) (T, error)
 
 func ListPaginated[T any](
 	ctx context.Context,
 	db *sql.DB,
 	q *goqu.SelectDataset,
-	pageReq PageRequest,
+	pageReq *PageRequest,
 	mapRow RowMapper[T],
 ) (Page[T], error) {
 	total, err := countTotal(ctx, db, q)
 	if err != nil {
+
+		println("COUNT ERROR")
 		return Page[T]{}, err
 	}
 	if total == 0 {
@@ -118,6 +120,7 @@ func ListPaginated[T any](
 
 	data, err := listData(ctx, db, q, mapRow)
 	if err != nil {
+		println("LIST DATA ERROR")
 		return Page[T]{}, err
 	}
 
@@ -132,11 +135,13 @@ func listData[T any](
 ) (_ []T, err error) {
 	query, args, err := q.ToSQL()
 	if err != nil {
+		println("TO SQL ERROR")
 		return nil, err
 	}
 
-	rows, err := db.QueryContext(ctx, query, args)
+	rows, err := db.QueryContext(ctx, query, args...)
 	if err != nil {
+		println("QueryContext ERROR")
 		return nil, err
 	}
 

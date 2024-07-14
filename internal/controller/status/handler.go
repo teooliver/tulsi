@@ -37,7 +37,7 @@ func (h Handler) ListAllStatus(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	statusList, err := h.service.ListAllStatus(ctx)
 	if err != nil {
-		w.Write([]byte(fmt.Sprintf("Something went wrong: %v\n", err)))
+		w.Write([]byte(fmt.Sprintf("STATUS HANDLER => Something went wrong: %v\n", err)))
 	}
 	StatusResponse := ListStatusResponse{
 		StatusList: statusList,
@@ -45,7 +45,7 @@ func (h Handler) ListAllStatus(w http.ResponseWriter, r *http.Request) {
 
 	jsonStatusList, err := json.Marshal(StatusResponse.StatusList)
 	if err != nil {
-		w.Write([]byte(fmt.Sprintf("Something went wrong: %v\n", err)))
+		w.Write([]byte(fmt.Sprintf("STATUS HANDLER MARSHAL =>Something went wrong: %v\n", err)))
 	}
 
 	w.Write([]byte(jsonStatusList))

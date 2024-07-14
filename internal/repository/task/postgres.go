@@ -18,20 +18,23 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 	return &PostgresRepository{db: db}
 }
 
-type ListParams struct {
-	Page postgresutils.PageRequest
-}
+// type ListParams struct {
+// 	Page postgresutils.PageRequest
+// }
 
-func (r *PostgresRepository) ListAllTasks(ctx context.Context, params) ([]Task, error) {
-	sql, _, err := goqu.From("task").Select(allColumns...).ToSQL()
-	if err != nil {
-		return nil, fmt.Errorf("error generating list all task query: %w", err)
-	}
+func (r *PostgresRepository) ListAllTasks(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[Task], error) {
+	println("GOT HERE REPO")
+	// sql, _, err := goqu.From("task").Select(allColumns...).ToSQL()
+	// if err != nil {
+	// 	return nil, fmt.Errorf("error generating list all task query: %w", err)
+	// }
 
 	// rows, err := r.db.Query(sql)
 	// if err != nil {
 	// 	return nil, fmt.Errorf("error executing list all task query: %w", err)
 	// }
+
+	// // First paginate, then map?
 
 	// defer rows.Close()
 
@@ -46,7 +49,8 @@ func (r *PostgresRepository) ListAllTasks(ctx context.Context, params) ([]Task, 
 	// }
 
 	// return result, nil
-	return postgresutils.ListPaginated(ctx, r.db, sql, params.Page, mapRow postgresutils.RowMapper[T])
+	q := goqu.From("task").Select(allColumns...)
+	return postgresutils.ListPaginated(ctx, r.db, q, params, mapRowToTask)
 }
 
 // TODO: should return at least id of the created task
