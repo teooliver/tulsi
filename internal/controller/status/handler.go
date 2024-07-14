@@ -7,12 +7,14 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/ggicci/httpin"
 	"github.com/go-chi/chi/v5"
 	"github.com/teooliver/kanban/internal/repository/status"
+	"github.com/teooliver/kanban/pkg/postgresutils"
 )
 
 type statusService interface {
-	ListAllStatus(ctx context.Context) ([]status.Status, error)
+	ListAllStatus(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[status.Status], error)
 	CreateStatus(ctx context.Context, status status.StatusForCreate) error
 	DeleteStatus(ctx context.Context, status string) error
 	UpdateStatus(ctx context.Context, status string, updatedStatus status.StatusForUpdate) error
@@ -28,14 +30,16 @@ func New(service statusService) Handler {
 	}
 }
 
-// TODO: Add pagination
 type ListStatusResponse struct {
-	StatusList []status.Status `json:"status_list"`
+	StatusList postgresutils.Page[status.Status] `json:"status_list"`
 }
 
 func (h Handler) ListAllStatus(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	statusList, err := h.service.ListAllStatus(ctx)
+	input := r.Context().Value(httpin.Input).(*postgresutils.PageRequest)
+	slog.Info("HTTPin Input: ", input)
+
+	statusList, err := h.service.ListAllStatus(ctx, input)
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("STATUS HANDLER => Something went wrong: %v\n", err)))
 	}

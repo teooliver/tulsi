@@ -27,8 +27,6 @@ func New(
 }
 
 func (s *Service) ListAllTasks(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[task.Task], error) {
-	println("GOT HERE SERVICE")
-
 	tasks, err := s.taskRepo.ListAllTasks(ctx, params)
 	if err != nil {
 		return postgresutils.Page[task.Task]{}, err

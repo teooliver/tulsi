@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/teooliver/kanban/internal/repository/user"
+	"github.com/teooliver/kanban/pkg/postgresutils"
 )
 
 type Service struct {
@@ -11,7 +12,7 @@ type Service struct {
 }
 
 type userRepo interface {
-	ListAllUsers(ctx context.Context) ([]user.User, error)
+	ListAllUsers(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[user.User], error)
 	CreateUser(ctx context.Context, user user.UserForCreate) error
 	DeleteUser(ctx context.Context, userID string) error
 	UpdateUser(ctx context.Context, userID string, user user.UserForUpdate) (err error)
@@ -25,10 +26,10 @@ func New(
 	}
 }
 
-func (s *Service) ListAllUsers(ctx context.Context) ([]user.User, error) {
-	users, err := s.userRepo.ListAllUsers(ctx)
+func (s *Service) ListAllUsers(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[user.User], error) {
+	users, err := s.userRepo.ListAllUsers(ctx, params)
 	if err != nil {
-		return nil, err
+		return postgresutils.Page[user.User]{}, err
 	}
 
 	return users, nil

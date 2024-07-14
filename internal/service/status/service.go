@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/teooliver/kanban/internal/repository/status"
+	"github.com/teooliver/kanban/pkg/postgresutils"
 )
 
 type Service struct {
@@ -11,7 +12,7 @@ type Service struct {
 }
 
 type statusRepo interface {
-	ListAllStatus(ctx context.Context) ([]status.Status, error)
+	ListAllStatus(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[status.Status], error)
 	CreateStatus(ctx context.Context, status status.StatusForCreate) error
 	DeleteStatus(ctx context.Context, statusId string) error
 	UpdateStatus(ctx context.Context, statusID string, status status.StatusForUpdate) (err error)
@@ -25,10 +26,10 @@ func New(
 	}
 }
 
-func (s *Service) ListAllStatus(ctx context.Context) ([]status.Status, error) {
-	allStatus, err := s.statusRepo.ListAllStatus(ctx)
+func (s *Service) ListAllStatus(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[status.Status], error) {
+	allStatus, err := s.statusRepo.ListAllStatus(ctx, params)
 	if err != nil {
-		return nil, err
+		return postgresutils.Page[status.Status]{}, err
 	}
 
 	return allStatus, nil

@@ -7,12 +7,14 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/ggicci/httpin"
 	"github.com/go-chi/chi/v5"
 	"github.com/teooliver/kanban/internal/repository/user"
+	"github.com/teooliver/kanban/pkg/postgresutils"
 )
 
 type userService interface {
-	ListAllUsers(ctx context.Context) ([]user.User, error)
+	ListAllUsers(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[user.User], error)
 	CreateUser(ctx context.Context, user user.UserForCreate) error
 	DeleteUser(ctx context.Context, userID string) error
 	UpdateUser(ctx context.Context, userID string, updatedUser user.UserForUpdate) error
@@ -30,12 +32,15 @@ func New(service userService) Handler {
 
 // TODO: Add pagination
 type ListUserResponse struct {
-	Users []user.User `json:"users"`
+	Users postgresutils.Page[user.User] `json:"users"`
 }
 
 func (h Handler) ListUsers(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	users, err := h.service.ListAllUsers(ctx)
+	input := r.Context().Value(httpin.Input).(*postgresutils.PageRequest)
+	slog.Info("HTTPin Input: ", input)
+
+	users, err := h.service.ListAllUsers(ctx, input)
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("Something went wrong: %v\n", err)))
 	}

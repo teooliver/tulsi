@@ -23,32 +23,6 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 // }
 
 func (r *PostgresRepository) ListAllTasks(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[Task], error) {
-	println("GOT HERE REPO")
-	// sql, _, err := goqu.From("task").Select(allColumns...).ToSQL()
-	// if err != nil {
-	// 	return nil, fmt.Errorf("error generating list all task query: %w", err)
-	// }
-
-	// rows, err := r.db.Query(sql)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("error executing list all task query: %w", err)
-	// }
-
-	// // First paginate, then map?
-
-	// defer rows.Close()
-
-	// var result []Task
-	// for rows.Next() {
-	// 	task, err := mapRowToTask(rows)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-
-	// 	result = append(result, task)
-	// }
-
-	// return result, nil
 	q := goqu.From("task").Select(allColumns...)
 	return postgresutils.ListPaginated(ctx, r.db, q, params, mapRowToTask)
 }

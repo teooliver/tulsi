@@ -7,6 +7,7 @@ import (
 	"log/slog"
 
 	"github.com/doug-martin/goqu/v9"
+	"github.com/teooliver/kanban/pkg/postgresutils"
 )
 
 type PostgresRepository struct {
@@ -17,31 +18,9 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 	return &PostgresRepository{db: db}
 }
 
-func (r *PostgresRepository) ListAllStatus(ctx context.Context) ([]Status, error) {
-	sql, _, err := goqu.From("status").Select(allColumns...).ToSQL()
-	if err != nil {
-		return nil, fmt.Errorf("error generating list all status query: %w", err)
-	}
-
-	rows, err := r.db.Query(sql)
-	if err != nil {
-		return nil, fmt.Errorf("error executing list all status query: %w", err)
-	}
-
-	defer rows.Close()
-
-	var result []Status
-	for rows.Next() {
-		task, err := mapRowToStatus(rows)
-		if err != nil {
-			return nil, err
-		}
-		slog.Info("LIST SQL RESULT ===> %+v\n", "result", task)
-
-		result = append(result, task)
-	}
-
-	return result, nil
+func (r *PostgresRepository) ListAllStatus(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[Status], error) {
+	q := goqu.From("status").Select(allColumns...)
+	return postgresutils.ListPaginated(ctx, r.db, q, params, mapRowToStatus)
 }
 
 func (r *PostgresRepository) CreateStatus(ctx context.Context, status StatusForCreate) (err error) {

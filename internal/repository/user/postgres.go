@@ -7,6 +7,7 @@ import (
 	"log/slog"
 
 	"github.com/doug-martin/goqu/v9"
+	"github.com/teooliver/kanban/pkg/postgresutils"
 )
 
 type PostgresRepository struct {
@@ -17,31 +18,9 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 	return &PostgresRepository{db: db}
 }
 
-func (r *PostgresRepository) ListAllUsers(ctx context.Context) ([]User, error) {
-	sql, _, err := goqu.From("app_user").Select(allColumns...).ToSQL()
-	if err != nil {
-		return nil, fmt.Errorf("error generating list all user query: %w", err)
-	}
-
-	rows, err := r.db.Query(sql)
-	if err != nil {
-		return nil, fmt.Errorf("error executing list all user query: %w", err)
-	}
-
-	defer rows.Close()
-
-	var result []User
-	for rows.Next() {
-		user, err := mapRowToUser(rows)
-		if err != nil {
-			return nil, err
-		}
-		slog.Info("LIST SQL RESULT ===> %+v\n", "result", user)
-
-		result = append(result, user)
-	}
-
-	return result, nil
+func (r *PostgresRepository) ListAllUsers(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[User], error) {
+	q := goqu.From("app_user").Select(allColumns...)
+	return postgresutils.ListPaginated(ctx, r.db, q, params, mapRowToUser)
 }
 
 func (r *PostgresRepository) CreateUser(ctx context.Context, user UserForCreate) (err error) {
