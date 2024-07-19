@@ -1,3 +1,6 @@
+run:
+	go run cmd/kanban-api/main.go
+
 lint:
 	golangci-lint run
 
