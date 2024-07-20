@@ -13,8 +13,8 @@ type Service struct {
 
 type taskRepo interface {
 	ListAllTasks(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[task.Task], error)
-	CreateTask(ctx context.Context, task task.TaskForCreate) error
-	DeleteTask(ctx context.Context, taskID string) error
+	CreateTask(ctx context.Context, task task.TaskForCreate) (string, error)
+	DeleteTask(ctx context.Context, taskID string) (string, error)
 	UpdateTask(ctx context.Context, taskID string, task task.TaskForUpdate) (err error)
 }
 
@@ -35,22 +35,22 @@ func (s *Service) ListAllTasks(ctx context.Context, params *postgresutils.PageRe
 	return tasks, nil
 }
 
-func (s *Service) CreateTask(ctx context.Context, task task.TaskForCreate) error {
-	err := s.taskRepo.CreateTask(ctx, task)
+func (s *Service) CreateTask(ctx context.Context, task task.TaskForCreate) (string, error) {
+	id, err := s.taskRepo.CreateTask(ctx, task)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	return id, nil
 }
 
-func (s *Service) DeleteTask(ctx context.Context, taskID string) error {
-	err := s.taskRepo.DeleteTask(ctx, taskID)
+func (s *Service) DeleteTask(ctx context.Context, taskID string) (string, error) {
+	id, err := s.taskRepo.DeleteTask(ctx, taskID)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	return id, nil
 }
 func (s *Service) UpdateTask(ctx context.Context, taskID string, updatedTask task.TaskForUpdate) error {
 	err := s.taskRepo.UpdateTask(ctx, taskID, updatedTask)

@@ -18,17 +18,12 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 	return &PostgresRepository{db: db}
 }
 
-// type ListParams struct {
-// 	Page postgresutils.PageRequest
-// }
-
 func (r *PostgresRepository) ListAllTasks(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[Task], error) {
 	q := goqu.From("task").Select(allColumns...)
 	return postgresutils.ListPaginated(ctx, r.db, q, params, mapRowToTask)
 }
 
-// TODO: should return at least id of the created task
-func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate) (err error) {
+func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate) (string, error) {
 	insertSQL, args, err := goqu.Insert("task").Rows(TaskForCreate{
 		Title:       task.Title,
 		Description: task.Description,
@@ -36,31 +31,32 @@ func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate)
 		// UserID:      task.UserID,
 	}).Returning("id").ToSQL()
 	if err != nil {
-		return fmt.Errorf("error generating create task query: %w", err)
-	}
-	result, err := r.db.ExecContext(ctx, insertSQL, args...)
-	if err != nil {
-		return fmt.Errorf("error executing create task query: %w", err)
+		return "", fmt.Errorf("error generating create task query: %w", err)
 	}
 
-	slog.Info("CREATE RESULT", result)
-	return nil
+	var id string
+	err = r.db.QueryRowContext(ctx, insertSQL, args...).Scan(&id)
+	if err != nil {
+		return "", fmt.Errorf("error executing create task query: %w", err)
+	}
+
+	return id, nil
 }
 
 // TODO: use `uuid` type for taskID instead of `string`
-func (r *PostgresRepository) DeleteTask(ctx context.Context, taskID string) (err error) {
+func (r *PostgresRepository) DeleteTask(ctx context.Context, taskID string) (string, error) {
 	insertSQL, args, err := goqu.Delete("task").Where(goqu.Ex{"id": taskID}).Returning("id").ToSQL()
 	if err != nil {
-		return fmt.Errorf("error generating delete task query: %w", err)
+		return "", fmt.Errorf("error generating delete task query: %w", err)
 	}
 
-	result, err := r.db.ExecContext(ctx, insertSQL, args...)
+	var id string
+	err = r.db.QueryRowContext(ctx, insertSQL, args...).Scan(&id)
 	if err != nil {
-		return fmt.Errorf("error executing delete task query: %w", err)
+		return "", fmt.Errorf("error executing create task query: %w", err)
 	}
 
-	slog.Info("DELETED TASKS ID", result)
-	return nil
+	return id, nil
 }
 
 func (r *PostgresRepository) UpdateTask(ctx context.Context, taskID string, task TaskForUpdate) (err error) {

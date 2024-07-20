@@ -38,7 +38,7 @@ func (r *PostgresRepository) CreateUser(ctx context.Context, user UserForCreate)
 		return fmt.Errorf("error executing create user query: %w", err)
 	}
 
-	slog.Info("CREATE RESULT", result)
+	slog.Info("CREATED RESULT", result)
 	return nil
 }
 

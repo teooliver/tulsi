@@ -15,8 +15,8 @@ import (
 
 type taskService interface {
 	ListAllTasks(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[task.Task], error)
-	CreateTask(ctx context.Context, task task.TaskForCreate) error
-	DeleteTask(ctx context.Context, taskID string) error
+	CreateTask(ctx context.Context, task task.TaskForCreate) (string, error)
+	DeleteTask(ctx context.Context, taskID string) (string, error)
 	UpdateTask(ctx context.Context, taskID string, updatedTask task.TaskForUpdate) error
 }
 
@@ -73,21 +73,26 @@ func (h Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	}
 	slog.Info("Task for CREATE %+v\n", "taskToCreate", taskToCreate)
 
-	err = h.service.CreateTask(ctx, taskToCreate)
+	id, err := h.service.CreateTask(ctx, taskToCreate)
+	if err != nil {
+		// Should return proper HTTP status and error msg
+		w.Write([]byte(fmt.Sprintf("Create Task - Something went wrong: %v\n", err)))
+	}
 
+	w.Write([]byte(id))
 }
 
 func (h Handler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	taskID := chi.URLParam(r, "id")
-	err := h.service.DeleteTask(ctx, taskID)
-
+	id, err := h.service.DeleteTask(ctx, taskID)
 	if err != nil {
 		// Should return Error Not Found and 404
-		slog.Info("TaskID %+v\n", taskID, taskID)
+		w.Write([]byte(fmt.Sprintf("Delete Task - Something went wrong: %v\n", err)))
 	}
 
+	w.Write([]byte(id))
 }
 
 func (h Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
