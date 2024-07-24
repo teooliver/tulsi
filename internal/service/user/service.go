@@ -13,7 +13,7 @@ type Service struct {
 
 type userRepo interface {
 	ListAllUsers(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[user.User], error)
-	CreateUser(ctx context.Context, user user.UserForCreate) error
+	CreateUser(ctx context.Context, user user.UserForCreate) (string, error)
 	DeleteUser(ctx context.Context, userID string) error
 	UpdateUser(ctx context.Context, userID string, user user.UserForUpdate) (err error)
 }

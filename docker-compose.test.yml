@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  postgest_test:
+    image: postgres:16.2
+    container_name: postgres_test
+    # restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=db_user_test
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=kanban_go_test_db
+    # volumes:
+    #   - db:/var/lib/postgresql/data
+# volumes:
+#   db:
+#     driver: local
