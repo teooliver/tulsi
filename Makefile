@@ -17,3 +17,6 @@ status:
 
 test_db_up:
 	docker compose -f docker-compose.test.yml  up
+
+psql_test_inspect:
+	psql -d kanban_go_test_db -U  db_user_test -W

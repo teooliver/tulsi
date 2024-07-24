@@ -2,6 +2,7 @@ package user_test
 
 import (
 	"context"
+	"log"
 	"testing"
 	"time"
 
@@ -36,7 +37,10 @@ func TestIntegration_PostgresRepository(t *testing.T) {
 	t.Run("Create User", func(t *testing.T) {
 		ctx, cancel := context.WithTimeout(context.Background(), 5000*time.Second)
 		t.Cleanup(cancel)
-		db, _ := test.DB(ctx, t)
+		db, err := test.DB(ctx, t)
+		if err != nil {
+			log.Println("Db error", err)
+		}
 		repo := user.NewPostgres(db)
 
 		userToCreate := user.UserForCreate{

@@ -32,7 +32,7 @@ func DB(ctx context.Context, t *testing.T) (*sql.DB, error) {
 
 	err = db.Ping()
 	if err != nil {
-		log.Fatal("Error connecting to db")
+		log.Fatal("Error connecting to db", err)
 		return db, fmt.Errorf("error connecting to db: %w", err)
 	}
 

@@ -36,7 +36,7 @@ func (s *Service) ListAllUsers(ctx context.Context, params *postgresutils.PageRe
 }
 
 func (s *Service) CreateUser(ctx context.Context, user user.UserForCreate) error {
-	err := s.userRepo.CreateUser(ctx, user)
+	_, err := s.userRepo.CreateUser(ctx, user)
 	if err != nil {
 		return err
 	}
