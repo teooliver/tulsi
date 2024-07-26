@@ -15,8 +15,8 @@ import (
 
 type userService interface {
 	ListAllUsers(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[user.User], error)
-	CreateUser(ctx context.Context, user user.UserForCreate) error
-	DeleteUser(ctx context.Context, userID string) error
+	CreateUser(ctx context.Context, user user.UserForCreate) (string, error)
+	DeleteUser(ctx context.Context, userID string) (string, error)
 	UpdateUser(ctx context.Context, userID string, updatedUser user.UserForUpdate) error
 }
 
@@ -67,7 +67,8 @@ func (h Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	slog.Info("User for CREATE %+v\n", "userToCreate", userToCreate)
 
-	err = h.service.CreateUser(ctx, userToCreate)
+	id, err := h.service.CreateUser(ctx, userToCreate)
+	w.Write([]byte(id))
 
 }
 
@@ -75,12 +76,14 @@ func (h Handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	userID := chi.URLParam(r, "id")
-	err := h.service.DeleteUser(ctx, userID)
+	id, err := h.service.DeleteUser(ctx, userID)
 
 	if err != nil {
 		// Should return Error Not Found and 404
 		slog.Info("UserID %+v\n", userID, userID)
 	}
+
+	w.Write([]byte(id))
 
 }
 

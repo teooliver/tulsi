@@ -37,7 +37,7 @@ func TestIntegration_PostgresRepository(t *testing.T) {
 	t.Run("Create User", func(t *testing.T) {
 		ctx, cancel := context.WithTimeout(context.Background(), 5000*time.Second)
 		t.Cleanup(cancel)
-		db, err := test.DB(ctx, t)
+		db, err := test.TestDB(ctx, t)
 		if err != nil {
 			log.Println("Db error", err)
 		}

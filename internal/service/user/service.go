@@ -14,7 +14,7 @@ type Service struct {
 type userRepo interface {
 	ListAllUsers(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[user.User], error)
 	CreateUser(ctx context.Context, user user.UserForCreate) (string, error)
-	DeleteUser(ctx context.Context, userID string) error
+	DeleteUser(ctx context.Context, userID string) (userId string, err error)
 	UpdateUser(ctx context.Context, userID string, user user.UserForUpdate) (err error)
 }
 
@@ -35,22 +35,22 @@ func (s *Service) ListAllUsers(ctx context.Context, params *postgresutils.PageRe
 	return users, nil
 }
 
-func (s *Service) CreateUser(ctx context.Context, user user.UserForCreate) error {
-	_, err := s.userRepo.CreateUser(ctx, user)
+func (s *Service) CreateUser(ctx context.Context, user user.UserForCreate) (string, error) {
+	id, err := s.userRepo.CreateUser(ctx, user)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	return id, nil
 }
 
-func (s *Service) DeleteUser(ctx context.Context, userID string) error {
-	err := s.userRepo.DeleteUser(ctx, userID)
+func (s *Service) DeleteUser(ctx context.Context, userID string) (string, error) {
+	id, err := s.userRepo.DeleteUser(ctx, userID)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	return id, nil
 }
 func (s *Service) UpdateUser(ctx context.Context, userID string, updatedUser user.UserForUpdate) error {
 	err := s.userRepo.UpdateUser(ctx, userID, updatedUser)

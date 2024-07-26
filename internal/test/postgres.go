@@ -17,16 +17,14 @@ const (
 
 const (
 	ENV_DSN = "DSN"
-	// config from docker-composer.test.yml.
-	defaultTestDsn = "host=localhost port=5432 user=db_user_test dbname=kanban_go_test_db password=12345 sslmode=disable"
+	// config from docker-composer.yml.
+	defaultTestDsn = "host=localhost port=5432 user=db_user dbname=kanban-go password=12345 sslmode=disable"
 )
 
-func DB(ctx context.Context, t *testing.T) (*sql.DB, error) {
+func TestDB(ctx context.Context, t *testing.T) (*sql.DB, error) {
 	t.Helper()
 	db, err := sql.Open("pgx", defaultTestDsn)
 	if err != nil {
-		// TODO?
-		// db.Close()
 		panic(err)
 	}
 
@@ -37,6 +35,14 @@ func DB(ctx context.Context, t *testing.T) (*sql.DB, error) {
 	}
 
 	log.Println("Database connection established")
+
+	db.SetMaxIdleConns(8)
+	db.SetMaxOpenConns(20)
+	cleanDB(ctx, t, db)
+
+	t.Cleanup(func() {
+		require.NoError(t, db.Close())
+	})
 
 	return db, nil
 }

@@ -23,7 +23,7 @@ func (r *PostgresRepository) ListAllUsers(ctx context.Context, params *postgresu
 	return postgresutils.ListPaginated(ctx, r.db, q, params, mapRowToUser)
 }
 
-// TODO: Return created user
+// TODO: Return created user instead of just the id
 func (r *PostgresRepository) CreateUser(ctx context.Context, user UserForCreate) (string, error) {
 	insertSQL, args, err := goqu.Insert("app_user").Rows(UserForCreate{
 		Email:     user.Email,
@@ -34,14 +34,6 @@ func (r *PostgresRepository) CreateUser(ctx context.Context, user UserForCreate)
 		return "", fmt.Errorf("error generating create user query: %w", err)
 	}
 
-	// result, err := r.db.ExecContext(ctx, insertSQL, args...)
-	// if err != nil {
-	// 	return fmt.Errorf("error executing create user query: %w", err)
-	// }
-
-	// slog.Info("CREATED RESULT", result)
-	// return nil
-
 	var id string
 	err = r.db.QueryRowContext(ctx, insertSQL, args...).Scan(&id)
 	if err != nil {
@@ -51,19 +43,20 @@ func (r *PostgresRepository) CreateUser(ctx context.Context, user UserForCreate)
 	return id, nil
 }
 
-func (r *PostgresRepository) DeleteUser(ctx context.Context, userID string) (err error) {
+func (r *PostgresRepository) DeleteUser(ctx context.Context, userID string) (userId string, err error) {
 	insertSQL, args, err := goqu.Delete("app_user").Where(goqu.Ex{"id": userID}).Returning("id").ToSQL()
 	if err != nil {
-		return fmt.Errorf("error generating delete user query: %w", err)
+		return "", fmt.Errorf("error generating delete user query: %w", err)
 	}
 
-	result, err := r.db.ExecContext(ctx, insertSQL, args...)
+	var id string
+	err = r.db.QueryRowContext(ctx, insertSQL, args...).Scan(&id)
 	if err != nil {
-		return fmt.Errorf("error executing delete user query: %w", err)
+		return "", fmt.Errorf("error executing delete user query: %w", err)
 	}
 
-	slog.Info("DELETED USER ID", result)
-	return nil
+	return id, nil
+
 }
 
 func (r *PostgresRepository) UpdateUser(ctx context.Context, userID string, user UserForUpdate) (err error) {
