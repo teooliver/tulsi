@@ -38,12 +38,13 @@ type ListUserResponse struct {
 func (h Handler) ListUsers(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	input := r.Context().Value(httpin.Input).(*postgresutils.PageRequest)
-	slog.Info("HTTPin Input: ", input)
 
 	users, err := h.service.ListAllUsers(ctx, input)
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("Something went wrong: %v\n", err)))
+		return
 	}
+
 	userResponse := ListUserResponse{
 		Users: users,
 	}
@@ -51,8 +52,10 @@ func (h Handler) ListUsers(w http.ResponseWriter, r *http.Request) {
 	jsonUsers, err := json.Marshal(userResponse.Users)
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("Something went wrong: %v\n", err)))
+		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(jsonUsers))
 }
 
@@ -65,9 +68,16 @@ func (h Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
 	slog.Info("User for CREATE %+v\n", "userToCreate", userToCreate)
 
 	id, err := h.service.CreateUser(ctx, userToCreate)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(id))
 
 }
@@ -79,14 +89,17 @@ func (h Handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	id, err := h.service.DeleteUser(ctx, userID)
 
 	if err != nil {
-		// Should return Error Not Found and 404
+		w.WriteHeader(http.StatusNotFound)
 		slog.Info("UserID %+v\n", userID, userID)
+		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(id))
 
 }
 
+// TODO: Return updated user
 func (h Handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -101,8 +114,10 @@ func (h Handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	err = h.service.UpdateUser(ctx, userID, userToUpdate)
 
 	if err != nil {
-		// Should return Error Not Found and 404
-		print(err)
+		w.WriteHeader(http.StatusNotFound)
+		return
 	}
+
+	w.WriteHeader(http.StatusOK)
 
 }

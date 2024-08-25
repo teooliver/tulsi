@@ -44,11 +44,11 @@ type ListTaskResponse struct {
 func (h Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	input := r.Context().Value(httpin.Input).(*postgresutils.PageRequest)
-	slog.Info("HTTPin Input: ", input)
 
 	tasks, err := h.service.ListAllTasks(ctx, input)
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("TASK HANDLER => Something went wrong: %v\n", err)))
+		return
 	}
 	taskResponse := ListTaskResponse{
 		Tasks: tasks,
@@ -57,8 +57,10 @@ func (h Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 	jsonTasks, err := json.Marshal(taskResponse.Tasks)
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("TASK HANDLER MARSHAL => Something went wrong: %v\n", err)))
+		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(jsonTasks))
 }
 
@@ -75,10 +77,11 @@ func (h Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 
 	id, err := h.service.CreateTask(ctx, taskToCreate)
 	if err != nil {
-		// Should return proper HTTP status and error msg
-		w.Write([]byte(fmt.Sprintf("Create Task - Something went wrong: %v\n", err)))
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte(id))
 }
 
@@ -88,10 +91,12 @@ func (h Handler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 	taskID := chi.URLParam(r, "id")
 	id, err := h.service.DeleteTask(ctx, taskID)
 	if err != nil {
-		// Should return Error Not Found and 404
+		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte(fmt.Sprintf("Delete Task - Something went wrong: %v\n", err)))
+		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(id))
 }
 
@@ -107,10 +112,12 @@ func (h Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = h.service.UpdateTask(ctx, taskID, taskToUpdate)
-
 	if err != nil {
-		// Should return Error Not Found and 404
-		print(err)
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
 	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(taskID))
 
 }
