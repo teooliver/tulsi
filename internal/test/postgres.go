@@ -17,7 +17,7 @@ const (
 
 const (
 	ENV_DSN = "DSN"
-	// config from docker-composer.yml.
+	// Note: this config comes from compose.yml.
 	defaultTestDsn = "host=localhost port=5432 user=db_user dbname=kanban-go password=12345 sslmode=disable"
 )
 

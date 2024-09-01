@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  postgest_test:
+  postgres_test:
     image: postgres:16.2
     container_name: postgres_test
     # restart: always
