@@ -23,8 +23,8 @@ func TestStatusIntoCSVString(t *testing.T) {
 	got := statusIntoCSVString(status)
 
 	want := []string{
-		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c6, Backlog"),
-		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c7, Todo"),
+		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c6,Backlog"),
+		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c7,Todo"),
 	}
 
 	if !slices.Equal(got, want) {

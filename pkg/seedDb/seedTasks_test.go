@@ -34,8 +34,8 @@ func TestTaskIntoCSVString(t *testing.T) {
 	got := taskIntoCSVString(tasks)
 
 	want := []string{
-		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c5, some_title, some_color, some_description, %v, %v", statusID, userID),
-		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c5, some_title_v2, some_color_v2, some_description_v2, %v, %v", statusID, userID),
+		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c5,some_title,some_color,some_description,%v,%v", statusID, userID),
+		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c5,some_title_v2,some_color_v2,some_description_v2,%v,%v", statusID, userID),
 	}
 
 	if !slices.Equal(got, want) {
