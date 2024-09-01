@@ -40,11 +40,14 @@ func (suite *TaskRepoTestSuite) SetupSuite() {
 		panic("error bootstraping application")
 	}
 
+	//Question: Why TaskRepo is *invalid type instead of *task.PostgresRepository
+	var taskRepo = deps.Repos.TaskRepo
+
 	suite.pgContainer = pgContainer
 	if err != nil {
 		log.Fatal(err)
 	}
-	suite.repository = deps.Repos.TaskRepo
+	suite.repository = taskRepo
 }
 
 func (suite *TaskRepoTestSuite) TearDownSuite() {
@@ -64,16 +67,6 @@ func (suite *TaskRepoTestSuite) TestCreateTask() {
 	assert.NoError(t, err)
 	assert.NotNil(t, id)
 }
-
-// func (suite *TaskRepoTestSuite) TestGetCustomerByEmail() {
-// 	t := suite.T()
-
-// 	customer, err := suite.repository.GetCustomerByEmail(suite.ctx, "john@gmail.com")
-// 	assert.NoError(t, err)
-// 	assert.NotNil(t, customer)
-// 	assert.Equal(t, "John", customer.Name)
-// 	assert.Equal(t, "john@gmail.com", customer.Email)
-// }
 
 func TestTaskRepoTestSuite(t *testing.T) {
 	suite.Run(t, new(TaskRepoTestSuite))
