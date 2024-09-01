@@ -5,9 +5,9 @@ import (
 	"log"
 	"testing"
 
+	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/teooliver/kanban/internal/bootstrap"
 	"github.com/teooliver/kanban/internal/config"
 	"github.com/teooliver/kanban/pkg/testhelpers"
 )
@@ -30,20 +30,13 @@ func (suite *TaskRepoTestSuite) SetupSuite() {
 		DSN: pgContainer.ConnectionString,
 	}
 
-	testConfig := config.Config{
-		Postgres: postgresConfig,
-	}
-
-	deps, err := bootstrap.Deps(suite.ctx, &testConfig)
+	db, err := testhelpers.InitPostgres(suite.ctx, &postgresConfig)
 	if err != nil {
-		log.Fatal("Error bootstraping application: %w", err)
-		panic("error bootstraping application")
+		log.Fatal(err)
 	}
-
-	//Question: Why TaskRepo is *invalid type instead of *task.PostgresRepository
-	var taskRepo = deps.Repos.TaskRepo
 
 	suite.pgContainer = pgContainer
+	taskRepo := NewPostgres(db)
 	if err != nil {
 		log.Fatal(err)
 	}
