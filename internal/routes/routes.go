@@ -33,8 +33,9 @@ func Router(deps *bootstrap.AllDeps) http.Handler {
 	})
 
 	r.Route("/status", func(r chi.Router) {
-		// TODO: Add Pagination
-		r.Get("/", deps.Handlers.StatusHandler.ListAllStatus)
+		r.With(
+			httpin.NewInput(postgresutils.PageRequest{}),
+		).Get("/", deps.Handlers.StatusHandler.ListAllStatus)
 		r.Post("/", deps.Handlers.StatusHandler.CreateStatus)
 		r.Delete("/{id}", deps.Handlers.StatusHandler.DeleteStatus)
 		r.Put("/{id}", deps.Handlers.StatusHandler.UpdateStatus)

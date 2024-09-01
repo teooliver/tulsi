@@ -37,7 +37,7 @@ type ListStatusResponse struct {
 func (h Handler) ListAllStatus(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	input := r.Context().Value(httpin.Input).(*postgresutils.PageRequest)
-	slog.Info("HTTPin Input: ", input)
+	// slog.Info("HTTPin Input: ", input)
 
 	statusList, err := h.service.ListAllStatus(ctx, input)
 	if err != nil {
