@@ -1,5 +1,12 @@
-build:
-	go build ./...
+build_docker:
+	docker build . -t kanban-go/seed
+
+run_test_image:
+	docker run --name seed -e POSTGRES_PASSWORD=mysecretpassword -d kanban-go/seed
+
+exec_seed_image:
+	docker exec -it seed sh
+
 
 run:
 	go run cmd/kanban-api/main.go
@@ -20,8 +27,9 @@ migrate_test:
 status:
 	goose -dir "./migrations" postgres "host=localhost port=5432 user=db_user dbname=kanban-go password=12345" status
 
-test_db_up:
-	docker compose -f docker-compose.test.yml  up
 
 psql_test_inspect:
 	psql -d kanban_go_test_db -U db_user_test -W
+
+build:
+	go build ./...

@@ -20,6 +20,9 @@ type PostgresContainer struct {
 	ConnectionString string
 }
 
+// var POSTGRES_IMAGE = ""postgres:15.3-alpine"
+var POSTGRES_IMAGE = "kanban-go/seed:latest"
+
 func CreatePostgresContainer(ctx context.Context) (*PostgresContainer, error) {
 	_, path, _, ok := runtime.Caller(0)
 	if !ok {
@@ -28,8 +31,8 @@ func CreatePostgresContainer(ctx context.Context) (*PostgresContainer, error) {
 
 	migrationFilesPath, err := filepath.Glob(filepath.Join(filepath.Dir(path), "..", "..", "migrations", "*.sql"))
 
-	pgContainer, err := postgres.RunContainer(ctx,
-		testcontainers.WithImage("postgres:15.3-alpine"),
+	pgContainer, err := postgres.Run(ctx,
+		"kanban-go/seed:latest",
 		postgres.WithInitScripts(migrationFilesPath...),
 		postgres.WithDatabase("test-db"),
 		postgres.WithUsername("postgres"),

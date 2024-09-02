@@ -59,6 +59,7 @@ func (r *PostgresRepository) DeleteTask(ctx context.Context, taskID string) (str
 	return id, nil
 }
 
+// TODO: Update Status
 func (r *PostgresRepository) UpdateTask(ctx context.Context, taskID string, task TaskForUpdate) (err error) {
 	updateSQL, args, err := goqu.Update("task").Set(task).Where(goqu.Ex{"id": taskID}).Returning("id").ToSQL()
 	if err != nil {
