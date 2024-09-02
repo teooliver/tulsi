@@ -54,18 +54,16 @@ func (suite *TaskRepoTestSuite) TestTaskRepo() {
 	t := suite.T()
 
 	// Create Task 01
-	id, err := suite.repository.CreateTask(suite.ctx, TaskForCreate{
+	task01ID, err := suite.repository.CreateTask(suite.ctx, TaskForCreate{
 		Title:       "some title 01",
 		Description: "some description 01",
 		Color:       "some color 01",
 	})
 	assert.NoError(t, err)
-	assert.NotNil(t, id)
-
-	var task01ID = id
+	assert.NotNil(t, task01ID)
 
 	// Update Task 01
-	err = suite.repository.UpdateTask(suite.ctx, id, TaskForUpdate{
+	err = suite.repository.UpdateTask(suite.ctx, task01ID, TaskForUpdate{
 		Title:       "updated title",
 		Description: "updated description",
 		Color:       "updated color",
@@ -73,7 +71,7 @@ func (suite *TaskRepoTestSuite) TestTaskRepo() {
 	assert.NoError(t, err)
 
 	// Create Task 02
-	id, err = suite.repository.CreateTask(suite.ctx, TaskForCreate{
+	id, err := suite.repository.CreateTask(suite.ctx, TaskForCreate{
 		Title:       "some title 02",
 		Description: "some description 02",
 		Color:       "some color 02",
