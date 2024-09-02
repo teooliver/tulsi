@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/teooliver/kanban/internal/config"
+	"github.com/teooliver/kanban/pkg/postgresutils"
 	"github.com/teooliver/kanban/pkg/testhelpers"
 )
 
@@ -49,16 +50,65 @@ func (suite *TaskRepoTestSuite) TearDownSuite() {
 	}
 }
 
-func (suite *TaskRepoTestSuite) TestCreateTask() {
+func (suite *TaskRepoTestSuite) TestTaskRepo() {
 	t := suite.T()
 
+	// Create Task 01
 	id, err := suite.repository.CreateTask(suite.ctx, TaskForCreate{
-		Title:       "some title",
-		Description: "some description",
-		Color:       "some color",
+		Title:       "some title 01",
+		Description: "some description 01",
+		Color:       "some color 01",
 	})
 	assert.NoError(t, err)
 	assert.NotNil(t, id)
+
+	var task01ID = id
+
+	// Update Task 01
+	err = suite.repository.UpdateTask(suite.ctx, id, TaskForUpdate{
+		Title:       "updated title",
+		Description: "updated description",
+		Color:       "updated color",
+	})
+	assert.NoError(t, err)
+
+	// Create Task 02
+	id, err = suite.repository.CreateTask(suite.ctx, TaskForCreate{
+		Title:       "some title 02",
+		Description: "some description 02",
+		Color:       "some color 02",
+	})
+	assert.NoError(t, err)
+	assert.NotNil(t, id)
+
+	// Delete Task 02
+	id, err = suite.repository.DeleteTask(suite.ctx, id)
+	assert.NoError(t, err)
+	assert.NotNil(t, id)
+
+	// Check final Task Repo state:
+	actual, err := suite.repository.ListAllTasks(suite.ctx, &postgresutils.PageRequest{
+		Page: 0,
+		Size: 10,
+		Sort: make([]string, 0),
+	})
+
+	expected := postgresutils.Page[Task]{
+		Content: []Task{{
+			ID:          task01ID,
+			Title:       "updated title",
+			Description: "updated description",
+			Color:       "updated color",
+			StatusID:    nil,
+			UserID:      nil,
+		}},
+		Page:          0,
+		Size:          10,
+		TotalElements: 1,
+		TotalPages:    1,
+	}
+
+	assert.Equal(t, expected, actual, "expected %q, \n actual %q")
 }
 
 func TestTaskRepoTestSuite(t *testing.T) {
