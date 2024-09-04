@@ -25,7 +25,7 @@ func seedData() DbData {
 	tasks := make([]task.Task, 0, len(users)*tasksPerUser)
 
 	for _, u := range users {
-		userTasks := createMultipleTasks(tasksPerUser, statusList[0].ID, u.ID)
+		userTasks := createMultipleTasks(tasksPerUser, statusList[0].ID, u.ID, "some_id")
 		tasks = append(tasks, userTasks...)
 	}
 

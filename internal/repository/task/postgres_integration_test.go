@@ -88,7 +88,6 @@ func (suite *TaskRepoTestSuite) TestTaskRepo() {
 	actual, err := suite.repository.ListAllTasks(suite.ctx, &postgresutils.PageRequest{
 		Page: 0,
 		Size: 10,
-		Sort: make([]string, 0),
 	})
 
 	expected := postgresutils.Page[Task]{
@@ -106,7 +105,7 @@ func (suite *TaskRepoTestSuite) TestTaskRepo() {
 		TotalPages:    1,
 	}
 
-	assert.Equal(t, expected, actual, "expected %q, \n actual %q")
+	assert.Equal(t, expected, actual)
 }
 
 func TestTaskRepoTestSuite(t *testing.T) {

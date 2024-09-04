@@ -12,6 +12,7 @@ type Task struct {
 	Color       string  `json:"color"`
 	StatusID    *string `json:"status_id"`
 	UserID      *string `json:"user_id"`
+	// SprintID    *string `json:"sprint_id"`
 }
 
 type TaskForCreate struct {
@@ -20,6 +21,7 @@ type TaskForCreate struct {
 	Color       string `json:"color"`
 	// StatusID    string `json:"status_id"`
 	// UserID      string `json:"user_id"`
+	// SprintID    string `json:"sprint_id"`
 }
 
 type TaskForUpdate struct {
@@ -28,6 +30,7 @@ type TaskForUpdate struct {
 	Color       string `json:"color"`
 	// StatusID    string `json:"status_id"`
 	// UserID      string `json:"user_id"`
+	// SprintID    string `json:"sprint_id"`
 }
 
 var allColumns = []any{
@@ -37,6 +40,7 @@ var allColumns = []any{
 	"color",
 	"status_id",
 	"user_id",
+	// "sprint_id",
 }
 
 func mapRowToTask(rows *sql.Rows) (Task, error) {

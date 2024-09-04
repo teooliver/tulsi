@@ -20,7 +20,6 @@ type PostgresContainer struct {
 	ConnectionString string
 }
 
-// var POSTGRES_IMAGE = ""postgres:15.3-alpine"
 var POSTGRES_IMAGE = "kanban-go/seed:latest"
 
 func CreatePostgresContainer(ctx context.Context) (*PostgresContainer, error) {

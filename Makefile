@@ -7,9 +7,11 @@ run_test_image:
 exec_seed_image:
 	docker exec -it seed sh
 
-
 run:
 	go run cmd/kanban-api/main.go
+
+seed:
+	go run cmd/seedDb/main.go
 
 lint:
 	golangci-lint run
