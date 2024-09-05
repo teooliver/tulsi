@@ -9,8 +9,8 @@ import (
 	"github.com/teooliver/kanban/internal/repository/user"
 )
 
-// TODO: Create CLI tool to define those types of vars and create DbData
-var tasksPerUser = 5
+var usersAmount = 10
+var tasksPerUserAmount = 5
 
 type DbData struct {
 	StatusList []status.Status
@@ -20,12 +20,12 @@ type DbData struct {
 
 func seedData() DbData {
 	statusList := createFakeStatusList()
-	users := createMultipleFakeUsers(10)
+	users := createMultipleFakeUsers(usersAmount)
 
-	tasks := make([]task.Task, 0, len(users)*tasksPerUser)
+	tasks := make([]task.Task, 0, len(users)*tasksPerUserAmount)
 
 	for _, u := range users {
-		userTasks := createMultipleTasks(tasksPerUser, statusList[0].ID, u.ID, "some_id")
+		userTasks := createMultipleTasks(tasksPerUserAmount, statusList[0].ID, u.ID)
 		tasks = append(tasks, userTasks...)
 	}
 

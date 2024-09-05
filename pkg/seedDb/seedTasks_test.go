@@ -38,9 +38,9 @@ func TestTaskIntoCSVString(t *testing.T) {
 	got := taskIntoCSVString(tasks)
 
 	want := []string{
-		fmt.Sprint("id,title,description,color,status_id,user_id"),
-		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c5,some_title,some_description,some_color,%v,%v", statusID, userID),
-		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c5,some_title_v2,some_description_v2,some_color_v2,%v,%v", statusID, userID),
+		fmt.Sprint("id,title,description,color,user_id,status_id"),
+		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c5,some_title,some_description,some_color,%v,%v", userID, statusID),
+		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c5,some_title_v2,some_description_v2,some_color_v2,%v,%v", userID, statusID),
 	}
 
 	if got[0] != want[0] {
