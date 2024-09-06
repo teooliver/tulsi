@@ -17,7 +17,6 @@ func createFakeTask(statusID string, userId string) task.Task {
 		Color:       fake.Lorem().Faker.Color().ColorName(),
 		StatusID:    &statusID,
 		UserID:      &userId,
-		// SprintID:    &sprintId,
 	}
 
 	return task

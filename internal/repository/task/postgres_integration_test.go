@@ -90,21 +90,6 @@ func (suite *TaskRepoTestSuite) TestTaskRepo() {
 		Size: 0, // All items
 	})
 
-	// expected := postgresutils.Page[Task]{
-	// 	Content: []Task{{
-	// 		ID:          task01ID,
-	// 		Title:       "updated title",
-	// 		Description: "updated description",
-	// 		Color:       "updated color",
-	// 		StatusID:    nil,
-	// 		UserID:      nil,
-	// 	}},
-	// 	Page:          0,
-	// 	Size:          10,
-	// 	TotalElements: 1,
-	// 	TotalPages:    1,
-	// }
-
 	assert.Equal(t, 51, int(actual.TotalElements))
 	assert.Equal(t, 1, int(actual.TotalPages))
 }

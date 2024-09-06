@@ -12,7 +12,9 @@ type Task struct {
 	Color       string  `json:"color"`
 	StatusID    *string `json:"status_id"`
 	UserID      *string `json:"user_id"`
-	// SprintID    *string `json:"sprint_id"`
+	// ColumnID string  `json:"column_id"`
+	// CreatedDate string  `json:"created_date"`
+	// IsActive bool `json:"is_active"`
 }
 
 type TaskForCreate struct {
@@ -21,7 +23,9 @@ type TaskForCreate struct {
 	Color       string `json:"color"`
 	// StatusID    string `json:"status_id"`
 	// UserID      string `json:"user_id"`
-	// SprintID    string `json:"sprint_id"`
+	// ColumnID string  `json:"column_id"`
+	// CreatedDate string  `json:"created_date"`
+	// IsActive bool `json:"is_active"`
 }
 
 type TaskForUpdate struct {
@@ -30,7 +34,9 @@ type TaskForUpdate struct {
 	Color       string `json:"color"`
 	// StatusID    string `json:"status_id"`
 	// UserID      string `json:"user_id"`
-	// SprintID    string `json:"sprint_id"`
+	// ColumnID string  `json:"column_id"`
+	// CreatedDate string  `json:"created_date"`
+	// IsActive bool `json:"is_active"`
 }
 
 var allColumns = []any{
@@ -40,7 +46,9 @@ var allColumns = []any{
 	"color",
 	"status_id",
 	"user_id",
-	// "sprint_id",
+	// "column_id",
+	// "created_date",
+	// "is_active",
 }
 
 func mapRowToTask(rows *sql.Rows) (Task, error) {

@@ -53,7 +53,7 @@ func (r *PostgresRepository) DeleteTask(ctx context.Context, taskID string) (str
 	var id string
 	err = r.db.QueryRowContext(ctx, insertSQL, args...).Scan(&id)
 	if err != nil {
-		return "", fmt.Errorf("error executing create task query: %w", err)
+		return "", fmt.Errorf("error executing delete task query: %w", err)
 	}
 
 	return id, nil
