@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TABLE IF NOT EXISTS column (
+CREATE TABLE IF NOT EXISTS board_column (
 id uuid DEFAULT gen_random_uuid(),
 name VARCHAR(200),
 position VARCHAR(200),

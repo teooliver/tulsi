@@ -61,11 +61,12 @@ func (r *PostgresRepository) UpdateBoard(ctx context.Context, boardID string, bo
 		return fmt.Errorf("error generating update board query: %w", err)
 	}
 
-	result, err := r.db.ExecContext(ctx, updateSQL, args...)
+	// TODO: Return the result from ExecContext
+	_, err = r.db.ExecContext(ctx, updateSQL, args...)
 	if err != nil {
 		return fmt.Errorf("error executing update board query: %w", err)
 	}
 
-	slog.Info("UPDATED ID", result)
+	slog.Info("UPDATED ID")
 	return nil
 }

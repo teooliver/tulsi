@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"log/slog"
 
 	"github.com/doug-martin/goqu/v9"
 	"github.com/teooliver/kanban/pkg/postgresutils"
@@ -59,19 +58,19 @@ func (r *PostgresRepository) DeleteTask(ctx context.Context, taskID string) (str
 	return id, nil
 }
 
-// TODO: Update Status
+// TODO: Return the result from ExecContext
 func (r *PostgresRepository) UpdateTask(ctx context.Context, taskID string, task TaskForUpdate) (err error) {
 	updateSQL, args, err := goqu.Update("task").Set(task).Where(goqu.Ex{"id": taskID}).Returning("id").ToSQL()
 	if err != nil {
 		return fmt.Errorf("error generating update task query: %w", err)
 	}
 
-	result, err := r.db.ExecContext(ctx, updateSQL, args...)
+	_, err = r.db.ExecContext(ctx, updateSQL, args...)
 	if err != nil {
 		return fmt.Errorf("error executing update task query: %w", err)
 	}
 
-	slog.Info("UPDATED ID", result)
+	// slog.Info("UPDATED ID", result)
 	return nil
 }
 

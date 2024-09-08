@@ -44,14 +44,6 @@ func (s *Service) CreateTask(ctx context.Context, task task.TaskForCreate) (stri
 	return id, nil
 }
 
-func (s *Service) DeleteTask(ctx context.Context, taskID string) (string, error) {
-	id, err := s.taskRepo.DeleteTask(ctx, taskID)
-	if err != nil {
-		return "", err
-	}
-
-	return id, nil
-}
 func (s *Service) UpdateTask(ctx context.Context, taskID string, updatedTask task.TaskForUpdate) error {
 	err := s.taskRepo.UpdateTask(ctx, taskID, updatedTask)
 	if err != nil {
@@ -59,4 +51,13 @@ func (s *Service) UpdateTask(ctx context.Context, taskID string, updatedTask tas
 	}
 
 	return nil
+}
+
+func (s *Service) DeleteTask(ctx context.Context, taskID string) (string, error) {
+	id, err := s.taskRepo.DeleteTask(ctx, taskID)
+	if err != nil {
+		return "", err
+	}
+
+	return id, nil
 }
