@@ -20,7 +20,7 @@ func Router(deps *bootstrap.AllDeps) http.Handler {
 	r.Use(middleware.Recoverer)
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("welcome"))
+		w.Write([]byte("Welcome to Go Kanban"))
 	})
 
 	r.Route("/tasks", func(r chi.Router) {
