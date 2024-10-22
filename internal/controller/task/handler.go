@@ -15,6 +15,7 @@ import (
 
 type taskService interface {
 	ListAllTasks(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[task.Task], error)
+	GetTaskByID(ctx context.Context, taskID string) (task.Task, error)
 	CreateTask(ctx context.Context, task task.TaskForCreate) (string, error)
 	DeleteTask(ctx context.Context, taskID string) (string, error)
 	UpdateTask(ctx context.Context, taskID string, updatedTask task.TaskForUpdate) error
@@ -55,6 +56,25 @@ func (h Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	jsonTasks, err := json.Marshal(taskResponse.Tasks)
+	if err != nil {
+		w.Write([]byte(fmt.Sprintf("TASK HANDLER MARSHAL => Something went wrong: %v\n", err)))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(jsonTasks))
+}
+func (h Handler) GetTaskByID(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	taskID := chi.URLParam(r, "id")
+
+	task, err := h.service.GetTaskByID(ctx, taskID)
+	if err != nil {
+		w.Write([]byte(fmt.Sprintf("TASK HANDLER => Something went wrong: %v\n", err)))
+		return
+	}
+
+	jsonTasks, err := json.Marshal(task)
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("TASK HANDLER MARSHAL => Something went wrong: %v\n", err)))
 		return

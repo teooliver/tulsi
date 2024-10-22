@@ -13,6 +13,7 @@ type Service struct {
 
 type taskRepo interface {
 	ListAllTasks(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[task.Task], error)
+	GetTaskByID(ctx context.Context, taskID string) (task.Task, error)
 	CreateTask(ctx context.Context, task task.TaskForCreate) (string, error)
 	DeleteTask(ctx context.Context, taskID string) (string, error)
 	UpdateTask(ctx context.Context, taskID string, task task.TaskForUpdate) (err error)
@@ -33,6 +34,15 @@ func (s *Service) ListAllTasks(ctx context.Context, params *postgresutils.PageRe
 	}
 
 	return tasks, nil
+}
+
+func (s *Service) GetTaskByID(ctx context.Context, taskID string) (task.Task, error) {
+	task, err := s.taskRepo.GetTaskByID(ctx, taskID)
+	if err != nil {
+		return task, err
+	}
+
+	return task, nil
 }
 
 func (s *Service) CreateTask(ctx context.Context, task task.TaskForCreate) (string, error) {

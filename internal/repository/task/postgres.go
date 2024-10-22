@@ -22,6 +22,34 @@ func (r *PostgresRepository) ListAllTasks(ctx context.Context, params *postgresu
 	return postgresutils.ListPaginated(ctx, r.db, q, params, mapRowToTask)
 }
 
+func (r *PostgresRepository) GetTaskByID(ctx context.Context, taskID string) (Task, error) {
+	q := goqu.From("task").Select(allColumns...).Where(goqu.Ex{"id": taskID})
+	query, args, err := q.ToSQL()
+	if err != nil {
+		println("TO SQL ERROR")
+		return Task{}, err
+	}
+
+	row, err := r.db.QueryContext(ctx, query, args...)
+	if err != nil {
+		println("QueryContext ERROR")
+		return Task{}, err
+	}
+
+	var t Task
+	// From the docs:
+	// https://pkg.go.dev/database/sql#Rows.Next
+	// Every call to Rows.Scan, even the first one, must be preceded by a call to Rows.Next.
+	row.Next()
+	err = row.Scan(&t.ID, &t.Title, &t.Description, &t.Color, &t.StatusID, &t.UserID)
+
+	if err != nil {
+		return Task{}, fmt.Errorf("Error error scanning Task row: %w", err)
+	}
+
+	return t, nil
+}
+
 func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate) (string, error) {
 	insertSQL, args, err := goqu.Insert("task").Rows(TaskForCreate{
 		Title:       task.Title,

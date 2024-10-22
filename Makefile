@@ -1,6 +1,9 @@
 build_docker:
 	docker build . -t kanban-go/seed
 
+compose_up:
+	docker compose up
+
 run_test_image:
 	docker run --name seed -e POSTGRES_PASSWORD=mysecretpassword -d kanban-go/seed
 
@@ -38,3 +41,5 @@ psql_test_inspect:
 
 build:
 	go build ./...
+
+setup: build_docker compose_up

@@ -38,6 +38,7 @@ func Router(deps *bootstrap.AllDeps) http.Handler {
 		r.With(
 			httpin.NewInput(postgresutils.PageRequest{}),
 		).Get("/", deps.Handlers.TaskHandler.ListTasks)
+		r.Get("/{id}", deps.Handlers.TaskHandler.GetTaskByID)
 		r.Post("/", deps.Handlers.TaskHandler.CreateTask)
 		r.Delete("/{id}", deps.Handlers.TaskHandler.DeleteTask)
 		r.Put("/{id}", deps.Handlers.TaskHandler.UpdateTask)
@@ -58,6 +59,12 @@ func Router(deps *bootstrap.AllDeps) http.Handler {
 		r.Post("/", deps.Handlers.UserHandler.CreateUser)
 		r.Delete("/{id}", deps.Handlers.UserHandler.DeleteUser)
 		r.Put("/{id}", deps.Handlers.UserHandler.UpdateUser)
+	})
+
+	r.Route("/projects", func(r chi.Router) {
+		r.With(
+			httpin.NewInput(postgresutils.PageRequest{}),
+		).Get("/", deps.Handlers.ProjectHandler.ListProjects)
 	})
 
 	return r

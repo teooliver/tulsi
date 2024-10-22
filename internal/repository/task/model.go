@@ -57,7 +57,7 @@ func mapRowToTask(rows *sql.Rows) (Task, error) {
 
 	if err != nil {
 		return Task{}, fmt.Errorf("Error error scanning Task row: %w", err)
-
 	}
+
 	return t, nil
 }

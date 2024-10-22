@@ -25,9 +25,9 @@ func (r *PostgresRepository) ListAllColumns(ctx context.Context, params *postgre
 
 func (r *PostgresRepository) CreateColumn(ctx context.Context, column ColumnForCreate) (string, error) {
 	insertSQL, args, err := goqu.Insert("column").Rows(ColumnForCreate{
-		Name:     column.Name,
-		BoardID:  column.BoardID,
-		Position: column.Position,
+		Name:      column.Name,
+		ProjectID: column.ProjectID,
+		Position:  column.Position,
 	}).Returning("id").ToSQL()
 	if err != nil {
 		return "", fmt.Errorf("error generating create column query: %w", err)
