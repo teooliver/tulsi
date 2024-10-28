@@ -23,7 +23,7 @@ type ProjectToUpdate struct {
 
 var allColumns = []any{
 	"id",
-	"title",
+	"name",
 	"description",
 }
 

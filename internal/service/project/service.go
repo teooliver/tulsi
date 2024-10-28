@@ -27,12 +27,12 @@ func New(
 }
 
 func (s *Service) ListAllProjects(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[project.Project], error) {
-	allStatus, err := s.projectRepo.ListAllProjects(ctx, params)
+	allProjects, err := s.projectRepo.ListAllProjects(ctx, params)
 	if err != nil {
 		return postgresutils.Page[project.Project]{}, err
 	}
 
-	return allStatus, nil
+	return allProjects, nil
 }
 
 // func (s *Service) CreateProject(ctx context.Context, project project.ProjectToCreate) error {

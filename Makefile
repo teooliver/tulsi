@@ -37,9 +37,11 @@ status:
 
 
 psql_test_inspect:
-	psql -d kanban_go_test_db -U db_user_test -W
+	psql -d kanban-go -U db_user -W
 
 build:
 	go build ./...
 
 setup: build_docker compose_up
+
+run_all: compose_up run

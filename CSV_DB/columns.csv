@@ -1,0 +1,6 @@
+id,name,position,project_id
+309f864b-5f0a-4e46-aff9-b54e78ad64a1,Backlog,0,6e420a0a-6cca-4888-ba4b-b31fad371ac1
+4bce19af-844c-4b91-85eb-464fba3a0112,Todo,1,6e420a0a-6cca-4888-ba4b-b31fad371ac1
+93c1e602-af99-4fb2-98ff-daeec60a867f,In Progress,2,6e420a0a-6cca-4888-ba4b-b31fad371ac1
+b2cd838d-fc4d-4e13-9f9c-dd4127f02868,Review,3,6e420a0a-6cca-4888-ba4b-b31fad371ac1
+9cc0aad3-812d-4314-ac8c-7c237688f9f4,Done,4,6e420a0a-6cca-4888-ba4b-b31fad371ac1

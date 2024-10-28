@@ -9,7 +9,7 @@ import (
 	"github.com/teooliver/kanban/pkg/error"
 )
 
-func createFakeTask(statusID string, userId string) task.Task {
+func createFakeTask(statusID string, userId string, columnID string) task.Task {
 	task := task.Task{
 		ID:          uuid.New().String(),
 		Title:       strings.Join(fake.Lorem().Words(3), " "),
@@ -17,16 +17,17 @@ func createFakeTask(statusID string, userId string) task.Task {
 		Color:       fake.Lorem().Faker.Color().ColorName(),
 		StatusID:    &statusID,
 		UserID:      &userId,
+		ColumnID:    columnID,
 	}
 
 	return task
 }
 
-func createMultipleTasks(nbTasks int, statusID string, userId string) []task.Task {
+func createMultipleTasks(nbTasks int, statusID string, userId string, columnID string) []task.Task {
 	tasks := make([]task.Task, 0, nbTasks)
 
 	for i := 0; i < nbTasks; i++ {
-		task := createFakeTask(statusID, userId)
+		task := createFakeTask(statusID, userId, columnID)
 		tasks = append(tasks, task)
 	}
 
@@ -36,11 +37,11 @@ func createMultipleTasks(nbTasks int, statusID string, userId string) []task.Tas
 func taskIntoCSVString(tasks []task.Task) []string {
 	s := make([]string, 0, len(tasks))
 
-	tasksCSVHeader := "id,title,description,color,user_id,status_id"
+	tasksCSVHeader := "id,title,description,color,user_id,status_id,column_id"
 	s = append(s, tasksCSVHeader)
 
 	for _, t := range tasks {
-		result := fmt.Sprintf("%s,%s,%s,%s,%s,%s", t.ID, t.Title, t.Description, t.Color, error.ZeroOnNil(t.UserID), error.ZeroOnNil(t.StatusID))
+		result := fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s", t.ID, t.Title, t.Description, t.Color, error.ZeroOnNil(t.UserID), error.ZeroOnNil(t.StatusID), t.ColumnID)
 		s = append(s, result)
 	}
 

@@ -4,6 +4,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/teooliver/kanban/internal/repository/column"
+	"github.com/teooliver/kanban/internal/repository/project"
 	"github.com/teooliver/kanban/internal/repository/status"
 	"github.com/teooliver/kanban/internal/repository/task"
 	"github.com/teooliver/kanban/internal/repository/user"
@@ -16,16 +18,19 @@ type DbData struct {
 	StatusList []status.Status
 	Users      []user.User
 	Tasks      []task.Task
+	Projects   []project.Project
+	Columns    []column.Column
 }
 
 func seedData() DbData {
 	statusList := createFakeStatusList()
 	users := createMultipleFakeUsers(usersAmount)
+	projects := createMultipleProjects(5)
+	columns := createMultipleColumns(projects[0].ID)
 
 	tasks := make([]task.Task, 0, len(users)*tasksPerUserAmount)
-
 	for _, u := range users {
-		userTasks := createMultipleTasks(tasksPerUserAmount, statusList[0].ID, u.ID)
+		userTasks := createMultipleTasks(tasksPerUserAmount, statusList[0].ID, u.ID, columns[0].ID)
 		tasks = append(tasks, userTasks...)
 	}
 
@@ -37,6 +42,8 @@ func seedData() DbData {
 		StatusList: statusList,
 		Users:      users,
 		Tasks:      tasks,
+		Projects:   projects,
+		Columns:    columns,
 	}
 }
 
@@ -46,10 +53,14 @@ func CreateDbCSV() {
 	usersCSVTable := userIntoCSVString(dbData.Users)
 	statusCSVTable := statusIntoCSVString(dbData.StatusList)
 	tasksCSVTable := taskIntoCSVString(dbData.Tasks)
+	columnsCSVTable := columnsIntoCSVString(dbData.Columns)
+	projectsCSVTable := projectsIntoCSVString(dbData.Projects)
 
 	writeCSVtoFile("users.csv", usersCSVTable)
 	writeCSVtoFile("status.csv", statusCSVTable)
 	writeCSVtoFile("tasks.csv", tasksCSVTable)
+	writeCSVtoFile("columns.csv", columnsCSVTable)
+	writeCSVtoFile("projects.csv", projectsCSVTable)
 
 }
 

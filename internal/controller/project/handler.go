@@ -35,7 +35,7 @@ func (h Handler) ListProjects(w http.ResponseWriter, r *http.Request) {
 
 	projects, err := h.service.ListAllProjects(ctx, input)
 	if err != nil {
-		w.Write([]byte(fmt.Sprintf("TASK HANDLER => Something went wrong: %v\n", err)))
+		w.Write([]byte(fmt.Sprintf("Project HANDLER => Something went wrong: %v\n", err)))
 		return
 	}
 	projectResponse := ListProjectResponse{
@@ -44,7 +44,7 @@ func (h Handler) ListProjects(w http.ResponseWriter, r *http.Request) {
 
 	jsonProjects, err := json.Marshal(projectResponse.Projects)
 	if err != nil {
-		w.Write([]byte(fmt.Sprintf("TASK HANDLER MARSHAL => Something went wrong: %v\n", err)))
+		w.Write([]byte(fmt.Sprintf("Project HANDLER MARSHAL => Something went wrong: %v\n", err)))
 		return
 	}
 

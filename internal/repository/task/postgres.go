@@ -88,6 +88,8 @@ func (r *PostgresRepository) DeleteTask(ctx context.Context, taskID string) (str
 
 // TODO: Return the result from ExecContext
 func (r *PostgresRepository) UpdateTask(ctx context.Context, taskID string, task TaskForUpdate) (err error) {
+	// TODO: update only the fields sent by the FE instead of using the whole task blindly:
+	// SET column1 = value1, column2 = value2, ...
 	updateSQL, args, err := goqu.Update("task").Set(task).Where(goqu.Ex{"id": taskID}).Returning("id").ToSQL()
 	if err != nil {
 		return fmt.Errorf("error generating update task query: %w", err)
@@ -98,7 +100,6 @@ func (r *PostgresRepository) UpdateTask(ctx context.Context, taskID string, task
 		return fmt.Errorf("error executing update task query: %w", err)
 	}
 
-	// slog.Info("UPDATED ID", result)
 	return nil
 }
 

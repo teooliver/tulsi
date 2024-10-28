@@ -9,19 +9,19 @@ type Column struct {
 	ID        string `json:"id"` //PK
 	Name      string `json:"name"`
 	ProjectID string `json:"project_id"` //FK
-	Position  string `json:"position"`
+	Position  int16  `json:"position"`
 }
 
 type ColumnForCreate struct {
 	Name      string `json:"name"`
 	ProjectID string `json:"project_id"` //FK
-	Position  string `json:"position"`
+	Position  int16  `json:"position"`
 }
 
 type ColumnForUpdate struct {
 	Name      string `json:"name"`
 	ProjectID string `json:"project_id"` //FK
-	Position  string `json:"position"`
+	Position  int16  `json:"position"`
 }
 
 var allColumns = []any{
