@@ -65,6 +65,7 @@ func Router(deps *bootstrap.AllDeps) http.Handler {
 		r.With(
 			httpin.NewInput(postgresutils.PageRequest{}),
 		).Get("/", deps.Handlers.ProjectHandler.ListProjects)
+		r.Get("/{id}/columns", deps.Handlers.ProjectHandler.GetProjectColumns)
 	})
 
 	return r

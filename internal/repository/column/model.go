@@ -3,6 +3,7 @@ package column
 import (
 	"database/sql"
 	"fmt"
+	"log/slog"
 )
 
 type Column struct {
@@ -31,12 +32,16 @@ var allColumns = []any{
 	"position",
 }
 
-func mapRowToColumn(rows *sql.Rows) (Column, error) {
+// TODO: Need this on the Projects repo to map Join result, but this break the "clean architecture" spec
+// find better way of doing it
+func MapRowToColumn(rows *sql.Rows) (Column, error) {
 	var t Column
-	err := rows.Scan(&t.ID, &t.Name)
+	err := rows.Scan(&t.ID, &t.Name, &t.ProjectID, &t.Position)
+
+	slog.Info("ROW TO COLUMN", err, t)
 
 	if err != nil {
-		return Column{}, fmt.Errorf("Error error scanning Task row: %w", err)
+		return Column{}, fmt.Errorf("Error error scanning COLUMN row: %w", err)
 
 	}
 	return t, nil

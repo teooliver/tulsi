@@ -64,6 +64,7 @@ func (h Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(jsonTasks))
 }
+
 func (h Handler) GetTaskByID(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	taskID := chi.URLParam(r, "id")

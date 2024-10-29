@@ -20,7 +20,7 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 
 func (r *PostgresRepository) ListAllColumns(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[Column], error) {
 	q := goqu.From("column").Select(allColumns...)
-	return postgresutils.ListPaginated(ctx, r.db, q, params, mapRowToColumn)
+	return postgresutils.ListPaginated(ctx, r.db, q, params, MapRowToColumn)
 }
 
 func (r *PostgresRepository) CreateColumn(ctx context.Context, column ColumnForCreate) (string, error) {

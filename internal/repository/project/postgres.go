@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/doug-martin/goqu/v9"
+	"github.com/teooliver/kanban/internal/repository/column"
 	"github.com/teooliver/kanban/pkg/postgresutils"
 )
 
@@ -40,7 +41,7 @@ func (r *PostgresRepository) CreateProject(ctx context.Context, project ProjectT
 	return id, nil
 }
 
-// TODO: use `uuid` type for taskID instead of `string`
+// TODO: use `uuid` type for projectID instead of `string`
 func (r *PostgresRepository) DeleteProject(ctx context.Context, projectID string) (string, error) {
 	insertSQL, args, err := goqu.Delete("project").Where(goqu.Ex{"id": projectID}).Returning("id").ToSQL()
 	if err != nil {
@@ -57,8 +58,8 @@ func (r *PostgresRepository) DeleteProject(ctx context.Context, projectID string
 }
 
 // TODO: Return the result from ExecContext
-func (r *PostgresRepository) UpdateProject(ctx context.Context, taskID string, project ProjectToUpdate) (err error) {
-	updateSQL, args, err := goqu.Update("project").Set(project).Where(goqu.Ex{"id": taskID}).Returning("id").ToSQL()
+func (r *PostgresRepository) UpdateProject(ctx context.Context, projectID string, project ProjectToUpdate) (err error) {
+	updateSQL, args, err := goqu.Update("project").Set(project).Where(goqu.Ex{"id": projectID}).Returning("id").ToSQL()
 	if err != nil {
 		return fmt.Errorf("error generating update project query: %w", err)
 	}
@@ -70,4 +71,39 @@ func (r *PostgresRepository) UpdateProject(ctx context.Context, taskID string, p
 
 	// slog.Info("UPDATED ID", result)
 	return nil
+}
+
+func (r *PostgresRepository) GetProjectColumns(ctx context.Context, projectID string) (columns []column.Column, err error) {
+	// SELECT project_column.id, project_column.name,project_column.project_id, project_column.position
+	// FROM project_column
+	// INNER JOIN project ON project_column.project_id= project.id;
+	sql, args, err := goqu.Select(
+		"project_column.id",
+		"project_column.name",
+		"project_column.project_id",
+		"project_column.position").From(
+		"project_column").InnerJoin(
+		goqu.T("project"),
+		goqu.On(goqu.Ex{"project_column.project_id": goqu.I("project.id")})).ToSQL()
+
+	if err != nil {
+		return []column.Column{}, fmt.Errorf("error generating update project query: %w", err)
+	}
+
+	rows, err := r.db.QueryContext(ctx, sql, args...)
+
+	if err != nil {
+		return []column.Column{}, fmt.Errorf("error executing update project query: %w", err)
+	}
+
+	var result []column.Column
+	for rows.Next() {
+		row, err := column.MapRowToColumn(rows)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, row)
+	}
+
+	return result, nil
 }
