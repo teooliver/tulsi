@@ -9,6 +9,7 @@ type Project struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
+	IsArchived  bool   `json:"is_archived"`
 }
 
 type ProjectToCreate struct {
@@ -19,17 +20,19 @@ type ProjectToCreate struct {
 type ProjectToUpdate struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
+	IsArchived  bool   `json:"is_archived"`
 }
 
 var allColumns = []any{
 	"id",
 	"name",
 	"description",
+	"is_archived",
 }
 
 func mapRowToProject(rows *sql.Rows) (Project, error) {
 	var t Project
-	err := rows.Scan(&t.ID, &t.Name, &t.Description)
+	err := rows.Scan(&t.ID, &t.Name, &t.Description, &t.IsArchived)
 
 	if err != nil {
 		return Project{}, fmt.Errorf("Error error scanning Project row: %w", err)

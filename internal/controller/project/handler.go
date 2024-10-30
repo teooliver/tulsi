@@ -16,6 +16,7 @@ import (
 type projecService interface {
 	ListAllProjects(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[project.Project], error)
 	GetProjectColumns(ctx context.Context, projectId string) ([]column.Column, error)
+	ArquiveProject(ctx context.Context, projectID string) (string, error)
 }
 
 type Handler struct {
@@ -74,4 +75,19 @@ func (h Handler) GetProjectColumns(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(jsonColumns))
+}
+
+func (h Handler) ArquiveProject(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	projectID := chi.URLParam(r, "id")
+	id, err := h.service.ArquiveProject(ctx, projectID)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(fmt.Sprintf("Delete Project - Something went wrong: %v\n", err)))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(id))
 }

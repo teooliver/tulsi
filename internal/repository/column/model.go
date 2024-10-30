@@ -3,7 +3,6 @@ package column
 import (
 	"database/sql"
 	"fmt"
-	"log/slog"
 )
 
 type Column struct {
@@ -37,8 +36,6 @@ var allColumns = []any{
 func MapRowToColumn(rows *sql.Rows) (Column, error) {
 	var t Column
 	err := rows.Scan(&t.ID, &t.Name, &t.ProjectID, &t.Position)
-
-	slog.Info("ROW TO COLUMN", err, t)
 
 	if err != nil {
 		return Column{}, fmt.Errorf("Error error scanning COLUMN row: %w", err)

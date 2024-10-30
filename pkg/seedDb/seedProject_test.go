@@ -14,20 +14,22 @@ func TestProjectIntoCSVString(t *testing.T) {
 			ID:          "09a39094-4b42-4c25-96be-a0c16ee9f1c5",
 			Name:        "some_name",
 			Description: "some_description",
+			IsArchived:  false,
 		},
 		{
 			ID:          "09a39094-4b42-4c25-96be-a0c16ee9f1c6",
 			Name:        "some_name_v2",
 			Description: "some_description_v2",
+			IsArchived:  false,
 		},
 	}
 
 	got := projectsIntoCSVString(projects)
 
 	want := []string{
-		fmt.Sprint("id,name,description"),
-		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c5,some_name,some_description"),
-		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c6,some_name_v2,some_description_v2"),
+		fmt.Sprint("id,name,description,is_archived"),
+		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c5,some_name,some_description,false"),
+		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c6,some_name_v2,some_description_v2,false"),
 	}
 
 	if got[0] != want[0] {

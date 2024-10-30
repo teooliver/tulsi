@@ -15,6 +15,7 @@ type Service struct {
 type projectRepo interface {
 	ListAllProjects(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[project.Project], error)
 	GetProjectColumns(ctx context.Context, projectID string) (columns []column.Column, err error)
+	ArquiveProject(ctx context.Context, projectID string) (string, error)
 }
 
 func New(
@@ -52,14 +53,15 @@ func (s *Service) GetProjectColumns(ctx context.Context, projectID string) ([]co
 // 	return nil
 // }
 
-// func (s *Service) DeleteProject(ctx context.Context, statusID string) error {
-// 	err := s.projectRepo.DeleteProject(ctx, statusID)
-// 	if err != nil {
-// 		return err
-// 	}
+func (s *Service) ArquiveProject(ctx context.Context, projectID string) (string, error) {
 
-// 	return nil
-// }
+	id, err := s.projectRepo.ArquiveProject(ctx, projectID)
+	if err != nil {
+		return id, err
+	}
+	return id, nil
+}
+
 // func (s *Service) UpdateProject(ctx context.Context, statusID string, updatedProject project.ProjectToUpdate) error {
 // 	err := s.projectRepo.UpdateProject(ctx, statusID, updatedProject)
 // 	if err != nil {

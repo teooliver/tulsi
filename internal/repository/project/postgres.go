@@ -42,7 +42,7 @@ func (r *PostgresRepository) CreateProject(ctx context.Context, project ProjectT
 }
 
 // TODO: use `uuid` type for projectID instead of `string`
-func (r *PostgresRepository) DeleteProject(ctx context.Context, projectID string) (string, error) {
+func (r *PostgresRepository) ArquiveProject(ctx context.Context, projectID string) (string, error) {
 	insertSQL, args, err := goqu.Delete("project").Where(goqu.Ex{"id": projectID}).Returning("id").ToSQL()
 	if err != nil {
 		return "", fmt.Errorf("error generating delete project query: %w", err)
