@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"net/http"
 
 	"github.com/ggicci/httpin"
@@ -17,6 +18,7 @@ type projecService interface {
 	ListAllProjects(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[project.Project], error)
 	GetProjectColumns(ctx context.Context, projectId string) ([]column.Column, error)
 	ArquiveProject(ctx context.Context, projectID string) (string, error)
+	CreateProject(ctx context.Context, project project.CreateProjectRequest) (string, error)
 }
 
 type Handler struct {
@@ -48,7 +50,7 @@ func (h Handler) ListProjects(w http.ResponseWriter, r *http.Request) {
 
 	jsonProjects, err := json.Marshal(projectResponse.Projects)
 	if err != nil {
-		w.Write([]byte(fmt.Sprintf("Project HANDLER MARSHAL => Something went wrong: %v\n", err)))
+		w.Write([]byte(fmt.Sprintf("List Projects HANDLER MARSHAL => Something went wrong: %v\n", err)))
 		return
 	}
 
@@ -62,14 +64,14 @@ func (h Handler) GetProjectColumns(w http.ResponseWriter, r *http.Request) {
 
 	columns, err := h.service.GetProjectColumns(ctx, projectID)
 	if err != nil {
-		w.Write([]byte(fmt.Sprintf("Project HANDLER => Something went wrong: %v\n", err)))
+		w.Write([]byte(fmt.Sprintf("Get Project Columns HANDLER => Something went wrong: %v\n", err)))
 		return
 	}
 
 	jsonColumns, err := json.Marshal(columns)
 
 	if err != nil {
-		w.Write([]byte(fmt.Sprintf("Project HANDLER MARSHAL => Something went wrong: %v\n", err)))
+		w.Write([]byte(fmt.Sprintf("Get Project Columns HANDLER MARSHAL => Something went wrong: %v\n", err)))
 		return
 	}
 
@@ -84,10 +86,31 @@ func (h Handler) ArquiveProject(w http.ResponseWriter, r *http.Request) {
 	id, err := h.service.ArquiveProject(ctx, projectID)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte(fmt.Sprintf("Delete Project - Something went wrong: %v\n", err)))
+		w.Write([]byte(fmt.Sprintf("Arquive Project - Something went wrong: %v\n", err)))
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(id))
+}
+func (h Handler) CreateProject(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var projectRequest project.CreateProjectRequest
+	err := json.NewDecoder(r.Body).Decode(&projectRequest)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	slog.Info("Project for CREATE %+v\n", "projectToCreate", projectRequest)
+
+	id, err := h.service.CreateProject(ctx, projectRequest)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(fmt.Sprintf("Create Project - Something went wrong: %v\n", err)))
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte(id))
 }

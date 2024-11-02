@@ -13,6 +13,7 @@ type RestHandlers struct {
 	UserHandler    user.Handler
 	StatusHandler  status.Handler
 	ProjectHandler project.Handler
+	ColumnHandler  column.Handler
 }
 
 func InitRestHandlers(cfg *config.Config, services *Services) *RestHandlers {

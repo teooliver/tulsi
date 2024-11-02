@@ -23,10 +23,12 @@ func (r *PostgresRepository) ListAllProjects(ctx context.Context, params *postgr
 	return postgresutils.ListPaginated(ctx, r.db, q, params, mapRowToProject)
 }
 
-func (r *PostgresRepository) CreateProject(ctx context.Context, project ProjectToCreate) (string, error) {
-	insertSQL, args, err := goqu.Insert("project").Rows(ProjectToCreate{
-		Name:        project.Name,
-		Description: project.Description,
+func (r *PostgresRepository) CreateProject(ctx context.Context, project CreateProjectRequest) (string, error) {
+
+	insertSQL, args, err := goqu.Insert("project").Rows(goqu.Record{
+		"name":        project.Name,
+		"description": project.Description,
+		"is_archived": false,
 	}).Returning("id").ToSQL()
 	if err != nil {
 		return "", fmt.Errorf("error generating create project query: %w", err)

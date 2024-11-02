@@ -86,7 +86,6 @@ func (h Handler) GetTaskByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
-	println("GOT HERE")
 	ctx := r.Context()
 
 	var taskToCreate task.TaskForCreate

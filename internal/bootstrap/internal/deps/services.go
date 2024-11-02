@@ -13,6 +13,7 @@ type Services struct {
 	UserService    *user.Service
 	StatusService  *status.Service
 	ProjectService *project.Service
+	ColumnService  *column.Service
 }
 
 func InitServices(cfg *config.Config, infra *Infra, repos *Repos) *Services {
@@ -20,11 +21,13 @@ func InitServices(cfg *config.Config, infra *Infra, repos *Repos) *Services {
 	userService := user.New(repos.UserRepo)
 	statusService := status.New(repos.StatusRepo)
 	projectService := project.New(repos.ProjectsRepo)
+	columnService := column.New(repos.ColumnRepo)
 
 	return &Services{
 		TaskService:    taskService,
 		UserService:    userService,
 		StatusService:  statusService,
 		ProjectService: projectService,
+		ColumnService:  columnService,
 	}
 }

@@ -16,6 +16,7 @@ type projectRepo interface {
 	ListAllProjects(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[project.Project], error)
 	GetProjectColumns(ctx context.Context, projectID string) (columns []column.Column, err error)
 	ArquiveProject(ctx context.Context, projectID string) (string, error)
+	CreateProject(ctx context.Context, project project.CreateProjectRequest) (string, error)
 }
 
 func New(
@@ -44,17 +45,16 @@ func (s *Service) GetProjectColumns(ctx context.Context, projectID string) ([]co
 	return columns, nil
 }
 
-// func (s *Service) CreateProject(ctx context.Context, project project.ProjectToCreate) error {
-// 	err := s.projectRepo.CreateProject(ctx, project)
-// 	if err != nil {
-// 		return err
-// 	}
+func (s *Service) CreateProject(ctx context.Context, project project.CreateProjectRequest) (string, error) {
+	id, err := s.projectRepo.CreateProject(ctx, project)
+	if err != nil {
+		return "", err
+	}
 
-// 	return nil
-// }
+	return id, nil
+}
 
 func (s *Service) ArquiveProject(ctx context.Context, projectID string) (string, error) {
-
 	id, err := s.projectRepo.ArquiveProject(ctx, projectID)
 	if err != nil {
 		return id, err

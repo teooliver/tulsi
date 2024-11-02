@@ -12,9 +12,15 @@ type Project struct {
 	IsArchived  bool   `json:"is_archived"`
 }
 
+type CreateProjectRequest struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
 type ProjectToCreate struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
+	IsArchived  bool   `json:"is_archived"`
 }
 
 type ProjectToUpdate struct {
