@@ -43,18 +43,20 @@ func (r *PostgresRepository) CreateProject(ctx context.Context, project ProjectT
 
 // TODO: use `uuid` type for projectID instead of `string`
 func (r *PostgresRepository) ArquiveProject(ctx context.Context, projectID string) (string, error) {
-	insertSQL, args, err := goqu.Delete("project").Where(goqu.Ex{"id": projectID}).Returning("id").ToSQL()
+	updateSQL, args, err := goqu.Update("project").Set(
+		goqu.Record{"is_archived": true}).Where(
+		goqu.Ex{"id": projectID}).Returning("id").ToSQL()
 	if err != nil {
-		return "", fmt.Errorf("error generating delete project query: %w", err)
+		return "", fmt.Errorf("error arquiving project: %w", err)
 	}
 
-	var id string
-	err = r.db.QueryRowContext(ctx, insertSQL, args...).Scan(&id)
+	_, err = r.db.ExecContext(ctx, updateSQL, args...)
 	if err != nil {
-		return "", fmt.Errorf("error executing delete project query: %w", err)
+		return "", fmt.Errorf("error executing arquive project query: %w", err)
 	}
 
-	return id, nil
+	// TODO: return id here
+	return "", nil
 }
 
 // TODO: Return the result from ExecContext
