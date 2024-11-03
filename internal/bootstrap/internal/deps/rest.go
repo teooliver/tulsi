@@ -2,6 +2,7 @@ package deps
 
 import (
 	"github.com/teooliver/kanban/internal/config"
+	"github.com/teooliver/kanban/internal/controller/column"
 	"github.com/teooliver/kanban/internal/controller/project"
 	"github.com/teooliver/kanban/internal/controller/status"
 	"github.com/teooliver/kanban/internal/controller/task"

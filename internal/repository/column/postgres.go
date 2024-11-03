@@ -7,7 +7,6 @@ import (
 	"log/slog"
 
 	"github.com/doug-martin/goqu/v9"
-	"github.com/teooliver/kanban/pkg/postgresutils"
 )
 
 type PostgresRepository struct {
@@ -18,17 +17,13 @@ func NewPostgres(db *sql.DB) *PostgresRepository {
 	return &PostgresRepository{db: db}
 }
 
-func (r *PostgresRepository) ListAllColumns(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[Column], error) {
-	q := goqu.From("column").Select(allColumns...)
-	return postgresutils.ListPaginated(ctx, r.db, q, params, MapRowToColumn)
-}
-
 func (r *PostgresRepository) CreateColumn(ctx context.Context, column ColumnForCreate) (string, error) {
 	insertSQL, args, err := goqu.Insert("column").Rows(ColumnForCreate{
 		Name:      column.Name,
 		ProjectID: column.ProjectID,
 		Position:  column.Position,
 	}).Returning("id").ToSQL()
+
 	if err != nil {
 		return "", fmt.Errorf("error generating create column query: %w", err)
 	}

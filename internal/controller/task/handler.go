@@ -94,6 +94,7 @@ func (h Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
 	slog.Info("Task for CREATE %+v\n", "taskToCreate", taskToCreate)
 
 	id, err := h.service.CreateTask(ctx, taskToCreate)

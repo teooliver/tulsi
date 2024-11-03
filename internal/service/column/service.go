@@ -1,10 +1,11 @@
-package project
+package column
 
 import (
 	"context"
 
+	"log/slog"
+
 	"github.com/teooliver/kanban/internal/repository/column"
-	"github.com/teooliver/kanban/pkg/postgresutils"
 )
 
 type Service struct {
@@ -12,7 +13,6 @@ type Service struct {
 }
 
 type columnRepo interface {
-	ListAllColumns(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[column.Column], error)
 	CreateColumn(ctx context.Context, column column.ColumnForCreate) (string, error)
 }
 
@@ -24,16 +24,9 @@ func New(
 	}
 }
 
-func (s *Service) ListAllProjects(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[column.Column], error) {
-	allColumns, err := s.columnRepo.CreateColumn(ctx, params)
-	if err != nil {
-		return postgresutils.Page[column.Column]{}, err
-	}
-
-	return allColumns, nil
-}
-
 func (s *Service) CreateColumn(ctx context.Context, column column.ColumnForCreate) (string, error) {
+	// TODO: check `position` is already taken in the project
+	slog.Info("GOT HERE %+v\n", column)
 	id, err := s.columnRepo.CreateColumn(ctx, column)
 	if err != nil {
 		return "", err

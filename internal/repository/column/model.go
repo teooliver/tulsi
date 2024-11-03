@@ -6,22 +6,22 @@ import (
 )
 
 type Column struct {
-	ID        string `json:"id"` //PK
-	Name      string `json:"name"`
-	ProjectID string `json:"project_id"` //FK
-	Position  int16  `json:"position"`
+	ID        string  `json:"id"` //PK
+	Name      string  `json:"name"`
+	ProjectID string  `json:"project_id"` //FK
+	Position  float64 `json:"position"`
 }
 
 type ColumnForCreate struct {
-	Name      string `json:"name"`
-	ProjectID string `json:"project_id"` //FK
-	Position  int16  `json:"position"`
+	Name      string  `json:"name"`
+	ProjectID string  `json:"project_id"` //FK
+	Position  float64 `json:"position"`
 }
 
 type ColumnForUpdate struct {
-	Name      string `json:"name"`
-	ProjectID string `json:"project_id"` //FK
-	Position  int16  `json:"position"`
+	Name      string  `json:"name"`
+	ProjectID string  `json:"project_id"` //FK
+	Position  float64 `json:"position"`
 }
 
 var allColumns = []any{
