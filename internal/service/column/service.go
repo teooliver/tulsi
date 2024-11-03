@@ -26,7 +26,7 @@ func New(
 
 func (s *Service) CreateColumn(ctx context.Context, column column.ColumnForCreate) (string, error) {
 	// TODO: check `position` is already taken in the project
-	slog.Info("GOT HERE %+v\n", column)
+	slog.Info("GOT HERE CREATE COLUMN SERVICE")
 	id, err := s.columnRepo.CreateColumn(ctx, column)
 	if err != nil {
 		return "", err

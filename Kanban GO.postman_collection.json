@@ -67,13 +67,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/tasks/62d67329-82e3-4207-8de7-52ddb18d1d45",
+							"raw": "{{base_url}}/tasks/9c8d0fdd-02d2-4140-a735-d9199aa08f0e",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tasks",
-								"62d67329-82e3-4207-8de7-52ddb18d1d45"
+								"9c8d0fdd-02d2-4140-a735-d9199aa08f0e"
 							]
 						}
 					},
@@ -84,13 +84,41 @@
 					"request": {
 						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\":\"Test Edit title 02\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{base_url}}/tasks",
+							"raw": "{{base_url}}/tasks/9c8d0fdd-02d2-4140-a735-d9199aa08f0e",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"tasks"
+								"tasks",
+								"9c8d0fdd-02d2-4140-a735-d9199aa08f0e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Task by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/tasks/9c8d0fdd-02d2-4140-a735-d9199aa08f0e",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								"9c8d0fdd-02d2-4140-a735-d9199aa08f0e"
 							]
 						}
 					},
@@ -113,6 +141,178 @@
 							],
 							"path": [
 								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Projects",
+			"item": [
+				{
+					"name": "Get Projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/projects/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"projects",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Project Columns",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/projects/a2aa29f7-21a5-4add-b147-b9bd7f78c148/columns",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"projects",
+								"a2aa29f7-21a5-4add-b147-b9bd7f78c148",
+								"columns"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Archive Project",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/projects/49ac4711-e71c-4426-8fd1-c13643e7a265",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"projects",
+								"49ac4711-e71c-4426-8fd1-c13643e7a265"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crete Project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"New Project Title 03\",\n    \"description\":\"New Project Description 01\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/projects",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"projects"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Columns",
+			"item": [
+				{
+					"name": "Create Column",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test Column Name 01\",\n    \"project_id\": \"d0479c65-f200-4afc-91c6-63407250b6c1\",\n    \"position\":20\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/columns",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"columns"
 							]
 						}
 					},

@@ -9,7 +9,7 @@ type Column struct {
 	ID        string  `json:"id"` //PK
 	Name      string  `json:"name"`
 	ProjectID string  `json:"project_id"` //FK
-	Position  float64 `json:"position"`
+	Position  float64 `json:"position"`   // Needs to be float64 to be Decoded from JSON
 }
 
 type ColumnForCreate struct {

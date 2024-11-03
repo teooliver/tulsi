@@ -34,10 +34,10 @@ func (h Handler) CreateColumn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	slog.Info("Column for CREATE %+v\n", "ColumnToCreate", columnRequest)
+	slog.Info("GOT HERE - HANDLER CREATE COLUMN %+v\n", "ColumnToCreate", columnRequest)
 
 	id, err := h.service.CreateColumn(ctx, columnRequest)
-	slog.Info("ERROR", "ColumnToCreate", err)
+	// slog.Info("ERROR", "ColumnToCreate", err)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(fmt.Sprintf("Create Column - Something went wrong: %v\n", err)))
