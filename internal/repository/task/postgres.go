@@ -55,7 +55,7 @@ func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate)
 		Title:       task.Title,
 		Description: task.Description,
 		Color:       task.Color,
-		// UserID:      task.UserID,
+		ColumnID:    task.ColumnID,
 	}).Returning("id").ToSQL()
 	if err != nil {
 		return "", fmt.Errorf("error generating create task query: %w", err)

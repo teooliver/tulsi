@@ -22,11 +22,13 @@ func InitRestHandlers(cfg *config.Config, services *Services) *RestHandlers {
 	userHandler := user.New(services.UserService)
 	statusHandler := status.New(services.StatusService)
 	projectHandler := project.New(services.ProjectService)
+	columnHandler := column.New(services.ColumnService)
 
 	return &RestHandlers{
 		TaskHandler:    taskHandler,
 		UserHandler:    userHandler,
 		StatusHandler:  statusHandler,
 		ProjectHandler: projectHandler,
+		ColumnHandler:  columnHandler,
 	}
 }

@@ -16,8 +16,8 @@ func createFakeTask(statusID string, userId string, columnID string) task.Task {
 		Description: strings.Join(fake.Lorem().Words(5), " "),
 		Color:       fake.Lorem().Faker.Color().ColorName(),
 		StatusID:    &statusID,
-		UserID:      &userId,
 		ColumnID:    columnID,
+		UserID:      &userId,
 	}
 
 	return task
@@ -41,7 +41,7 @@ func taskIntoCSVString(tasks []task.Task) []string {
 	s = append(s, tasksCSVHeader)
 
 	for _, t := range tasks {
-		result := fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s", t.ID, t.Title, t.Description, t.Color, error.ZeroOnNil(t.UserID), error.ZeroOnNil(t.StatusID), t.ColumnID)
+		result := fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s", t.ID, t.Title, t.Description, t.Color, error.ZeroOrNil(t.UserID), error.ZeroOrNil(t.StatusID), t.ColumnID)
 		s = append(s, result)
 	}
 
