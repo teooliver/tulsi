@@ -51,11 +51,11 @@ func (r *PostgresRepository) GetTaskByID(ctx context.Context, taskID string) (Ta
 }
 
 func (r *PostgresRepository) CreateTask(ctx context.Context, task TaskForCreate) (string, error) {
-	insertSQL, args, err := goqu.Insert("task").Rows(TaskForCreate{
-		Title:       task.Title,
-		Description: task.Description,
-		Color:       task.Color,
-		ColumnID:    task.ColumnID,
+	insertSQL, args, err := goqu.Insert("task").Rows(goqu.Record{
+		"title":       task.Title,
+		"description": task.Description,
+		"color":       task.Color,
+		"column_id":   task.ColumnID,
 	}).Returning("id").ToSQL()
 	if err != nil {
 		return "", fmt.Errorf("error generating create task query: %w", err)

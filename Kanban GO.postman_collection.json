@@ -33,7 +33,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\":\"Test title 01\",\n    \"description\":\"Test Description 01\",\n    \"color\":\"Magenta\"\n}",
+							"raw": "{\n    \"title\":\"Test create task on column v02\",\n    \"description\":\"Test Description 01\",\n    \"color\":\"Magenta\",\n    \"column_id\": \"e51e7eb4-01b5-4054-a83c-5d908866a68f\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -317,6 +317,24 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Edit Columns",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/columns/{id}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"columns",
+								"{id}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
@@ -346,7 +364,7 @@
 	"variable": [
 		{
 			"key": "base_url",
-			"value": "localhost:3000",
+			"value": "localhost:3001",
 			"type": "string"
 		}
 	]
