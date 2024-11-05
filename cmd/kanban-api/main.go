@@ -36,7 +36,7 @@ func main() {
 	}
 
 	// The HTTP Server
-	server := &http.Server{Addr: "0.0.0.0:3000", Handler: routes.Router(deps)}
+	server := &http.Server{Addr: "0.0.0.0:3001", Handler: routes.Router(deps)}
 
 	// Listen for syscall signals for process to interrupt/quit
 	sig := make(chan os.Signal, 1)

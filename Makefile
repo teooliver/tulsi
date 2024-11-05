@@ -1,3 +1,7 @@
+# Live-reload
+air:
+	air
+
 build_docker:
 	docker build . -t kanban-go/seed
 
