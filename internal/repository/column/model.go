@@ -33,7 +33,7 @@ var allColumns = []any{
 
 // TODO: Need this on the Projects repo to map Join result, but this break the "clean architecture" spec
 // find better way of doing it
-func MapRowToColumn(rows *sql.Rows) (Column, error) {
+func mapRowToColumn(rows *sql.Rows) (Column, error) {
 	var t Column
 	err := rows.Scan(&t.ID, &t.Name, &t.ProjectID, &t.Position)
 

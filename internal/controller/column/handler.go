@@ -7,11 +7,13 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/teooliver/kanban/internal/repository/column"
 )
 
 type columnService interface {
 	CreateColumn(ctx context.Context, column column.ColumnForCreate) (string, error)
+	GetColumnsByProjectID(ctx context.Context, projectID string) ([]column.Column, error)
 }
 
 type Handler struct {
@@ -45,4 +47,25 @@ func (h Handler) CreateColumn(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte(id))
+}
+
+func (h Handler) GetColumnsByProjectID(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	projectID := chi.URLParam(r, "projectID")
+
+	columns, err := h.service.GetColumnsByProjectID(ctx, projectID)
+	if err != nil {
+		w.Write([]byte(fmt.Sprintf("Get Columns by ProjectID HANDLER => Something went wrong: %v\n", err)))
+		return
+	}
+
+	jsonColumns, err := json.Marshal(columns)
+
+	if err != nil {
+		w.Write([]byte(fmt.Sprintf("Get Columns by ProjectID HANDLER MARSHAL => Something went wrong: %v\n", err)))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(jsonColumns))
 }

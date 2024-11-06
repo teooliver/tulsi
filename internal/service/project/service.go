@@ -3,7 +3,6 @@ package project
 import (
 	"context"
 
-	"github.com/teooliver/kanban/internal/repository/column"
 	"github.com/teooliver/kanban/internal/repository/project"
 	"github.com/teooliver/kanban/pkg/postgresutils"
 )
@@ -14,7 +13,6 @@ type Service struct {
 
 type projectRepo interface {
 	ListAllProjects(ctx context.Context, params *postgresutils.PageRequest) (postgresutils.Page[project.Project], error)
-	GetProjectColumns(ctx context.Context, projectID string) (columns []column.Column, err error)
 	ArquiveProject(ctx context.Context, projectID string) (string, error)
 	CreateProject(ctx context.Context, project project.CreateProjectRequest) (string, error)
 }
@@ -34,15 +32,6 @@ func (s *Service) ListAllProjects(ctx context.Context, params *postgresutils.Pag
 	}
 
 	return allProjects, nil
-}
-
-func (s *Service) GetProjectColumns(ctx context.Context, projectID string) ([]column.Column, error) {
-	columns, err := s.projectRepo.GetProjectColumns(ctx, projectID)
-	if err != nil {
-		return columns, err
-	}
-
-	return columns, nil
 }
 
 func (s *Service) CreateProject(ctx context.Context, project project.CreateProjectRequest) (string, error) {

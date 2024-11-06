@@ -14,6 +14,7 @@ type Service struct {
 
 type columnRepo interface {
 	CreateColumn(ctx context.Context, column column.ColumnForCreate) (string, error)
+	GetColumnsByProjectID(ctx context.Context, projectID string) (columns []column.Column, err error)
 }
 
 func New(
@@ -33,4 +34,13 @@ func (s *Service) CreateColumn(ctx context.Context, column column.ColumnForCreat
 	}
 
 	return id, nil
+}
+
+func (s *Service) GetColumnsByProjectID(ctx context.Context, projectID string) ([]column.Column, error) {
+	columns, err := s.columnRepo.GetColumnsByProjectID(ctx, projectID)
+	if err != nil {
+		return columns, err
+	}
+
+	return columns, nil
 }
