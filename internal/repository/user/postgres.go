@@ -25,10 +25,10 @@ func (r *PostgresRepository) ListAllUsers(ctx context.Context, params *postgresu
 
 // TODO: Return created user instead of just the id
 func (r *PostgresRepository) CreateUser(ctx context.Context, user UserForCreate) (string, error) {
-	insertSQL, args, err := goqu.Insert("app_user").Rows(UserForCreate{
-		Email:     user.Email,
-		FirstName: user.FirstName,
-		LastName:  user.LastName,
+	insertSQL, args, err := goqu.Insert("app_user").Rows(goqu.Record{
+		"email":      user.Email,
+		"first_name": user.FirstName,
+		"last_name":  user.LastName,
 	}).Returning("id").ToSQL()
 	if err != nil {
 		return "", fmt.Errorf("error generating create user query: %w", err)

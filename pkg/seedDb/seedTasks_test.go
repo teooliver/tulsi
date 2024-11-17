@@ -10,7 +10,7 @@ import (
 func TestTaskIntoCSVString(t *testing.T) {
 	statusID := "09a39094-4b42-4c25-96be-a0c16ee9f1c6"
 	userID := "09a39094-4b42-4c25-96be-a0c16ee9f1c7"
-	// sprintID := "09a39094-4b42-4c25-96be-a0c16ee0000"
+	columnID := "09a39094-4b42-4c25-96be-a0c16ee9f1c8"
 
 	tasks := []task.Task{
 		{
@@ -20,7 +20,7 @@ func TestTaskIntoCSVString(t *testing.T) {
 			Color:       "some_color",
 			StatusID:    &statusID,
 			UserID:      &userID,
-			// SprintID:    &sprintID,
+			ColumnID:    columnID,
 		},
 		{
 			ID:          "09a39094-4b42-4c25-96be-a0c16ee9f1c5",
@@ -29,18 +29,16 @@ func TestTaskIntoCSVString(t *testing.T) {
 			Color:       "some_color_v2",
 			StatusID:    &statusID,
 			UserID:      &userID,
-			// SprintID:    &sprintIDINFO UPDATED ID !BADKEY
-			//
-			// ,
+			ColumnID:    columnID,
 		},
 	}
 
 	got := taskIntoCSVString(tasks)
 
 	want := []string{
-		fmt.Sprint("id,title,description,color,user_id,status_id"),
-		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c5,some_title,some_description,some_color,%v,%v", userID, statusID),
-		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c5,some_title_v2,some_description_v2,some_color_v2,%v,%v", userID, statusID),
+		fmt.Sprint("id,title,description,color,user_id,status_id,column_id"),
+		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c5,some_title,some_description,some_color,%v,%v,%v", userID, statusID, columnID),
+		fmt.Sprintf("09a39094-4b42-4c25-96be-a0c16ee9f1c5,some_title_v2,some_description_v2,some_color_v2,%v,%v,%v", userID, statusID, columnID),
 	}
 
 	if got[0] != want[0] {

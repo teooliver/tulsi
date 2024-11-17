@@ -1,6 +1,6 @@
-id,name,position,project_id
-e51e7eb4-01b5-4054-a83c-5d908866a68f,Backlog,0,49ac4711-e71c-4426-8fd1-c13643e7a265
-dcdf8590-b19e-4947-aa5e-dc6a5ef73af6,Todo,1,49ac4711-e71c-4426-8fd1-c13643e7a265
-d463eac8-5f3d-48ba-8067-198d4839d356,In Progress,2,49ac4711-e71c-4426-8fd1-c13643e7a265
-3a045cd2-6e14-4e30-b9b2-f8a838cf2cf5,Review,3,49ac4711-e71c-4426-8fd1-c13643e7a265
-374bdad3-756a-4fb1-8ffe-518428c50ed5,Done,4,49ac4711-e71c-4426-8fd1-c13643e7a265
+id,name,position,project_id,position_int
+c7dda00f-933d-4160-8d69-eb2eba479df0,Backlog,0,0bd5310a-fe45-43cf-8a84-cbbc9c1f32db,0
+e56b42c4-c1ac-48e7-89eb-5d923eed457c,Todo,1,0bd5310a-fe45-43cf-8a84-cbbc9c1f32db,1
+811b5d9f-dc23-478b-8d3b-c23e059760c4,In Progress,2,0bd5310a-fe45-43cf-8a84-cbbc9c1f32db,2
+df54c861-f0d6-4806-b6db-d529b4fbac4d,Review,3,0bd5310a-fe45-43cf-8a84-cbbc9c1f32db,3
+ed5f5820-ea32-44c6-aa46-c79f46e7a8eb,Done,4,0bd5310a-fe45-43cf-8a84-cbbc9c1f32db,4

@@ -1,3 +1,3 @@
 -- +goose up
 ALTER TABLE project_column
-ALTER COLUMN position TYPE INT;
+ADD COLUMN position_int SMALLINT;
