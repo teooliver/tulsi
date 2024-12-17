@@ -5,10 +5,12 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/teooliver/kanban/internal/repository/user"
+	"github.com/teooliver/kanban/pkg/auth"
 )
 
 func createFakeUser() user.User {
-	login := user.Login{HashedPassword: "", SessionToken: "", CSRFToken: ""}
+	hashedPassword, _ := auth.HashPassword("12345")
+	login := user.Login{HashedPassword: hashedPassword, SessionToken: "", CSRFToken: ""}
 
 	user := user.User{
 		ID:        uuid.New().String(),
