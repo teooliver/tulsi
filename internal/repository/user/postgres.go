@@ -92,17 +92,13 @@ func (r *PostgresRepository) GetUserByEmail(ctx context.Context, email string) (
 		return User{}, fmt.Errorf("error generating get user query: %w", err)
 	}
 
-	row, err := r.db.QueryContext(ctx, query, args...)
+	row := r.db.QueryRowContext(ctx, query, args...)
 	if err := row.Err(); err != nil {
 		return User{}, fmt.Errorf("error executing get user query: %w", err)
 	}
 
 	var u User
-	// From the docs:
-	// https://pkg.go.dev/database/sql#Rows.Next
-	// Every call to Rows.Scan, even the first one, must be preceded by a call to Rows.Next.
-	row.Next()
-	err = row.Scan(u.Email, u.FirstName, u.LastName, u.ID, u.Login.HashedPassword, u.Login.CSRFToken, u.Login.SessionToken)
+	err = row.Scan(u.ID, u.Email, u.FirstName, u.LastName, u.Login.HashedPassword, u.Login.SessionToken, u.Login.CSRFToken)
 
 	if err != nil {
 		return User{}, fmt.Errorf("Error error scanning Task row: %w", err)

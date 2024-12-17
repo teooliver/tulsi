@@ -30,17 +30,9 @@ func (r *PostgresRepository) GetTaskByID(ctx context.Context, taskID string) (Ta
 		return Task{}, err
 	}
 
-	row, err := r.db.QueryContext(ctx, query, args...)
-	if err != nil {
-		println("QueryContext ERROR")
-		return Task{}, err
-	}
+	row := r.db.QueryRowContext(ctx, query, args...)
 
 	var t Task
-	// From the docs:
-	// https://pkg.go.dev/database/sql#Rows.Next
-	// Every call to Rows.Scan, even the first one, must be preceded by a call to Rows.Next.
-	row.Next()
 	err = row.Scan(&t.ID, &t.Title, &t.Description, &t.Color, &t.StatusID, &t.UserID, &t.ColumnID)
 
 	if err != nil {
