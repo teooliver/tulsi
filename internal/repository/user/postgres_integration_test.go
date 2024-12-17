@@ -12,14 +12,14 @@ import (
 	"github.com/teooliver/kanban/pkg/testhelpers"
 )
 
-type TaskRepoTestSuite struct {
+type UserRepoTestSuite struct {
 	suite.Suite
 	pgContainer *testhelpers.PostgresContainer
 	repository  *PostgresRepository
 	ctx         context.Context
 }
 
-func (suite *TaskRepoTestSuite) SetupSuite() {
+func (suite *UserRepoTestSuite) SetupSuite() {
 	suite.ctx = context.Background()
 	pgContainer, err := testhelpers.CreatePostgresContainer(suite.ctx)
 	if err != nil {
@@ -36,20 +36,20 @@ func (suite *TaskRepoTestSuite) SetupSuite() {
 	}
 
 	suite.pgContainer = pgContainer
-	taskRepo := NewPostgres(db)
+	userRepo := NewPostgres(db)
 	if err != nil {
 		log.Fatal(err)
 	}
-	suite.repository = taskRepo
+	suite.repository = userRepo
 }
 
-func (suite *TaskRepoTestSuite) TearDownSuite() {
+func (suite *UserRepoTestSuite) TearDownSuite() {
 	if err := suite.pgContainer.Terminate(suite.ctx); err != nil {
 		log.Fatalf("error terminating postgres container: %s", err)
 	}
 }
 
-func (suite *TaskRepoTestSuite) TestUserRepo() {
+func (suite *UserRepoTestSuite) TestUserRepo() {
 	t := suite.T()
 
 	// Create Task 01
@@ -63,5 +63,5 @@ func (suite *TaskRepoTestSuite) TestUserRepo() {
 }
 
 func TestTaskRepoTestSuite(t *testing.T) {
-	suite.Run(t, new(TaskRepoTestSuite))
+	suite.Run(t, new(UserRepoTestSuite))
 }

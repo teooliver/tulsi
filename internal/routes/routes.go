@@ -54,8 +54,9 @@ func Router(deps *bootstrap.AllDeps) http.Handler {
 	})
 
 	r.Route("/users", func(r chi.Router) {
-		// TODO: Add Pagination
-		r.Get("/", deps.Handlers.UserHandler.ListUsers)
+		r.With(
+			httpin.NewInput(postgresutils.PageRequest{}),
+		).Get("/", deps.Handlers.UserHandler.ListUsers)
 		r.Post("/", deps.Handlers.UserHandler.CreateUser)
 		r.Delete("/{id}", deps.Handlers.UserHandler.DeleteUser)
 		r.Put("/{id}", deps.Handlers.UserHandler.UpdateUser)

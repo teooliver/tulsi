@@ -7,6 +7,7 @@ import (
 	"log/slog"
 
 	"github.com/doug-martin/goqu/v9"
+	"github.com/teooliver/kanban/pkg/auth"
 	"github.com/teooliver/kanban/pkg/postgresutils"
 )
 
@@ -25,10 +26,20 @@ func (r *PostgresRepository) ListAllUsers(ctx context.Context, params *postgresu
 
 // TODO: Return created user instead of just the id
 func (r *PostgresRepository) CreateUser(ctx context.Context, user UserForCreate) (string, error) {
+	hashedPassword, err := auth.HashPassword(user.Password)
+	if err != nil {
+		return "", fmt.Errorf("error hashing password: %w", err)
+	}
+
 	insertSQL, args, err := goqu.Insert("app_user").Rows(goqu.Record{
 		"email":      user.Email,
 		"first_name": user.FirstName,
 		"last_name":  user.LastName,
+		"login": goqu.Record{
+			"hashedPassword": hashedPassword,
+			"csrf_token":     "",
+			"session_token":  "",
+		},
 	}).Returning("id").ToSQL()
 	if err != nil {
 		return "", fmt.Errorf("error generating create user query: %w", err)
@@ -72,4 +83,31 @@ func (r *PostgresRepository) UpdateUser(ctx context.Context, userID string, user
 
 	slog.Info("UPDATED ID", result)
 	return nil
+}
+
+func (r *PostgresRepository) GetUserByEmail(ctx context.Context, email string) (user User, err error) {
+	q := goqu.From("app_user").Select(allColumns...).Where(goqu.Ex{"email": email})
+	query, args, err := q.ToSQL()
+	if err != nil {
+		return User{}, fmt.Errorf("error generating get user query: %w", err)
+	}
+
+	row, err := r.db.QueryContext(ctx, query, args...)
+	if err := row.Err(); err != nil {
+		return User{}, fmt.Errorf("error executing get user query: %w", err)
+	}
+
+	var u User
+	// From the docs:
+	// https://pkg.go.dev/database/sql#Rows.Next
+	// Every call to Rows.Scan, even the first one, must be preceded by a call to Rows.Next.
+	row.Next()
+	err = row.Scan(u.Email, u.FirstName, u.LastName, u.ID, u.Login.HashedPassword, u.Login.CSRFToken, u.Login.SessionToken)
+
+	if err != nil {
+		return User{}, fmt.Errorf("Error error scanning Task row: %w", err)
+	}
+
+	return u, nil
+
 }

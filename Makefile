@@ -1,8 +1,14 @@
+clean:
+	docker compose down
+	# docker kill kanban-go/seed
+	docker rmi kanban-go/seed
+	docker volume rm -f kanban-go_db
+
 # Live-reload
 air:
 	air
 
-build_docker:
+build_image:
 	docker build . -t kanban-go/seed
 
 compose_up:

@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+// TODO: Rename to Stage?
 type Column struct {
 	ID          string  `json:"id"` //PK
 	Name        string  `json:"name"`

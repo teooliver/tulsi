@@ -20,6 +20,11 @@ func InitInfra(ctx context.Context, cfg *config.Config) (*Infra, error) {
 		panic(err)
 	}
 
+	err = runMigrations()
+	if err != nil {
+		panic(err)
+	}
+
 	return &Infra{
 		Postgres: pgClient,
 	}, nil
@@ -42,6 +47,11 @@ func initPostgres(ctx context.Context, cfg *config.PostgresConfig) (*sql.DB, err
 	log.Println("Database connection established")
 
 	return db, nil
+}
+
+func runMigrations() error {
+	log.Println("RUNNING MIGRATIONS")
+	return nil
 }
 
 // func initPostgres(ctx context.Context, cfg *config.PostgresConfig) (*sql.DB, error) {

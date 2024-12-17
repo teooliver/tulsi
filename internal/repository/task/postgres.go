@@ -41,7 +41,7 @@ func (r *PostgresRepository) GetTaskByID(ctx context.Context, taskID string) (Ta
 	// https://pkg.go.dev/database/sql#Rows.Next
 	// Every call to Rows.Scan, even the first one, must be preceded by a call to Rows.Next.
 	row.Next()
-	err = row.Scan(&t.ID, &t.Title, &t.Description, &t.Color, &t.StatusID, &t.UserID)
+	err = row.Scan(&t.ID, &t.Title, &t.Description, &t.Color, &t.StatusID, &t.UserID, &t.ColumnID)
 
 	if err != nil {
 		return Task{}, fmt.Errorf("Error error scanning Task row: %w", err)

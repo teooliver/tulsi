@@ -1,6 +1,6 @@
 id,name,position,project_id,position_int
-c7dda00f-933d-4160-8d69-eb2eba479df0,Backlog,0,0bd5310a-fe45-43cf-8a84-cbbc9c1f32db,0
-e56b42c4-c1ac-48e7-89eb-5d923eed457c,Todo,1,0bd5310a-fe45-43cf-8a84-cbbc9c1f32db,1
-811b5d9f-dc23-478b-8d3b-c23e059760c4,In Progress,2,0bd5310a-fe45-43cf-8a84-cbbc9c1f32db,2
-df54c861-f0d6-4806-b6db-d529b4fbac4d,Review,3,0bd5310a-fe45-43cf-8a84-cbbc9c1f32db,3
-ed5f5820-ea32-44c6-aa46-c79f46e7a8eb,Done,4,0bd5310a-fe45-43cf-8a84-cbbc9c1f32db,4
+03177403-8719-4321-abf6-5507f8d5d6a6,Backlog,0,5433e986-9fff-4efd-94ff-3cc7ffcd03e2,0
+51059519-b323-4e45-a593-4fa89fa63a37,Todo,1,5433e986-9fff-4efd-94ff-3cc7ffcd03e2,1
+391e1c85-8a03-4134-b859-b473d39676b2,In Progress,2,5433e986-9fff-4efd-94ff-3cc7ffcd03e2,2
+b4ab679c-6158-488e-a77f-525d22f549e4,Review,3,5433e986-9fff-4efd-94ff-3cc7ffcd03e2,3
+6f4c33bf-cdc4-4d08-b7c5-42ef9afb7b70,Done,4,5433e986-9fff-4efd-94ff-3cc7ffcd03e2,4

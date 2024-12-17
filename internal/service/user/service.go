@@ -16,6 +16,7 @@ type userRepo interface {
 	CreateUser(ctx context.Context, user user.UserForCreate) (string, error)
 	DeleteUser(ctx context.Context, userID string) (userId string, err error)
 	UpdateUser(ctx context.Context, userID string, user user.UserForUpdate) (err error)
+	GetUserByEmail(ctx context.Context, email string) (user user.User, err error)
 }
 
 func New(
@@ -52,6 +53,7 @@ func (s *Service) DeleteUser(ctx context.Context, userID string) (string, error)
 
 	return id, nil
 }
+
 func (s *Service) UpdateUser(ctx context.Context, userID string, updatedUser user.UserForUpdate) error {
 	err := s.userRepo.UpdateUser(ctx, userID, updatedUser)
 	if err != nil {
@@ -59,4 +61,13 @@ func (s *Service) UpdateUser(ctx context.Context, userID string, updatedUser use
 	}
 
 	return nil
+}
+
+func (s *Service) GetUserByEmail(ctx context.Context, email string) (user.User, error) {
+	user, err := s.userRepo.GetUserByEmail(ctx, email)
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
 }

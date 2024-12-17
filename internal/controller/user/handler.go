@@ -6,10 +6,12 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"time"
 
 	"github.com/ggicci/httpin"
 	"github.com/go-chi/chi/v5"
 	"github.com/teooliver/kanban/internal/repository/user"
+	"github.com/teooliver/kanban/pkg/auth"
 	"github.com/teooliver/kanban/pkg/postgresutils"
 )
 
@@ -18,6 +20,7 @@ type userService interface {
 	CreateUser(ctx context.Context, user user.UserForCreate) (string, error)
 	DeleteUser(ctx context.Context, userID string) (string, error)
 	UpdateUser(ctx context.Context, userID string, updatedUser user.UserForUpdate) error
+	GetUserByEmail(ctx context.Context, email string) (user user.User, err error)
 }
 
 type Handler struct {
@@ -119,5 +122,62 @@ func (h Handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+
+}
+
+// Auth Functions
+func (h Handler) Login(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	// Testing using FormValue insteado of Json in this case
+	// username is always email
+	username := r.FormValue("username")
+	password := r.FormValue("password")
+
+	u, err := h.service.GetUserByEmail(ctx, username)
+	if err != nil || !auth.CheckPasswordHash(password, u.Login.HashedPassword) {
+		err := http.StatusNotFound
+		http.Error(w, "Invalid username or password", err)
+		return
+	}
+
+	sessionToken := auth.GenerateToken(32)
+	csrfToken := auth.GenerateToken(32)
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "session_token",
+		Value:    sessionToken,
+		Expires:  time.Now().Add(24 * time.Hour),
+		HttpOnly: true,
+	})
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "csrf_token",
+		Value:    csrfToken,
+		Expires:  time.Now().Add(24 * time.Hour),
+		HttpOnly: false,
+	})
+
+	// // Store tokens in the database
+	var userLogin = user.Login{
+		HashedPassword: u.Login.HashedPassword,
+		SessionToken:   sessionToken,
+		CSRFToken:      csrfToken,
+	}
+	// u.Login.SessionToken = sessionToken
+	// u.Login.CSRFToken = csrfToken
+
+	var userToUpdate = user.UserForUpdate{
+		Email:     u.Email,
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+		Login:     userLogin,
+	}
+
+	// TODO: UpdateUser
+	h.service.UpdateUser(ctx, u.ID, userToUpdate)
+	// users[username] = user
+
+	fmt.Fprintln(w, "Login successful!")
 
 }
