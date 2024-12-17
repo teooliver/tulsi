@@ -32,14 +32,12 @@ func (r *PostgresRepository) CreateUser(ctx context.Context, user UserForCreate)
 	}
 
 	insertSQL, args, err := goqu.Insert("app_user").Rows(goqu.Record{
-		"email":      user.Email,
-		"first_name": user.FirstName,
-		"last_name":  user.LastName,
-		"login": goqu.Record{
-			"hashedPassword": hashedPassword,
-			"csrf_token":     "",
-			"session_token":  "",
-		},
+		"email":           user.Email,
+		"first_name":      user.FirstName,
+		"last_name":       user.LastName,
+		"hashed_password": hashedPassword,
+		"csrf_token":      "abc",
+		"session_token":   "abc",
 	}).Returning("id").ToSQL()
 	if err != nil {
 		return "", fmt.Errorf("error generating create user query: %w", err)

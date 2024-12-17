@@ -10,7 +10,7 @@ import (
 
 func createFakeUser() user.User {
 	hashedPassword, _ := auth.HashPassword("12345")
-	login := user.Login{HashedPassword: hashedPassword, SessionToken: "", CSRFToken: ""}
+	login := user.Login{HashedPassword: hashedPassword, SessionToken: "abc", CSRFToken: "abc"}
 
 	user := user.User{
 		ID:        uuid.New().String(),
