@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"github.com/teooliver/kanban/internal/bootstrap"
+	"github.com/teooliver/kanban/internal/controller/middlewares/authenticate"
 	"github.com/teooliver/kanban/pkg/postgresutils"
 )
 
@@ -29,6 +30,7 @@ func Router(deps *bootstrap.AllDeps) http.Handler {
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
+	r.Use(authenticate.WithApiKey())
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Welcome to Go Kanban"))
