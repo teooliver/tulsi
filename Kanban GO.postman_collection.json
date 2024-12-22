@@ -13,7 +13,13 @@
 					"name": "Get Tasks",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{base_url}}/tasks",
 							"host": [
@@ -112,13 +118,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/tasks/9c8d0fdd-02d2-4140-a735-d9199aa08f0e",
+							"raw": "{{base_url}}/tasks/ee8cf089-9f7f-4e91-bf91-ebac4edd01b9",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"tasks",
-								"9c8d0fdd-02d2-4140-a735-d9199aa08f0e"
+								"ee8cf089-9f7f-4e91-bf91-ebac4edd01b9"
 							]
 						}
 					},
@@ -167,6 +173,110 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"some_email@email.com\",\n    \"first_name\": \"first\",\n    \"last_name\": \"last\",\n    \"password\": \"12345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/9c2a6a3c-04ee-4d2e-bc5e-9d1d219f9b4b",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"9c2a6a3c-04ee-4d2e-bc5e-9d1d219f9b4b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/{id}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"{id}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -186,32 +296,6 @@
 							"path": [
 								"projects",
 								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Project Columns",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/projects/a2aa29f7-21a5-4add-b147-b9bd7f78c148/columns",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"projects",
-								"a2aa29f7-21a5-4add-b147-b9bd7f78c148",
-								"columns"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
-								}
 							]
 						}
 					},
@@ -335,10 +419,51 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Columns by ProjectID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/projects/a2aa29f7-21a5-4add-b147-b9bd7f78c148/columns",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"projects",
+								"a2aa29f7-21a5-4add-b147-b9bd7f78c148",
+								"columns"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
 	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "123",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "X-API-KEY",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",
