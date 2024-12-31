@@ -1,4 +1,4 @@
-# Tulsi
+# Tulsi (WIP)
 
 <img src="assets/images/tulsi-logo.png" alt="Alt text" width="150" height="150">
 
