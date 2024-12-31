@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"log/slog"
 
 	"github.com/teooliver/kanban/internal/repository/user"
 	"github.com/teooliver/kanban/pkg/postgresutils"
@@ -64,6 +65,7 @@ func (s *Service) UpdateUser(ctx context.Context, userID string, updatedUser use
 }
 
 func (s *Service) GetUserByEmail(ctx context.Context, email string) (user.User, error) {
+	slog.Info("SERVICE => GET USER BY EMAIL", email)
 	user, err := s.userRepo.GetUserByEmail(ctx, email)
 	if err != nil {
 		return user, err

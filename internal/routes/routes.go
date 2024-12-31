@@ -60,6 +60,7 @@ func Router(deps *bootstrap.AllDeps) http.Handler {
 			httpin.NewInput(postgresutils.PageRequest{}),
 		).Get("/", deps.Handlers.UserHandler.ListUsers)
 		r.Post("/", deps.Handlers.UserHandler.CreateUser)
+		r.Post("/login", deps.Handlers.UserHandler.Login)
 		r.Delete("/{id}", deps.Handlers.UserHandler.DeleteUser)
 		r.Put("/{id}", deps.Handlers.UserHandler.UpdateUser)
 	})

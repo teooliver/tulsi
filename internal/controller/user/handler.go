@@ -134,7 +134,10 @@ func (h Handler) Login(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
+	slog.Info("CONTROLER => GET USER BY EMAIL", username)
+
 	u, err := h.service.GetUserByEmail(ctx, username)
+	slog.Info("CONTROLER => ERROR", u, err)
 	if err != nil || !auth.CheckPasswordHash(password, u.Login.HashedPassword) {
 		err := http.StatusNotFound
 		http.Error(w, "Invalid username or password", err)

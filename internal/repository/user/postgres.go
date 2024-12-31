@@ -86,6 +86,7 @@ func (r *PostgresRepository) UpdateUser(ctx context.Context, userID string, user
 func (r *PostgresRepository) GetUserByEmail(ctx context.Context, email string) (user User, err error) {
 	q := goqu.From("app_user").Select(allColumns...).Where(goqu.Ex{"email": email})
 	query, args, err := q.ToSQL()
+	slog.Info("REPO => QUERY", query)
 	if err != nil {
 		return User{}, fmt.Errorf("error generating get user query: %w", err)
 	}
@@ -96,11 +97,13 @@ func (r *PostgresRepository) GetUserByEmail(ctx context.Context, email string) (
 	}
 
 	var u User
-	err = row.Scan(u.ID, u.Email, u.FirstName, u.LastName, u.Login.HashedPassword, u.Login.SessionToken, u.Login.CSRFToken)
+	err = row.Scan(&u.ID, &u.Email, &u.FirstName, &u.LastName, &u.Login.HashedPassword, &u.Login.SessionToken, &u.Login.CSRFToken)
 
 	if err != nil {
-		return User{}, fmt.Errorf("Error error scanning Task row: %w", err)
+		return User{}, fmt.Errorf("Error error scanning User row: %w", err)
 	}
+
+	slog.Info("REPO => QUERY RETURN", u)
 
 	return u, nil
 
