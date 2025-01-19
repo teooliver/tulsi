@@ -1,5 +1,6 @@
 .env
 notes.txt
+notes.md
 requirements.txt
 bin
 tmp
