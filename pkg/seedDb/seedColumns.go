@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/teooliver/kanban/internal/repository/column"
+	"github.com/teooliver/tulsi/internal/repository/column"
 )
 
 func createMultipleColumns(projectId string) []column.Column {

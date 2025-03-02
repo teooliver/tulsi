@@ -3,8 +3,8 @@ package project
 import (
 	"context"
 
-	"github.com/teooliver/kanban/internal/repository/project"
-	"github.com/teooliver/kanban/pkg/postgresutils"
+	"github.com/teooliver/tulsi/internal/repository/project"
+	"github.com/teooliver/tulsi/pkg/postgresutils"
 )
 
 type Service struct {

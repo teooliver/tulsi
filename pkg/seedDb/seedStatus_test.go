@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/teooliver/kanban/internal/repository/status"
+	"github.com/teooliver/tulsi/internal/repository/status"
 )
 
 func TestStatusIntoCSVString(t *testing.T) {

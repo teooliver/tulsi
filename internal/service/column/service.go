@@ -5,7 +5,7 @@ import (
 
 	"log/slog"
 
-	"github.com/teooliver/kanban/internal/repository/column"
+	"github.com/teooliver/tulsi/internal/repository/column"
 )
 
 type Service struct {

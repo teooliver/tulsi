@@ -9,8 +9,8 @@ import (
 
 	"github.com/ggicci/httpin"
 	"github.com/go-chi/chi/v5"
-	"github.com/teooliver/kanban/internal/repository/task"
-	"github.com/teooliver/kanban/pkg/postgresutils"
+	"github.com/teooliver/tulsi/internal/repository/task"
+	"github.com/teooliver/tulsi/pkg/postgresutils"
 )
 
 type taskService interface {

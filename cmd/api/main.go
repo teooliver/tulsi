@@ -10,8 +10,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/teooliver/kanban/internal/bootstrap"
-	"github.com/teooliver/kanban/internal/routes"
+	"github.com/teooliver/tulsi/internal/bootstrap"
+	"github.com/teooliver/tulsi/internal/routes"
 )
 
 func main() {

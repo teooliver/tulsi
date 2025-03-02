@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/teooliver/kanban/internal/config"
+	"github.com/teooliver/tulsi/internal/config"
 
 	"github.com/joho/godotenv"
 )
@@ -14,7 +14,7 @@ const (
 	host   = "localhost"
 	port   = 5432
 	user   = "db_user"
-	dbname = "kanban-go"
+	dbname = "tulsi"
 )
 
 func Config(filename string) (*config.Config, error) {

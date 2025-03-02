@@ -5,9 +5,10 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
-	"github.com/teooliver/kanban/internal/config"
+	"github.com/teooliver/tulsi/internal/config"
 )
 
 type Infra struct {
@@ -32,10 +33,12 @@ func InitInfra(ctx context.Context, cfg *config.Config) (*Infra, error) {
 
 func initPostgres(ctx context.Context, cfg *config.PostgresConfig) (*sql.DB, error) {
 	db, err := sql.Open("pgx", cfg.DSN)
+
 	if err != nil {
-		// TODO?
-		// db.Close()
-		panic(err)
+		// TODO: We need to have access to logger here or check the error on main for example
+		// logger.Error(err.Error())
+		os.Exit(1)
+		// panic(err)
 	}
 
 	err = db.Ping()

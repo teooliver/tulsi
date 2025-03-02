@@ -3,11 +3,13 @@ package bootstrap
 import (
 	"context"
 
-	"github.com/teooliver/kanban/internal/bootstrap/internal/deps"
-	"github.com/teooliver/kanban/internal/config"
+	"github.com/teooliver/tulsi/internal/bootstrap/internal/deps"
+	"github.com/teooliver/tulsi/internal/config"
 )
 
 type AllDeps struct {
+	// logger
+	// 	config? config
 	Repos    *deps.Repos
 	Services *deps.Services
 	Handlers *deps.RestHandlers
@@ -27,7 +29,9 @@ func Deps(
 	handlers := deps.InitRestHandlers(cfg, services)
 
 	return &AllDeps{
-		Repos:    repos,
+		// Do we need to expose the repos here?
+		Repos: repos,
+		// Do we need to expose the services here?
 		Services: services,
 		Handlers: handlers,
 	}, nil

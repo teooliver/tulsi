@@ -9,7 +9,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/teooliver/kanban/internal/config"
+	"github.com/teooliver/tulsi/internal/config"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
@@ -20,7 +20,7 @@ type PostgresContainer struct {
 	ConnectionString string
 }
 
-var POSTGRES_IMAGE = "kanban-go/seed:latest"
+var POSTGRES_IMAGE = "tulsi/seed:latest"
 
 func CreatePostgresContainer(ctx context.Context) (*PostgresContainer, error) {
 	_, path, _, ok := runtime.Caller(0)
@@ -31,7 +31,7 @@ func CreatePostgresContainer(ctx context.Context) (*PostgresContainer, error) {
 	migrationFilesPath, err := filepath.Glob(filepath.Join(filepath.Dir(path), "..", "..", "migrations", "*.sql"))
 
 	pgContainer, err := postgres.Run(ctx,
-		"kanban-go/seed:latest",
+		"tulsi/seed:latest",
 		postgres.WithInitScripts(migrationFilesPath...),
 		postgres.WithDatabase("test-db"),
 		postgres.WithUsername("postgres"),

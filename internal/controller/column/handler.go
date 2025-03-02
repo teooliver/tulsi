@@ -8,7 +8,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/teooliver/kanban/internal/repository/column"
+	"github.com/teooliver/tulsi/internal/repository/column"
 )
 
 type columnService interface {

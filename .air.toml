@@ -4,8 +4,8 @@ tmp_dir = "tmp"
 
 [build]
 args_bin = []
-bin = "./bin/kanban-go"
-cmd = "go build -o bin/kanban-go  ./cmd/kanban-api/main.go"
+bin = "./bin/tulsi"
+cmd = "go build -o bin/tulsi  ./cmd/api/main.go"
 delay = 1000
 exclude_dir = ["assets", "tmp", "vendor", "testdata"]
 exclude_file = []

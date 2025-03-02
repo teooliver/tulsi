@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/teooliver/kanban/internal/repository/project"
+	"github.com/teooliver/tulsi/internal/repository/project"
 )
 
 func createFakeProject() project.Project {

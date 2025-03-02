@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/teooliver/kanban/internal/repository/column"
+	"github.com/teooliver/tulsi/internal/repository/column"
 )
 
 func TestColumnIntoCSVString(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/teooliver/kanban/internal/repository/status"
+	"github.com/teooliver/tulsi/internal/repository/status"
 )
 
 func createFakeStatusList() []status.Status {

@@ -10,9 +10,9 @@ import (
 
 	"github.com/ggicci/httpin"
 	"github.com/go-chi/chi/v5"
-	"github.com/teooliver/kanban/internal/repository/user"
-	"github.com/teooliver/kanban/pkg/auth"
-	"github.com/teooliver/kanban/pkg/postgresutils"
+	"github.com/teooliver/tulsi/internal/repository/user"
+	"github.com/teooliver/tulsi/pkg/auth"
+	"github.com/teooliver/tulsi/pkg/postgresutils"
 )
 
 type userService interface {

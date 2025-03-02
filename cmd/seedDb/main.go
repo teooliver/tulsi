@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/teooliver/kanban/pkg/seedDb"
+	"github.com/teooliver/tulsi/pkg/seedDb"
 )
 
 func main() {

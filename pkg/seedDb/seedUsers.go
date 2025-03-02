@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/teooliver/kanban/internal/repository/user"
-	"github.com/teooliver/kanban/pkg/auth"
+	"github.com/teooliver/tulsi/internal/repository/user"
+	"github.com/teooliver/tulsi/pkg/auth"
 )
 
 func createFakeUser() user.User {

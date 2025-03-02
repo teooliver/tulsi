@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/teooliver/kanban/internal/repository/task"
-	"github.com/teooliver/kanban/pkg/error"
+	"github.com/teooliver/tulsi/internal/repository/task"
+	"github.com/teooliver/tulsi/pkg/error"
 )
 
 func createFakeTask(statusID string, userId string, columnID string) task.Task {

@@ -3,8 +3,8 @@ package status
 import (
 	"context"
 
-	"github.com/teooliver/kanban/internal/repository/status"
-	"github.com/teooliver/kanban/pkg/postgresutils"
+	"github.com/teooliver/tulsi/internal/repository/status"
+	"github.com/teooliver/tulsi/pkg/postgresutils"
 )
 
 type Service struct {

@@ -7,7 +7,7 @@ import (
 	"log/slog"
 
 	"github.com/doug-martin/goqu/v9"
-	"github.com/teooliver/kanban/pkg/postgresutils"
+	"github.com/teooliver/tulsi/pkg/postgresutils"
 )
 
 type PostgresRepository struct {

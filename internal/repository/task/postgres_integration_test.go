@@ -8,9 +8,9 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/teooliver/kanban/internal/config"
-	"github.com/teooliver/kanban/pkg/postgresutils"
-	"github.com/teooliver/kanban/pkg/testhelpers"
+	"github.com/teooliver/tulsi/internal/config"
+	"github.com/teooliver/tulsi/pkg/postgresutils"
+	"github.com/teooliver/tulsi/pkg/testhelpers"
 )
 
 type TaskRepoTestSuite struct {

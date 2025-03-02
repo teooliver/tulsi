@@ -3,8 +3,8 @@ package task
 import (
 	"context"
 
-	"github.com/teooliver/kanban/internal/repository/task"
-	"github.com/teooliver/kanban/pkg/postgresutils"
+	"github.com/teooliver/tulsi/internal/repository/task"
+	"github.com/teooliver/tulsi/pkg/postgresutils"
 )
 
 type Service struct {

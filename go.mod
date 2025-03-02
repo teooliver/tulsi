@@ -1,4 +1,4 @@
-module github.com/teooliver/kanban
+module github.com/teooliver/tulsi
 
 go 1.22.3
 

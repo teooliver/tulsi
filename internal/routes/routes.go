@@ -7,9 +7,9 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
-	"github.com/teooliver/kanban/internal/bootstrap"
-	"github.com/teooliver/kanban/internal/controller/middlewares/authenticate"
-	"github.com/teooliver/kanban/pkg/postgresutils"
+	"github.com/teooliver/tulsi/internal/bootstrap"
+	"github.com/teooliver/tulsi/internal/controller/middlewares/authenticate"
+	"github.com/teooliver/tulsi/pkg/postgresutils"
 )
 
 func Router(deps *bootstrap.AllDeps) http.Handler {

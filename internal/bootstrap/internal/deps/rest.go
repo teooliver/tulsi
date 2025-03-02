@@ -1,12 +1,12 @@
 package deps
 
 import (
-	"github.com/teooliver/kanban/internal/config"
-	"github.com/teooliver/kanban/internal/controller/column"
-	"github.com/teooliver/kanban/internal/controller/project"
-	"github.com/teooliver/kanban/internal/controller/status"
-	"github.com/teooliver/kanban/internal/controller/task"
-	"github.com/teooliver/kanban/internal/controller/user"
+	"github.com/teooliver/tulsi/internal/config"
+	"github.com/teooliver/tulsi/internal/controller/column"
+	"github.com/teooliver/tulsi/internal/controller/project"
+	"github.com/teooliver/tulsi/internal/controller/status"
+	"github.com/teooliver/tulsi/internal/controller/task"
+	"github.com/teooliver/tulsi/internal/controller/user"
 )
 
 type RestHandlers struct {

@@ -4,8 +4,8 @@ import (
 	"context"
 	"log/slog"
 
-	"github.com/teooliver/kanban/internal/repository/user"
-	"github.com/teooliver/kanban/pkg/postgresutils"
+	"github.com/teooliver/tulsi/internal/repository/user"
+	"github.com/teooliver/tulsi/pkg/postgresutils"
 )
 
 type Service struct {

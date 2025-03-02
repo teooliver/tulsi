@@ -4,11 +4,11 @@ import (
 	"log"
 	"os"
 
-	"github.com/teooliver/kanban/internal/repository/column"
-	"github.com/teooliver/kanban/internal/repository/project"
-	"github.com/teooliver/kanban/internal/repository/status"
-	"github.com/teooliver/kanban/internal/repository/task"
-	"github.com/teooliver/kanban/internal/repository/user"
+	"github.com/teooliver/tulsi/internal/repository/column"
+	"github.com/teooliver/tulsi/internal/repository/project"
+	"github.com/teooliver/tulsi/internal/repository/status"
+	"github.com/teooliver/tulsi/internal/repository/task"
+	"github.com/teooliver/tulsi/internal/repository/user"
 )
 
 var usersAmount = 10

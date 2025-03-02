@@ -6,37 +6,34 @@ import (
 )
 
 type Task struct {
-	ID          string  `json:"id"`
-	Title       string  `json:"title"`
-	Description string  `json:"description"`
-	Color       string  `json:"color"`
-	StatusID    *string `json:"status_id"`
-	ColumnID    string  `json:"column_id"`
-	UserID      *string `json:"user_id"`
+	ID          string `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Color       string `json:"color"`
+	StatusID    string `json:"status_id"`
+	ColumnID    string `json:"column_id"`
+	UserID      string `json:"user_id"`
+	version     int32  `json:"version"` // this is for BE porpuses, especially for Locking the data while multiple people is editing at the same time
 	// CreatedDate string  `json:"created_date"`
 	// IsActive bool `json:"is_active"`
 }
 
 type TaskForCreate struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Color       string `json:"color"`
-	ColumnID    string `json:"column_id"`
-	// StatusID    string `json:"status_id"`
-	// UserID      string `json:"user_id"`
-	// ColumnID string  `json:"column_id"`
-	// CreatedDate string  `json:"created_date"`
-	// IsActive bool `json:"is_active"`
+	Title       string  `json:"title"`
+	Description string  `json:"description"`
+	Color       *string `json:"color"`
+	ColumnID    *string `json:"column_id"`
+	StatusID    *string `json:"status_id"`
+	UserID      *string `json:"user_id"`
 }
 
 type TaskForUpdate struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Color       string `json:"color"`
-	ColumnID    string `json:"column_id"`
-	// StatusID    string `json:"status_id"`
-	// UserID      string `json:"user_id"`
-	// CreatedDate string  `json:"created_date"`
+	Title       *string `json:"title"`
+	Description *string `json:"description"`
+	Color       *string `json:"color"`
+	ColumnID    *string `json:"column_id"`
+	StatusID    *string `json:"status_id"`
+	UserID      *string `json:"user_id"`
 }
 
 var allColumns = []any{

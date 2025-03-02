@@ -1,13 +1,13 @@
 services:
   db:
-    image: kanban-go/seed:latest
+    image: tulsi/seed:latest
     restart: always
     ports:
       - 5432:5432
     environment:
       - POSTGRES_USER=db_user
       - POSTGRES_PASSWORD=12345
-      - POSTGRES_DB=kanban-go
+      - POSTGRES_DB=tulsi
     volumes:
       - db:/var/lib/postgresql/data
 
@@ -20,7 +20,7 @@ services:
   #   environment:
   #     - POSTGRES_USER=db_user_test
   #     - POSTGRES_PASSWORD=12345
-  #     - POSTGRES_DB=kanban_go_test_db
+  #     - POSTGRES_DB=tulsi_go_test_db
   # server:
   #   build:
   #     context: .

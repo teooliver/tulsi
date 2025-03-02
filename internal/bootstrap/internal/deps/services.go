@@ -1,12 +1,12 @@
 package deps
 
 import (
-	"github.com/teooliver/kanban/internal/config"
-	"github.com/teooliver/kanban/internal/service/column"
-	"github.com/teooliver/kanban/internal/service/project"
-	"github.com/teooliver/kanban/internal/service/status"
-	"github.com/teooliver/kanban/internal/service/task"
-	"github.com/teooliver/kanban/internal/service/user"
+	"github.com/teooliver/tulsi/internal/config"
+	"github.com/teooliver/tulsi/internal/service/column"
+	"github.com/teooliver/tulsi/internal/service/project"
+	"github.com/teooliver/tulsi/internal/service/status"
+	"github.com/teooliver/tulsi/internal/service/task"
+	"github.com/teooliver/tulsi/internal/service/user"
 )
 
 type Services struct {
